@@ -1,0 +1,1544 @@
+# Solar Time by hourly increment: + 12
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+12	+12:00	-	hour+12
+
+# Solar Time by hourly increment: + 11
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+11	+11:00	-	hour+11
+
+# Solar Time by hourly increment: + 10
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+10	+10:00	-	hour+10
+
+# Solar Time by hourly increment: + 9
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+09	+9:00	-	hour+09
+
+# Solar Time by hourly increment: + 8
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+08	+8:00	-	hour+08
+
+# Solar Time by hourly increment: + 7
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+07	+7:00	-	hour+07
+
+# Solar Time by hourly increment: + 6
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+06	+6:00	-	hour+06
+
+# Solar Time by hourly increment: + 5
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+05	+5:00	-	hour+05
+
+# Solar Time by hourly increment: + 4
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+04	+4:00	-	hour+04
+
+# Solar Time by hourly increment: + 3
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+03	+3:00	-	hour+03
+
+# Solar Time by hourly increment: + 2
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+02	+2:00	-	hour+02
+
+# Solar Time by hourly increment: + 1
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+01	+1:00	-	hour+01
+
+# Solar Time by hourly increment: + 0
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour+00	+0:00	-	hour+00
+
+# Solar Time by hourly increment: - 1
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour-01	-1:00	-	hour-01
+
+# Solar Time by hourly increment: - 2
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour-02	-2:00	-	hour-02
+
+# Solar Time by hourly increment: - 3
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour-03	-3:00	-	hour-03
+
+# Solar Time by hourly increment: - 4
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour-04	-4:00	-	hour-04
+
+# Solar Time by hourly increment: - 5
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour-05	-5:00	-	hour-05
+
+# Solar Time by hourly increment: - 6
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour-06	-6:00	-	hour-06
+
+# Solar Time by hourly increment: - 7
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour-07	-7:00	-	hour-07
+
+# Solar Time by hourly increment: - 8
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour-08	-8:00	-	hour-08
+
+# Solar Time by hourly increment: - 9
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour-09	-9:00	-	hour-09
+
+# Solar Time by hourly increment: - 10
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour-10	-10:00	-	hour-10
+
+# Solar Time by hourly increment: - 11
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour-11	-11:00	-	hour-11
+
+# Solar Time by hourly increment: - 12
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/hour-12	-12:00	-	hour-12
+
+# Solar Time by degree of Longitude: 180 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon180E	12:00	-	lon180E
+
+# Solar Time by degree of Longitude: 179 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon179E	11:56	-	lon179E
+
+# Solar Time by degree of Longitude: 178 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon178E	11:52	-	lon178E
+
+# Solar Time by degree of Longitude: 177 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon177E	11:48	-	lon177E
+
+# Solar Time by degree of Longitude: 176 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon176E	11:44	-	lon176E
+
+# Solar Time by degree of Longitude: 175 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon175E	11:40	-	lon175E
+
+# Solar Time by degree of Longitude: 174 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon174E	11:36	-	lon174E
+
+# Solar Time by degree of Longitude: 173 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon173E	11:32	-	lon173E
+
+# Solar Time by degree of Longitude: 172 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon172E	11:28	-	lon172E
+
+# Solar Time by degree of Longitude: 171 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon171E	11:24	-	lon171E
+
+# Solar Time by degree of Longitude: 170 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon170E	11:20	-	lon170E
+
+# Solar Time by degree of Longitude: 169 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon169E	11:16	-	lon169E
+
+# Solar Time by degree of Longitude: 168 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon168E	11:12	-	lon168E
+
+# Solar Time by degree of Longitude: 167 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon167E	11:08	-	lon167E
+
+# Solar Time by degree of Longitude: 166 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon166E	11:04	-	lon166E
+
+# Solar Time by degree of Longitude: 165 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon165E	11:00	-	lon165E
+
+# Solar Time by degree of Longitude: 164 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon164E	10:56	-	lon164E
+
+# Solar Time by degree of Longitude: 163 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon163E	10:52	-	lon163E
+
+# Solar Time by degree of Longitude: 162 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon162E	10:48	-	lon162E
+
+# Solar Time by degree of Longitude: 161 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon161E	10:44	-	lon161E
+
+# Solar Time by degree of Longitude: 160 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon160E	10:40	-	lon160E
+
+# Solar Time by degree of Longitude: 159 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon159E	10:36	-	lon159E
+
+# Solar Time by degree of Longitude: 158 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon158E	10:32	-	lon158E
+
+# Solar Time by degree of Longitude: 157 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon157E	10:28	-	lon157E
+
+# Solar Time by degree of Longitude: 156 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon156E	10:24	-	lon156E
+
+# Solar Time by degree of Longitude: 155 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon155E	10:20	-	lon155E
+
+# Solar Time by degree of Longitude: 154 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon154E	10:16	-	lon154E
+
+# Solar Time by degree of Longitude: 153 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon153E	10:12	-	lon153E
+
+# Solar Time by degree of Longitude: 152 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon152E	10:08	-	lon152E
+
+# Solar Time by degree of Longitude: 151 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon151E	10:04	-	lon151E
+
+# Solar Time by degree of Longitude: 150 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon150E	10:00	-	lon150E
+
+# Solar Time by degree of Longitude: 149 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon149E	9:56	-	lon149E
+
+# Solar Time by degree of Longitude: 148 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon148E	9:52	-	lon148E
+
+# Solar Time by degree of Longitude: 147 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon147E	9:48	-	lon147E
+
+# Solar Time by degree of Longitude: 146 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon146E	9:44	-	lon146E
+
+# Solar Time by degree of Longitude: 145 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon145E	9:40	-	lon145E
+
+# Solar Time by degree of Longitude: 144 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon144E	9:36	-	lon144E
+
+# Solar Time by degree of Longitude: 143 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon143E	9:32	-	lon143E
+
+# Solar Time by degree of Longitude: 142 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon142E	9:28	-	lon142E
+
+# Solar Time by degree of Longitude: 141 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon141E	9:24	-	lon141E
+
+# Solar Time by degree of Longitude: 140 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon140E	9:20	-	lon140E
+
+# Solar Time by degree of Longitude: 139 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon139E	9:16	-	lon139E
+
+# Solar Time by degree of Longitude: 138 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon138E	9:12	-	lon138E
+
+# Solar Time by degree of Longitude: 137 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon137E	9:08	-	lon137E
+
+# Solar Time by degree of Longitude: 136 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon136E	9:04	-	lon136E
+
+# Solar Time by degree of Longitude: 135 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon135E	9:00	-	lon135E
+
+# Solar Time by degree of Longitude: 134 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon134E	8:56	-	lon134E
+
+# Solar Time by degree of Longitude: 133 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon133E	8:52	-	lon133E
+
+# Solar Time by degree of Longitude: 132 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon132E	8:48	-	lon132E
+
+# Solar Time by degree of Longitude: 131 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon131E	8:44	-	lon131E
+
+# Solar Time by degree of Longitude: 130 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon130E	8:40	-	lon130E
+
+# Solar Time by degree of Longitude: 129 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon129E	8:36	-	lon129E
+
+# Solar Time by degree of Longitude: 128 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon128E	8:32	-	lon128E
+
+# Solar Time by degree of Longitude: 127 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon127E	8:28	-	lon127E
+
+# Solar Time by degree of Longitude: 126 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon126E	8:24	-	lon126E
+
+# Solar Time by degree of Longitude: 125 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon125E	8:20	-	lon125E
+
+# Solar Time by degree of Longitude: 124 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon124E	8:16	-	lon124E
+
+# Solar Time by degree of Longitude: 123 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon123E	8:12	-	lon123E
+
+# Solar Time by degree of Longitude: 122 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon122E	8:08	-	lon122E
+
+# Solar Time by degree of Longitude: 121 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon121E	8:04	-	lon121E
+
+# Solar Time by degree of Longitude: 120 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon120E	8:00	-	lon120E
+
+# Solar Time by degree of Longitude: 119 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon119E	7:56	-	lon119E
+
+# Solar Time by degree of Longitude: 118 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon118E	7:52	-	lon118E
+
+# Solar Time by degree of Longitude: 117 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon117E	7:48	-	lon117E
+
+# Solar Time by degree of Longitude: 116 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon116E	7:44	-	lon116E
+
+# Solar Time by degree of Longitude: 115 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon115E	7:40	-	lon115E
+
+# Solar Time by degree of Longitude: 114 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon114E	7:36	-	lon114E
+
+# Solar Time by degree of Longitude: 113 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon113E	7:32	-	lon113E
+
+# Solar Time by degree of Longitude: 112 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon112E	7:28	-	lon112E
+
+# Solar Time by degree of Longitude: 111 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon111E	7:24	-	lon111E
+
+# Solar Time by degree of Longitude: 110 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon110E	7:20	-	lon110E
+
+# Solar Time by degree of Longitude: 109 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon109E	7:16	-	lon109E
+
+# Solar Time by degree of Longitude: 108 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon108E	7:12	-	lon108E
+
+# Solar Time by degree of Longitude: 107 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon107E	7:08	-	lon107E
+
+# Solar Time by degree of Longitude: 106 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon106E	7:04	-	lon106E
+
+# Solar Time by degree of Longitude: 105 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon105E	7:00	-	lon105E
+
+# Solar Time by degree of Longitude: 104 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon104E	6:56	-	lon104E
+
+# Solar Time by degree of Longitude: 103 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon103E	6:52	-	lon103E
+
+# Solar Time by degree of Longitude: 102 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon102E	6:48	-	lon102E
+
+# Solar Time by degree of Longitude: 101 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon101E	6:44	-	lon101E
+
+# Solar Time by degree of Longitude: 100 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon100E	6:40	-	lon100E
+
+# Solar Time by degree of Longitude: 99 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon099E	6:36	-	lon099E
+
+# Solar Time by degree of Longitude: 98 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon098E	6:32	-	lon098E
+
+# Solar Time by degree of Longitude: 97 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon097E	6:28	-	lon097E
+
+# Solar Time by degree of Longitude: 96 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon096E	6:24	-	lon096E
+
+# Solar Time by degree of Longitude: 95 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon095E	6:20	-	lon095E
+
+# Solar Time by degree of Longitude: 94 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon094E	6:16	-	lon094E
+
+# Solar Time by degree of Longitude: 93 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon093E	6:12	-	lon093E
+
+# Solar Time by degree of Longitude: 92 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon092E	6:08	-	lon092E
+
+# Solar Time by degree of Longitude: 91 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon091E	6:04	-	lon091E
+
+# Solar Time by degree of Longitude: 90 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon090E	6:00	-	lon090E
+
+# Solar Time by degree of Longitude: 89 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon089E	5:56	-	lon089E
+
+# Solar Time by degree of Longitude: 88 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon088E	5:52	-	lon088E
+
+# Solar Time by degree of Longitude: 87 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon087E	5:48	-	lon087E
+
+# Solar Time by degree of Longitude: 86 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon086E	5:44	-	lon086E
+
+# Solar Time by degree of Longitude: 85 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon085E	5:40	-	lon085E
+
+# Solar Time by degree of Longitude: 84 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon084E	5:36	-	lon084E
+
+# Solar Time by degree of Longitude: 83 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon083E	5:32	-	lon083E
+
+# Solar Time by degree of Longitude: 82 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon082E	5:28	-	lon082E
+
+# Solar Time by degree of Longitude: 81 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon081E	5:24	-	lon081E
+
+# Solar Time by degree of Longitude: 80 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon080E	5:20	-	lon080E
+
+# Solar Time by degree of Longitude: 79 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon079E	5:16	-	lon079E
+
+# Solar Time by degree of Longitude: 78 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon078E	5:12	-	lon078E
+
+# Solar Time by degree of Longitude: 77 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon077E	5:08	-	lon077E
+
+# Solar Time by degree of Longitude: 76 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon076E	5:04	-	lon076E
+
+# Solar Time by degree of Longitude: 75 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon075E	5:00	-	lon075E
+
+# Solar Time by degree of Longitude: 74 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon074E	4:56	-	lon074E
+
+# Solar Time by degree of Longitude: 73 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon073E	4:52	-	lon073E
+
+# Solar Time by degree of Longitude: 72 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon072E	4:48	-	lon072E
+
+# Solar Time by degree of Longitude: 71 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon071E	4:44	-	lon071E
+
+# Solar Time by degree of Longitude: 70 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon070E	4:40	-	lon070E
+
+# Solar Time by degree of Longitude: 69 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon069E	4:36	-	lon069E
+
+# Solar Time by degree of Longitude: 68 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon068E	4:32	-	lon068E
+
+# Solar Time by degree of Longitude: 67 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon067E	4:28	-	lon067E
+
+# Solar Time by degree of Longitude: 66 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon066E	4:24	-	lon066E
+
+# Solar Time by degree of Longitude: 65 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon065E	4:20	-	lon065E
+
+# Solar Time by degree of Longitude: 64 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon064E	4:16	-	lon064E
+
+# Solar Time by degree of Longitude: 63 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon063E	4:12	-	lon063E
+
+# Solar Time by degree of Longitude: 62 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon062E	4:08	-	lon062E
+
+# Solar Time by degree of Longitude: 61 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon061E	4:04	-	lon061E
+
+# Solar Time by degree of Longitude: 60 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon060E	4:00	-	lon060E
+
+# Solar Time by degree of Longitude: 59 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon059E	3:56	-	lon059E
+
+# Solar Time by degree of Longitude: 58 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon058E	3:52	-	lon058E
+
+# Solar Time by degree of Longitude: 57 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon057E	3:48	-	lon057E
+
+# Solar Time by degree of Longitude: 56 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon056E	3:44	-	lon056E
+
+# Solar Time by degree of Longitude: 55 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon055E	3:40	-	lon055E
+
+# Solar Time by degree of Longitude: 54 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon054E	3:36	-	lon054E
+
+# Solar Time by degree of Longitude: 53 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon053E	3:32	-	lon053E
+
+# Solar Time by degree of Longitude: 52 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon052E	3:28	-	lon052E
+
+# Solar Time by degree of Longitude: 51 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon051E	3:24	-	lon051E
+
+# Solar Time by degree of Longitude: 50 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon050E	3:20	-	lon050E
+
+# Solar Time by degree of Longitude: 49 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon049E	3:16	-	lon049E
+
+# Solar Time by degree of Longitude: 48 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon048E	3:12	-	lon048E
+
+# Solar Time by degree of Longitude: 47 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon047E	3:08	-	lon047E
+
+# Solar Time by degree of Longitude: 46 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon046E	3:04	-	lon046E
+
+# Solar Time by degree of Longitude: 45 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon045E	3:00	-	lon045E
+
+# Solar Time by degree of Longitude: 44 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon044E	2:56	-	lon044E
+
+# Solar Time by degree of Longitude: 43 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon043E	2:52	-	lon043E
+
+# Solar Time by degree of Longitude: 42 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon042E	2:48	-	lon042E
+
+# Solar Time by degree of Longitude: 41 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon041E	2:44	-	lon041E
+
+# Solar Time by degree of Longitude: 40 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon040E	2:40	-	lon040E
+
+# Solar Time by degree of Longitude: 39 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon039E	2:36	-	lon039E
+
+# Solar Time by degree of Longitude: 38 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon038E	2:32	-	lon038E
+
+# Solar Time by degree of Longitude: 37 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon037E	2:28	-	lon037E
+
+# Solar Time by degree of Longitude: 36 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon036E	2:24	-	lon036E
+
+# Solar Time by degree of Longitude: 35 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon035E	2:20	-	lon035E
+
+# Solar Time by degree of Longitude: 34 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon034E	2:16	-	lon034E
+
+# Solar Time by degree of Longitude: 33 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon033E	2:12	-	lon033E
+
+# Solar Time by degree of Longitude: 32 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon032E	2:08	-	lon032E
+
+# Solar Time by degree of Longitude: 31 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon031E	2:04	-	lon031E
+
+# Solar Time by degree of Longitude: 30 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon030E	2:00	-	lon030E
+
+# Solar Time by degree of Longitude: 29 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon029E	1:56	-	lon029E
+
+# Solar Time by degree of Longitude: 28 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon028E	1:52	-	lon028E
+
+# Solar Time by degree of Longitude: 27 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon027E	1:48	-	lon027E
+
+# Solar Time by degree of Longitude: 26 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon026E	1:44	-	lon026E
+
+# Solar Time by degree of Longitude: 25 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon025E	1:40	-	lon025E
+
+# Solar Time by degree of Longitude: 24 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon024E	1:36	-	lon024E
+
+# Solar Time by degree of Longitude: 23 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon023E	1:32	-	lon023E
+
+# Solar Time by degree of Longitude: 22 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon022E	1:28	-	lon022E
+
+# Solar Time by degree of Longitude: 21 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon021E	1:24	-	lon021E
+
+# Solar Time by degree of Longitude: 20 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon020E	1:20	-	lon020E
+
+# Solar Time by degree of Longitude: 19 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon019E	1:16	-	lon019E
+
+# Solar Time by degree of Longitude: 18 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon018E	1:12	-	lon018E
+
+# Solar Time by degree of Longitude: 17 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon017E	1:08	-	lon017E
+
+# Solar Time by degree of Longitude: 16 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon016E	1:04	-	lon016E
+
+# Solar Time by degree of Longitude: 15 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon015E	1:00	-	lon015E
+
+# Solar Time by degree of Longitude: 14 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon014E	0:56	-	lon014E
+
+# Solar Time by degree of Longitude: 13 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon013E	0:52	-	lon013E
+
+# Solar Time by degree of Longitude: 12 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon012E	0:48	-	lon012E
+
+# Solar Time by degree of Longitude: 11 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon011E	0:44	-	lon011E
+
+# Solar Time by degree of Longitude: 10 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon010E	0:40	-	lon010E
+
+# Solar Time by degree of Longitude: 9 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon009E	0:36	-	lon009E
+
+# Solar Time by degree of Longitude: 8 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon008E	0:32	-	lon008E
+
+# Solar Time by degree of Longitude: 7 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon007E	0:28	-	lon007E
+
+# Solar Time by degree of Longitude: 6 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon006E	0:24	-	lon006E
+
+# Solar Time by degree of Longitude: 5 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon005E	0:20	-	lon005E
+
+# Solar Time by degree of Longitude: 4 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon004E	0:16	-	lon004E
+
+# Solar Time by degree of Longitude: 3 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon003E	0:12	-	lon003E
+
+# Solar Time by degree of Longitude: 2 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon002E	0:08	-	lon002E
+
+# Solar Time by degree of Longitude: 1 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon001E	0:04	-	lon001E
+
+# Solar Time by degree of Longitude: 0 E
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon000E	0:00	-	lon000E
+
+# Solar Time by degree of Longitude: 1 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon001W	-0:04	-	lon001W
+
+# Solar Time by degree of Longitude: 2 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon002W	-0:08	-	lon002W
+
+# Solar Time by degree of Longitude: 3 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon003W	-0:12	-	lon003W
+
+# Solar Time by degree of Longitude: 4 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon004W	-0:16	-	lon004W
+
+# Solar Time by degree of Longitude: 5 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon005W	-0:20	-	lon005W
+
+# Solar Time by degree of Longitude: 6 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon006W	-0:24	-	lon006W
+
+# Solar Time by degree of Longitude: 7 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon007W	-0:28	-	lon007W
+
+# Solar Time by degree of Longitude: 8 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon008W	-0:32	-	lon008W
+
+# Solar Time by degree of Longitude: 9 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon009W	-0:36	-	lon009W
+
+# Solar Time by degree of Longitude: 10 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon010W	-0:40	-	lon010W
+
+# Solar Time by degree of Longitude: 11 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon011W	-0:44	-	lon011W
+
+# Solar Time by degree of Longitude: 12 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon012W	-0:48	-	lon012W
+
+# Solar Time by degree of Longitude: 13 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon013W	-0:52	-	lon013W
+
+# Solar Time by degree of Longitude: 14 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon014W	-0:56	-	lon014W
+
+# Solar Time by degree of Longitude: 15 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon015W	-1:00	-	lon015W
+
+# Solar Time by degree of Longitude: 16 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon016W	-1:04	-	lon016W
+
+# Solar Time by degree of Longitude: 17 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon017W	-1:08	-	lon017W
+
+# Solar Time by degree of Longitude: 18 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon018W	-1:12	-	lon018W
+
+# Solar Time by degree of Longitude: 19 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon019W	-1:16	-	lon019W
+
+# Solar Time by degree of Longitude: 20 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon020W	-1:20	-	lon020W
+
+# Solar Time by degree of Longitude: 21 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon021W	-1:24	-	lon021W
+
+# Solar Time by degree of Longitude: 22 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon022W	-1:28	-	lon022W
+
+# Solar Time by degree of Longitude: 23 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon023W	-1:32	-	lon023W
+
+# Solar Time by degree of Longitude: 24 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon024W	-1:36	-	lon024W
+
+# Solar Time by degree of Longitude: 25 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon025W	-1:40	-	lon025W
+
+# Solar Time by degree of Longitude: 26 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon026W	-1:44	-	lon026W
+
+# Solar Time by degree of Longitude: 27 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon027W	-1:48	-	lon027W
+
+# Solar Time by degree of Longitude: 28 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon028W	-1:52	-	lon028W
+
+# Solar Time by degree of Longitude: 29 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon029W	-1:56	-	lon029W
+
+# Solar Time by degree of Longitude: 30 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon030W	-2:00	-	lon030W
+
+# Solar Time by degree of Longitude: 31 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon031W	-2:04	-	lon031W
+
+# Solar Time by degree of Longitude: 32 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon032W	-2:08	-	lon032W
+
+# Solar Time by degree of Longitude: 33 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon033W	-2:12	-	lon033W
+
+# Solar Time by degree of Longitude: 34 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon034W	-2:16	-	lon034W
+
+# Solar Time by degree of Longitude: 35 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon035W	-2:20	-	lon035W
+
+# Solar Time by degree of Longitude: 36 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon036W	-2:24	-	lon036W
+
+# Solar Time by degree of Longitude: 37 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon037W	-2:28	-	lon037W
+
+# Solar Time by degree of Longitude: 38 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon038W	-2:32	-	lon038W
+
+# Solar Time by degree of Longitude: 39 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon039W	-2:36	-	lon039W
+
+# Solar Time by degree of Longitude: 40 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon040W	-2:40	-	lon040W
+
+# Solar Time by degree of Longitude: 41 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon041W	-2:44	-	lon041W
+
+# Solar Time by degree of Longitude: 42 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon042W	-2:48	-	lon042W
+
+# Solar Time by degree of Longitude: 43 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon043W	-2:52	-	lon043W
+
+# Solar Time by degree of Longitude: 44 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon044W	-2:56	-	lon044W
+
+# Solar Time by degree of Longitude: 45 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon045W	-3:00	-	lon045W
+
+# Solar Time by degree of Longitude: 46 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon046W	-3:04	-	lon046W
+
+# Solar Time by degree of Longitude: 47 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon047W	-3:08	-	lon047W
+
+# Solar Time by degree of Longitude: 48 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon048W	-3:12	-	lon048W
+
+# Solar Time by degree of Longitude: 49 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon049W	-3:16	-	lon049W
+
+# Solar Time by degree of Longitude: 50 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon050W	-3:20	-	lon050W
+
+# Solar Time by degree of Longitude: 51 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon051W	-3:24	-	lon051W
+
+# Solar Time by degree of Longitude: 52 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon052W	-3:28	-	lon052W
+
+# Solar Time by degree of Longitude: 53 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon053W	-3:32	-	lon053W
+
+# Solar Time by degree of Longitude: 54 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon054W	-3:36	-	lon054W
+
+# Solar Time by degree of Longitude: 55 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon055W	-3:40	-	lon055W
+
+# Solar Time by degree of Longitude: 56 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon056W	-3:44	-	lon056W
+
+# Solar Time by degree of Longitude: 57 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon057W	-3:48	-	lon057W
+
+# Solar Time by degree of Longitude: 58 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon058W	-3:52	-	lon058W
+
+# Solar Time by degree of Longitude: 59 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon059W	-3:56	-	lon059W
+
+# Solar Time by degree of Longitude: 60 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon060W	-4:00	-	lon060W
+
+# Solar Time by degree of Longitude: 61 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon061W	-4:04	-	lon061W
+
+# Solar Time by degree of Longitude: 62 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon062W	-4:08	-	lon062W
+
+# Solar Time by degree of Longitude: 63 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon063W	-4:12	-	lon063W
+
+# Solar Time by degree of Longitude: 64 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon064W	-4:16	-	lon064W
+
+# Solar Time by degree of Longitude: 65 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon065W	-4:20	-	lon065W
+
+# Solar Time by degree of Longitude: 66 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon066W	-4:24	-	lon066W
+
+# Solar Time by degree of Longitude: 67 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon067W	-4:28	-	lon067W
+
+# Solar Time by degree of Longitude: 68 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon068W	-4:32	-	lon068W
+
+# Solar Time by degree of Longitude: 69 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon069W	-4:36	-	lon069W
+
+# Solar Time by degree of Longitude: 70 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon070W	-4:40	-	lon070W
+
+# Solar Time by degree of Longitude: 71 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon071W	-4:44	-	lon071W
+
+# Solar Time by degree of Longitude: 72 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon072W	-4:48	-	lon072W
+
+# Solar Time by degree of Longitude: 73 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon073W	-4:52	-	lon073W
+
+# Solar Time by degree of Longitude: 74 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon074W	-4:56	-	lon074W
+
+# Solar Time by degree of Longitude: 75 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon075W	-5:00	-	lon075W
+
+# Solar Time by degree of Longitude: 76 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon076W	-5:04	-	lon076W
+
+# Solar Time by degree of Longitude: 77 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon077W	-5:08	-	lon077W
+
+# Solar Time by degree of Longitude: 78 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon078W	-5:12	-	lon078W
+
+# Solar Time by degree of Longitude: 79 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon079W	-5:16	-	lon079W
+
+# Solar Time by degree of Longitude: 80 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon080W	-5:20	-	lon080W
+
+# Solar Time by degree of Longitude: 81 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon081W	-5:24	-	lon081W
+
+# Solar Time by degree of Longitude: 82 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon082W	-5:28	-	lon082W
+
+# Solar Time by degree of Longitude: 83 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon083W	-5:32	-	lon083W
+
+# Solar Time by degree of Longitude: 84 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon084W	-5:36	-	lon084W
+
+# Solar Time by degree of Longitude: 85 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon085W	-5:40	-	lon085W
+
+# Solar Time by degree of Longitude: 86 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon086W	-5:44	-	lon086W
+
+# Solar Time by degree of Longitude: 87 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon087W	-5:48	-	lon087W
+
+# Solar Time by degree of Longitude: 88 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon088W	-5:52	-	lon088W
+
+# Solar Time by degree of Longitude: 89 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon089W	-5:56	-	lon089W
+
+# Solar Time by degree of Longitude: 90 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon090W	-6:00	-	lon090W
+
+# Solar Time by degree of Longitude: 91 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon091W	-6:04	-	lon091W
+
+# Solar Time by degree of Longitude: 92 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon092W	-6:08	-	lon092W
+
+# Solar Time by degree of Longitude: 93 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon093W	-6:12	-	lon093W
+
+# Solar Time by degree of Longitude: 94 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon094W	-6:16	-	lon094W
+
+# Solar Time by degree of Longitude: 95 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon095W	-6:20	-	lon095W
+
+# Solar Time by degree of Longitude: 96 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon096W	-6:24	-	lon096W
+
+# Solar Time by degree of Longitude: 97 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon097W	-6:28	-	lon097W
+
+# Solar Time by degree of Longitude: 98 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon098W	-6:32	-	lon098W
+
+# Solar Time by degree of Longitude: 99 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon099W	-6:36	-	lon099W
+
+# Solar Time by degree of Longitude: 100 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon100W	-6:40	-	lon100W
+
+# Solar Time by degree of Longitude: 101 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon101W	-6:44	-	lon101W
+
+# Solar Time by degree of Longitude: 102 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon102W	-6:48	-	lon102W
+
+# Solar Time by degree of Longitude: 103 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon103W	-6:52	-	lon103W
+
+# Solar Time by degree of Longitude: 104 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon104W	-6:56	-	lon104W
+
+# Solar Time by degree of Longitude: 105 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon105W	-7:00	-	lon105W
+
+# Solar Time by degree of Longitude: 106 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon106W	-7:04	-	lon106W
+
+# Solar Time by degree of Longitude: 107 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon107W	-7:08	-	lon107W
+
+# Solar Time by degree of Longitude: 108 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon108W	-7:12	-	lon108W
+
+# Solar Time by degree of Longitude: 109 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon109W	-7:16	-	lon109W
+
+# Solar Time by degree of Longitude: 110 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon110W	-7:20	-	lon110W
+
+# Solar Time by degree of Longitude: 111 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon111W	-7:24	-	lon111W
+
+# Solar Time by degree of Longitude: 112 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon112W	-7:28	-	lon112W
+
+# Solar Time by degree of Longitude: 113 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon113W	-7:32	-	lon113W
+
+# Solar Time by degree of Longitude: 114 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon114W	-7:36	-	lon114W
+
+# Solar Time by degree of Longitude: 115 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon115W	-7:40	-	lon115W
+
+# Solar Time by degree of Longitude: 116 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon116W	-7:44	-	lon116W
+
+# Solar Time by degree of Longitude: 117 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon117W	-7:48	-	lon117W
+
+# Solar Time by degree of Longitude: 118 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon118W	-7:52	-	lon118W
+
+# Solar Time by degree of Longitude: 119 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon119W	-7:56	-	lon119W
+
+# Solar Time by degree of Longitude: 120 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon120W	-8:00	-	lon120W
+
+# Solar Time by degree of Longitude: 121 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon121W	-8:04	-	lon121W
+
+# Solar Time by degree of Longitude: 122 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon122W	-8:08	-	lon122W
+
+# Solar Time by degree of Longitude: 123 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon123W	-8:12	-	lon123W
+
+# Solar Time by degree of Longitude: 124 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon124W	-8:16	-	lon124W
+
+# Solar Time by degree of Longitude: 125 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon125W	-8:20	-	lon125W
+
+# Solar Time by degree of Longitude: 126 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon126W	-8:24	-	lon126W
+
+# Solar Time by degree of Longitude: 127 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon127W	-8:28	-	lon127W
+
+# Solar Time by degree of Longitude: 128 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon128W	-8:32	-	lon128W
+
+# Solar Time by degree of Longitude: 129 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon129W	-8:36	-	lon129W
+
+# Solar Time by degree of Longitude: 130 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon130W	-8:40	-	lon130W
+
+# Solar Time by degree of Longitude: 131 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon131W	-8:44	-	lon131W
+
+# Solar Time by degree of Longitude: 132 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon132W	-8:48	-	lon132W
+
+# Solar Time by degree of Longitude: 133 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon133W	-8:52	-	lon133W
+
+# Solar Time by degree of Longitude: 134 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon134W	-8:56	-	lon134W
+
+# Solar Time by degree of Longitude: 135 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon135W	-9:00	-	lon135W
+
+# Solar Time by degree of Longitude: 136 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon136W	-9:04	-	lon136W
+
+# Solar Time by degree of Longitude: 137 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon137W	-9:08	-	lon137W
+
+# Solar Time by degree of Longitude: 138 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon138W	-9:12	-	lon138W
+
+# Solar Time by degree of Longitude: 139 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon139W	-9:16	-	lon139W
+
+# Solar Time by degree of Longitude: 140 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon140W	-9:20	-	lon140W
+
+# Solar Time by degree of Longitude: 141 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon141W	-9:24	-	lon141W
+
+# Solar Time by degree of Longitude: 142 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon142W	-9:28	-	lon142W
+
+# Solar Time by degree of Longitude: 143 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon143W	-9:32	-	lon143W
+
+# Solar Time by degree of Longitude: 144 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon144W	-9:36	-	lon144W
+
+# Solar Time by degree of Longitude: 145 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon145W	-9:40	-	lon145W
+
+# Solar Time by degree of Longitude: 146 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon146W	-9:44	-	lon146W
+
+# Solar Time by degree of Longitude: 147 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon147W	-9:48	-	lon147W
+
+# Solar Time by degree of Longitude: 148 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon148W	-9:52	-	lon148W
+
+# Solar Time by degree of Longitude: 149 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon149W	-9:56	-	lon149W
+
+# Solar Time by degree of Longitude: 150 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon150W	-10:00	-	lon150W
+
+# Solar Time by degree of Longitude: 151 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon151W	-10:04	-	lon151W
+
+# Solar Time by degree of Longitude: 152 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon152W	-10:08	-	lon152W
+
+# Solar Time by degree of Longitude: 153 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon153W	-10:12	-	lon153W
+
+# Solar Time by degree of Longitude: 154 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon154W	-10:16	-	lon154W
+
+# Solar Time by degree of Longitude: 155 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon155W	-10:20	-	lon155W
+
+# Solar Time by degree of Longitude: 156 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon156W	-10:24	-	lon156W
+
+# Solar Time by degree of Longitude: 157 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon157W	-10:28	-	lon157W
+
+# Solar Time by degree of Longitude: 158 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon158W	-10:32	-	lon158W
+
+# Solar Time by degree of Longitude: 159 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon159W	-10:36	-	lon159W
+
+# Solar Time by degree of Longitude: 160 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon160W	-10:40	-	lon160W
+
+# Solar Time by degree of Longitude: 161 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon161W	-10:44	-	lon161W
+
+# Solar Time by degree of Longitude: 162 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon162W	-10:48	-	lon162W
+
+# Solar Time by degree of Longitude: 163 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon163W	-10:52	-	lon163W
+
+# Solar Time by degree of Longitude: 164 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon164W	-10:56	-	lon164W
+
+# Solar Time by degree of Longitude: 165 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon165W	-11:00	-	lon165W
+
+# Solar Time by degree of Longitude: 166 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon166W	-11:04	-	lon166W
+
+# Solar Time by degree of Longitude: 167 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon167W	-11:08	-	lon167W
+
+# Solar Time by degree of Longitude: 168 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon168W	-11:12	-	lon168W
+
+# Solar Time by degree of Longitude: 169 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon169W	-11:16	-	lon169W
+
+# Solar Time by degree of Longitude: 170 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon170W	-11:20	-	lon170W
+
+# Solar Time by degree of Longitude: 171 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon171W	-11:24	-	lon171W
+
+# Solar Time by degree of Longitude: 172 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon172W	-11:28	-	lon172W
+
+# Solar Time by degree of Longitude: 173 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon173W	-11:32	-	lon173W
+
+# Solar Time by degree of Longitude: 174 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon174W	-11:36	-	lon174W
+
+# Solar Time by degree of Longitude: 175 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon175W	-11:40	-	lon175W
+
+# Solar Time by degree of Longitude: 176 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon176W	-11:44	-	lon176W
+
+# Solar Time by degree of Longitude: 177 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon177W	-11:48	-	lon177W
+
+# Solar Time by degree of Longitude: 178 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon178W	-11:52	-	lon178W
+
+# Solar Time by degree of Longitude: 179 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon179W	-11:56	-	lon179W
+
+# Solar Time by degree of Longitude: 180 W
+# Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
+Zone	solar/lon180W	-12:00	-	lon180W
+
