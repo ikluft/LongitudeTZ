@@ -25,8 +25,8 @@ def gen_hour_tz(hour_in):
     offset_min = 0
 
     # generate strings from time zone parameters
-    zone_abbrev = "{}{}{:0>2d}".format("hour", sign, offset_hr)
-    zone_name = "{}/{}".format("solar", zone_abbrev)
+    zone_abbrev = "{}{}{:0>2d}".format("Solar", sign, offset_hr)
+    zone_name = "{}/{}".format("Solar", zone_abbrev)
     offset_str = "{}{:d}:{:0>2d}".format(sign, offset_hr, offset_min)
 
     # output time zone data
@@ -58,8 +58,8 @@ def gen_lon_tz(deg_in):
     offset_min = abs(offset) % 60
 
     # generate strings from time zone parameters
-    zone_abbrev = "{}{:0>3d}{}".format("lon", lon, e_w)
-    zone_name = "{}/{}".format("solar", zone_abbrev)
+    zone_abbrev = "{}{:0>3d}{}".format("Lon", lon, e_w)
+    zone_name = "{}/{}".format("Solar", zone_abbrev)
     offset_str = "{}{:d}:{:0>2d}".format(sign, offset_hr, offset_min)
 
     # output time zone data

@@ -27,8 +27,8 @@ sub gen_hour_tz
     my $offset_min = 0;
 
     # generate strings from time zone parameters
-    my $zone_abbrev = sprintf( "%s%s%02d",  "hour",  $sign, $offset_hr );
-    my $zone_name   = sprintf( "%s/%s",     "solar", $zone_abbrev );
+    my $zone_abbrev = sprintf( "%s%s%02d",  "Solar",  $sign, $offset_hr );
+    my $zone_name   = sprintf( "%s/%s",     "Solar", $zone_abbrev );
     my $offset_str  = sprintf( "%s%d:%02d", $sign,   $offset_hr, $offset_min );
 
     # output time zone data
@@ -63,8 +63,8 @@ sub gen_lon_tz
     my $offset_min = abs($offset) % 60;
 
     # generate strings from time zone parameters
-    my $zone_abbrev = sprintf( "%s%03d%s",  "lon",   $lon, $ew );
-    my $zone_name   = sprintf( "%s/%s",     "solar", $zone_abbrev );
+    my $zone_abbrev = sprintf( "%s%03d%s",  "Lon",   $lon, $ew );
+    my $zone_name   = sprintf( "%s/%s",     "Solar", $zone_abbrev );
     my $offset_str  = sprintf( "%s%d:%02d", $sign,   $offset_hr, $offset_min );
 
     # output time zone data
