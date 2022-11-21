@@ -14,7 +14,6 @@
 use Modern::Perl qw(2017);
 ## use critic (Modules::RequireExplicitPackage)
 
-use v5.26.0;    # 2017 Perl or newer
 use utf8;
 use autodie;
 use feature qw(say);
