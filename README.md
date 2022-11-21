@@ -12,6 +12,13 @@ With those items as its basis, this project is to establish "Solar Time Zone" da
 
 The project also makes another set of overlay time zones the width of 1 degree of longitude, which puts them in 4-minute intervals of time. These are a hyper-local niche for potential use by outdoor events. These may be used by those who would like to have the middle of the scheduling day coincide with local solar noon. 
 
+## Implementations
+Implementations of Solar TimeZone libraries:
+* [Perl](src/perl/) as _TimeZone::Solar_ module
+* Python - TODO
+* Rust - TODO
+* others coming, code contributions accepted
+
 ## The Solar Time Zones Standard
 The Solar Time Zones Standard includes the following rules.
 * There are 24 hour-based Solar Time Zones, named Solar-12 through Solar+12. Solar+00 is equivalent to UTC.
