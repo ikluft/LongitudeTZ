@@ -9,7 +9,7 @@
 # pragmas to silence some warnings from Perl::Critic
 ## no critic (Modules::RequireExplicitPackage)
 # This solves a catch-22 where parts of Perl::Critic want both package and use-strict to be first
-use Modern::Perl qw(2017);
+use Modern::Perl qw(2018);
 ## use critic (Modules::RequireExplicitPackage)
 
 package TimeZone::Solar;
@@ -53,6 +53,25 @@ sub version
     return "00-dev";
 }
 
+# check latitude data and initialize special case for polar regions - internal method called by init()
+sub _init_latitude
+{
+    my $self = shift;
+    my $class = ref $self;
+
+    # safety check on latitude
+    if ( $self->{latitude} > $MAX_LATITUDE_FP or $self->{latitude} < -$MAX_LATITUDE_FP ) {
+        croak "$class: latitude when provided must be in range -90..+90";
+    }
+
+    # special case: use Solar+00 (equal to UTC) within 10° latitude of poles
+    if ( $self->{latitude} >= $LIMIT_LATITUDE or $self->{latitude} <= -$LIMIT_LATITUDE ) {
+        $self->name( "Solar+00" );
+        $self->offset( 0 );
+    }
+    return;
+}
+
 # initialize - called by new()
 sub init
 {
@@ -64,18 +83,11 @@ sub init
 
     # if latitude is provided, use UTC within 10° latitude of poles
     if ( exists $self->{latitude}) {
-        # safety check on latitude
-        if ( $self->{latitude} > $MAX_LATITUDE_FP or $self->{latitude} < -$MAX_LATITUDE_FP ) {
-            croak "$class: latitude when provided must be in range -90..+90";
-        }
+        # check latitude data and initialize special case for polar regions
+        $self->_init_latitude();
 
-        # special case: use Solar+00 (equal to UTC) within 10° latitude of poles
-        if ( $self->{latitude} >= $LIMIT_LATITUDE or $self->{latitude} <= -$LIMIT_LATITUDE ) {
-            $self->name( "Solar+00" );
-            $self->offset( 0 );
-        }
-
-        # otherwise fall through to set time zone from longitude as usual
+        # return if initialized, otherwise fall through to set time zone from longitude as usual
+        return if exists $self->{name} and exists $self->{offset};
     }
 
     #
@@ -97,10 +109,12 @@ sub init
     my $use_lon_tz = ( exists $self->{use_lon_tz} and $self->{use_lon_tz});
     my $tz_degree_width = $use_lon_tz ? 1 : 15; # 1 for longitude-based tz, 15 for hour-based tz
     my $tz_max = $MAX_LONGITUDE_INT / $tz_degree_width; # ±180 for longitude-based tz, ±12 for hour-based tz
+    my $tz_type = $use_lon_tz ? "Lon" : "Solar";
+    my $tz_digits = $use_lon_tz ? 3 : 2;
 
     # handle special case of tz centered on Prime Meridian (0° longitude)
     if ( $self->{longitude} > -$tz_degree_width/2.0 and $self->{longitude} < $tz_degree_width/2.0 ) {
-        my $tz_name = sprintf "%s%s%0*d", $use_lon_tz ? "Lon" : "Solar", "+", $use_lon_tz ? 3 : 2, 0;
+        my $tz_name = sprintf "%s%s%0*d", $tz_type, "+", $tz_digits, 0;
         $self->name( $tz_name );
         $self->offset( 0 );
         return;
@@ -108,7 +122,7 @@ sub init
 
     # handle special case of half-wide tz at positive side of solar date line (180° longitude)
     if ( $self->{longitude} >= $tz_max - $tz_degree_width/2 - $FP_PRECISION ) {
-        my $tz_name = sprintf "%s%s%0*d", $use_lon_tz ? "Lon" : "Solar", "+", $use_lon_tz ? 3 : 2,
+        my $tz_name = sprintf "%s%s%0*d", $tz_type, "+", $tz_digits,
             $MAX_LONGITUDE_INT / $tz_degree_width;
         $self->name( $tz_name );
         $self->offset( 720 );
@@ -117,7 +131,7 @@ sub init
 
     # handle special case of half-wide tz at negativ< side of solar date line (180° longitude)
     if ( $self->{longitude} >= -$tz_max + $tz_degree_width/2 + $FP_PRECISION ) {
-        my $tz_name = sprintf "%s%s%0*d", $use_lon_tz ? "Lon" : "Solar", "-", $use_lon_tz ? 3 : 2,
+        my $tz_name = sprintf "%s%s%0*d", $tz_type, "-", $tz_digits,
             $MAX_LONGITUDE_INT / $tz_degree_width;
         $self->name( $tz_name );
         $self->offset( -720 );
@@ -125,10 +139,9 @@ sub init
     }
 
     # handle other times zones
-    my $tz_name = sprintf "%s%s%0*d", $use_lon_tz ? "Lon" : "Solar", $self->{longitude} >= 0 ? "+" : "-",
-        $use_lon_tz ? 3 : 2, int( abs( $self->{longitude} / $tz_degree_width ) - 0.5 );
-        my $offset = int( $self->{longitude} / $tz_degree_width - 0.5 )
-            * ( $MINUTES_PER_DEGREE_LON * $tz_degree_width);
+    my $tz_name = sprintf "%s%s%0*d", $tz_type, $self->{longitude} >= 0 ? "+" : "-",
+        $tz_digits, int( abs( $self->{longitude} / $tz_degree_width ) - 0.5 );
+    my $offset = int( $self->{longitude} / $tz_degree_width - 0.5 ) * ( $MINUTES_PER_DEGREE_LON * $tz_degree_width);
     $self->name( $tz_name );
     $self->offset( $offset );
     return;
