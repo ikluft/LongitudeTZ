@@ -29,6 +29,30 @@ Readonly::Scalar my $POLAR_UTC_AREA => 10.0;                                # la
 Readonly::Scalar my $LIMIT_LATITUDE => $MAX_LATITUDE_FP - $POLAR_UTC_AREA;  # max latitude for solar time zones
 Readonly::Scalar my $MINUTES_PER_DEGREE_LON => 4;                           # minutes per degree longitude
 
+# return TimeZone::Solar (or subclass) version number
+sub version
+{
+    my $class = shift;
+
+    if ( not defined $class ) {
+        throw_incompatible_class("invalid version() call on undefined value");
+    }
+    if ( not $class->isa(__PACKAGE__) ) {
+        throw_incompatible_class("invalid version() call for '$class': not in the ".__PACKAGE__." hierarchy");
+    }
+    {
+        ## no critic (TestingAndDebugging::ProhibitNoStrict)
+        no strict 'refs';
+        if ( defined ${ $class . "::VERSION" } ) {
+            return ${ $class . "::VERSION" };
+        }
+    }
+    if ( defined $__PACKAGE__::VERSION ) {
+        return $__PACKAGE__::VERSION;
+    }
+    return "00-dev";
+}
+
 # initialize - called by new()
 sub init
 {
@@ -148,6 +172,19 @@ __END__
 =head1 DESCRIPTION
 
 =head1 FUNCTIONS AND METHODS
+
+=over 1
+
+=item TimeZone::Solar->version()
+
+Return the version number of TimeZone::Solar, or for any subclass which inherits the method.
+
+When running code within a source-code development workspace, it returns "00-dev" to avoid warnings
+about undefined values.
+Release version numbers are assigned and added by the build system upon release,
+and are not available when running directly from a source code repository.
+
+=back
 
 =head1 LICENSE
 
