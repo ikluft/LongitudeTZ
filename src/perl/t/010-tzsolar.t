@@ -29,23 +29,25 @@ Readonly::Hash my %constants => (
     LIMIT_LATITUDE         => 80,
     MINUTES_PER_DEGREE_LON => 4,
 );
-Readonly::Scalar my $fp_epsilon =>
-  2**-24;    # fp epsilon for fp_equal() based on 32-bit floats
+Readonly::Scalar my $fp_epsilon => 2**-24;    # fp epsilon for fp_equal() based on 32-bit floats
 
 # count tests
-sub count_tests {
+sub count_tests
+{
     return ( ( scalar keys %constants ) + ( $constants{MAX_DEGREES} + 1 ) * 4 );
 }
 
 # floating point equality comparison utility function
 # FP must not be compared with == operator - instead check if difference is within "machine epsilon" precision
-sub fp_equal {
+sub fp_equal
+{
     my ( $x, $y ) = @_;
     return ( abs( $x - $y ) < $fp_epsilon ) ? 1 : 0;
 }
 
 # check constants
-sub test_constants {
+sub test_constants
+{
     foreach my $key ( sort keys %constants ) {
         if ( substr( $key, -3 ) eq "_FP" ) {
 
@@ -54,11 +56,10 @@ sub test_constants {
                 fp_equal( TimeZone::Solar->_get_const($key), $constants{$key} ),
                 sprintf( "constant check: %s = %.7f", $key, $constants{$key} )
             );
-        }
-        else {
+        } else {
+
             # other types
-            is( TimeZone::Solar->_get_const($key),
-                $constants{$key}, "constant check: $key = $constants{$key}" );
+            is( TimeZone::Solar->_get_const($key), $constants{$key}, "constant check: $key = $constants{$key}" );
         }
     }
 }
@@ -66,14 +67,13 @@ sub test_constants {
 # compute expected time zone name and offset for test
 # parameters use integer degrees and return the expected values at that longitude
 # floating point variations on coordinates are up to the tests - but it expects this integer's result
-sub expect_lon2tz {
-    my %params     = @_;
-    my $lon        = $params{lon};
-    my $use_lon_tz = ( exists $params{use_lon_tz} and $params{use_lon_tz} );
-    my $tz_degree_width =
-      $use_lon_tz ? 1 : 15;    # 1 for longitude-based tz, 15 for hour-based tz
-    my $tz_max = $constants{MAX_LONGITUDE_INT} /
-      $tz_degree_width;    # ±180 for longitude-based tz, ±12 for hour-based tz
+sub expect_lon2tz
+{
+    my %params          = @_;
+    my $lon             = $params{lon};
+    my $use_lon_tz      = ( exists $params{use_lon_tz} and $params{use_lon_tz} );
+    my $tz_degree_width = $use_lon_tz ? 1 : 15;                     # 1 for longitude-based tz, 15 for hour-based tz
+    my $tz_max = $constants{MAX_LONGITUDE_INT} / $tz_degree_width;  # ±180 for longitude-based tz, ±12 for hour-based tz
     my $tz_type   = $use_lon_tz ? "Lon" : "Solar";
     my $tz_digits = $use_lon_tz ? 3     : 2;
 
@@ -84,31 +84,24 @@ sub expect_lon2tz {
         # handle special case of tz centered on Prime Meridian (0° longitude)
         $tz_name = sprintf( "%s%s%0*d", $tz_type, "+", $tz_digits, 0 );
         $offset  = 0;
-    }
-    elsif ( $lon >= $tz_max - $tz_degree_width / 2 or $lon == -180 ) {
+    } elsif ( $lon >= $tz_max - $tz_degree_width / 2 or $lon == -180 ) {
 
-# handle special case of half-wide tz at positive side of solar date line (180° longitude)
-# special case of -180: expect results for +180
-        $tz_name = sprintf( "%s%s%0*d",
-            $tz_type, "+", $tz_digits,
-            $constants{MAX_LONGITUDE_INT} / $tz_degree_width );
-        $offset = 720;
-    }
-    elsif ( $lon <= -$tz_max + $tz_degree_width / 2 ) {
+        # handle special case of half-wide tz at positive side of solar date line (180° longitude)
+        # special case of -180: expect results for +180
+        $tz_name = sprintf( "%s%s%0*d", $tz_type, "+", $tz_digits, $constants{MAX_LONGITUDE_INT} / $tz_degree_width );
+        $offset  = 720;
+    } elsif ( $lon <= -$tz_max + $tz_degree_width / 2 ) {
 
-# handle special case of half-wide tz at negative side of solar date line (180° longitude)
-        $tz_name = sprintf( "%s%s%0*d",
-            $tz_type, "-", $tz_digits,
-            $constants{MAX_LONGITUDE_INT} / $tz_degree_width );
-        $offset = -720;
-    }
-    else {
+        # handle special case of half-wide tz at negative side of solar date line (180° longitude)
+        $tz_name = sprintf( "%s%s%0*d", $tz_type, "-", $tz_digits, $constants{MAX_LONGITUDE_INT} / $tz_degree_width );
+        $offset  = -720;
+    } else {
+
         # handle other times zones
         $tz_name = sprintf( "%s%s%0*d",
             $tz_type,   $lon >= 0 ? "+" : "-",
             $tz_digits, int( abs( $lon / $tz_degree_width ) - 0.5 ) );
-        $offset = int( $lon / $tz_degree_width - 0.5 ) *
-          ( $constants{MINUTES_PER_DEGREE_LON} * $tz_degree_width );
+        $offset = int( $lon / $tz_degree_width - 0.5 ) * ( $constants{MINUTES_PER_DEGREE_LON} * $tz_degree_width );
     }
 
     #say STDERR "debug(lon:$lon,type:$tz_type) -> $tz_name, $offset";
@@ -116,24 +109,22 @@ sub expect_lon2tz {
 }
 
 # perform tests for a degree of longitude
-sub test_lon {
+sub test_lon
+{
     my $lon = shift;
 
     # hourly and longitude time zones without latitude
     foreach my $use_lon_tz ( 0, 1 ) {
-        my $stz =
-          TimeZone::Solar->new( longitude => $lon, use_lon_tz => $use_lon_tz );
-        my ( $name, $offset ) =
-          expect_lon2tz( lon => $lon, use_lon_tz => $use_lon_tz );
-        is( $stz->name(), $name,
-            sprintf( "%-04d lon: name = %s", $lon, $name ) );
-        is( $stz->offset(), $offset,
-            sprintf( "%-04d lon: offset = %d", $lon, $offset ) );
+        my $stz = TimeZone::Solar->new( longitude => $lon, use_lon_tz => $use_lon_tz );
+        my ( $name, $offset ) = expect_lon2tz( lon => $lon, use_lon_tz => $use_lon_tz );
+        is( $stz->name(),   $name,   sprintf( "%-04d lon: name = %s",   $lon, $name ) );
+        is( $stz->offset(), $offset, sprintf( "%-04d lon: offset = %d", $lon, $offset ) );
     }
 }
 
 # check against every integer longitude value around the globe
-sub test_global {
+sub test_global
+{
     for ( my $lon = -180 ; $lon <= 180 ; $lon++ ) {
         test_lon($lon);
     }

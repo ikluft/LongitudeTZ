@@ -22,7 +22,8 @@ use Carp    qw(croak);
 # generate standard 1-hour-wide (15 degrees longitude) time zones
 # input parameter: integer hours from GMT in the range
 # These correspond to the GMT+x/GMT-x time zones, except with boundaries defined by longitude lines.
-sub gen_hour_tz {
+sub gen_hour_tz
+{
     my $hour = int(shift);
     if ( $hour < -12 or $hour > 12 ) {
         croak "hour parameter must be -12 to +12 inclusive";
@@ -40,8 +41,7 @@ sub gen_hour_tz {
 
     # output time zone data
     say "# Solar Time by hourly increment: $sign $offset_hr";
-    say "# "
-      . join( "\t", qw(Zone NAME ), "", qw(STDOFF RULES FORMAT [UNTIL]) );
+    say "# " . join( "\t", qw(Zone NAME ), "", qw(STDOFF RULES FORMAT [UNTIL]) );
     say join( "\t", "Zone", $zone_name, $offset_str, "-", $zone_abbrev );
     say "";
     return;
@@ -51,20 +51,21 @@ sub gen_hour_tz {
 # input parameter: integer degrees of longitude in the range 180 to -180, Solar Time Zone centered on the meridian,
 # including one half degree either side of the meridian. Each time zone is named for its 1-degree-wide range.
 # The exception is at the Solar Date Line, where +12 and -12 time zones are one half degree wide.
-sub gen_lon_tz {
+sub gen_lon_tz
+{
     my $deg = int(shift);
     if ( $deg < -180 or $deg > 180 ) {
         croak "deg parameter must be -180 to +180 inclusive";
     }
 
-# use integer degrees to compute time zone parameters: longitude, east/west sign and minutes offset
-# $deg>=0: positive degrees (east longitude), straightforward assignments of data
-# $deg<0: negative degrees (west longitude)
+    # use integer degrees to compute time zone parameters: longitude, east/west sign and minutes offset
+    # $deg>=0: positive degrees (east longitude), straightforward assignments of data
+    # $deg<0: negative degrees (west longitude)
     my $lon  = abs($deg);
     my $ew   = ( $deg >= 0 ) ? "E" : "W";
     my $sign = ( $deg >= 0 ) ? ""  : "-";
 
-# derive time zone parameters from 4 minutes of offset for each degree of longitude
+    # derive time zone parameters from 4 minutes of offset for each degree of longitude
     my $offset     = 4 * abs($deg);
     my $offset_hr  = int( abs($offset) / 60 );
     my $offset_min = abs($offset) % 60;
@@ -76,8 +77,7 @@ sub gen_lon_tz {
 
     # output time zone data
     say "# Solar Time by degree of longitude: $lon $ew";
-    say "# "
-      . join( "\t", qw(Zone NAME ), "", qw(STDOFF RULES FORMAT [UNTIL]) );
+    say "# " . join( "\t", qw(Zone NAME ), "", qw(STDOFF RULES FORMAT [UNTIL]) );
     say join( "\t", "Zone", $zone_name, $offset_str, "-", $zone_abbrev );
     say "";
     return;

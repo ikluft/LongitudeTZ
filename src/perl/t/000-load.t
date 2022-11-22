@@ -11,8 +11,7 @@ Readonly::Scalar my $main_class => "TimeZone::Solar";
 # always test these modules can load
 Readonly::Array my @submodules => qw(
 );
-Readonly::Array my @modules =>
-  ( $main_class, map { $main_class . "::" . $_ } @submodules );
+Readonly::Array my @modules => ( $main_class, map { $main_class . "::" . $_ } @submodules );
 
 # count tests
 plan tests => int(@modules);
