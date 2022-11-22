@@ -20,14 +20,36 @@ use Readonly;
 
 # constants
 Readonly::Scalar my $PRECISION_DIGITS => 6;                                 # max decimal digits of precision
-Readonly::Scalar my $FP_PRECISION => (10 ** -$PRECISION_DIGITS) / 2.0;      # 1/2 width of floating point equality
+Readonly::Scalar my $PRECISION_FP => (10 ** -$PRECISION_DIGITS) / 2.0;      # 1/2 width of floating point equality
 Readonly::Scalar my $MAX_DEGREES => 360;                                    # maximum degrees = 360
 Readonly::Scalar my $MAX_LONGITUDE_INT => $MAX_DEGREES / 2;                 # min/max longitude in integer = 180
 Readonly::Scalar my $MAX_LONGITUDE_FP => $MAX_DEGREES / 2.0;                # min/max longitude in float = 180.0
 Readonly::Scalar my $MAX_LATITUDE_FP => $MAX_DEGREES / 4.0;                 # min/max latitude in float = 90.0
-Readonly::Scalar my $POLAR_UTC_AREA => 10.0;                                # latitude degrees around poles to use UTC
+Readonly::Scalar my $POLAR_UTC_AREA => 10;                                  # latitude degrees around poles to use UTC
 Readonly::Scalar my $LIMIT_LATITUDE => $MAX_LATITUDE_FP - $POLAR_UTC_AREA;  # max latitude for solar time zones
 Readonly::Scalar my $MINUTES_PER_DEGREE_LON => 4;                           # minutes per degree longitude
+Readonly::Hash my %constants => (
+    PRECISION_DIGITS => $PRECISION_DIGITS,
+    PRECISION_FP => $PRECISION_FP,
+    MAX_DEGREES => $MAX_DEGREES,
+    MAX_LONGITUDE_INT => $MAX_LONGITUDE_INT,
+    MAX_LONGITUDE_FP => $MAX_LONGITUDE_FP,
+    MAX_LATITUDE_FP => $MAX_LATITUDE_FP,
+    POLAR_UTC_AREA => $POLAR_UTC_AREA,
+    LIMIT_LATITUDE => $LIMIT_LATITUDE,
+    MINUTES_PER_DEGREE_LON => $MINUTES_PER_DEGREE_LON,
+);
+
+# access constants - for use by tests
+# throws exception if requested contant name doesn't exist
+sub _get_const
+{
+    my ( $class, $name ) = @_;
+    if ( not exists $constants{$name} ) {
+        croak "non-existent constant requested: $name";
+    }
+    return $constants{$name};
+}
 
 # return TimeZone::Solar (or subclass) version number
 sub version
@@ -38,7 +60,7 @@ sub version
         throw_incompatible_class("invalid version() call on undefined value");
     }
     if ( not $class->isa(__PACKAGE__) ) {
-        throw_incompatible_class("invalid version() call for '$class': not in the ".__PACKAGE__." hierarchy");
+        throw_incompatible_class("invalid version() call for '$class': not in ".__PACKAGE__." hierarchy");
     }
     {
         ## no critic (TestingAndDebugging::ProhibitNoStrict)
@@ -46,9 +68,6 @@ sub version
         if ( defined ${ $class . "::VERSION" } ) {
             return ${ $class . "::VERSION" };
         }
-    }
-    if ( defined $__PACKAGE__::VERSION ) {
-        return $__PACKAGE__::VERSION;
     }
     return "00-dev";
 }
@@ -100,7 +119,7 @@ sub init
     }
 
     # floating point equality test for solar date line: flip sign positive if within precision margin of the line
-    if ( $self->{longitude} < -$MAX_LONGITUDE_FP + $FP_PRECISION ) {
+    if ( $self->{longitude} < -$MAX_LONGITUDE_FP + $PRECISION_FP ) {
         $self->{longitude} = -$self->{longitude};
     }
 
@@ -121,7 +140,7 @@ sub init
     }
 
     # handle special case of half-wide tz at positive side of solar date line (180° longitude)
-    if ( $self->{longitude} >= $tz_max - $tz_degree_width/2 - $FP_PRECISION ) {
+    if ( $self->{longitude} >= $tz_max - $tz_degree_width/2 - $PRECISION_FP ) {
         my $tz_name = sprintf "%s%s%0*d", $tz_type, "+", $tz_digits,
             $MAX_LONGITUDE_INT / $tz_degree_width;
         $self->name( $tz_name );
@@ -130,7 +149,7 @@ sub init
     }
 
     # handle special case of half-wide tz at negativ< side of solar date line (180° longitude)
-    if ( $self->{longitude} >= -$tz_max + $tz_degree_width/2 + $FP_PRECISION ) {
+    if ( $self->{longitude} <= -$tz_max + $tz_degree_width/2 + $PRECISION_FP ) {
         my $tz_name = sprintf "%s%s%0*d", $tz_type, "-", $tz_digits,
             $MAX_LONGITUDE_INT / $tz_degree_width;
         $self->name( $tz_name );
@@ -165,6 +184,26 @@ sub new {
         $init_func->( $self );
     }
     return $self;
+}
+
+# accessor methods
+sub name
+{
+    my @args = @_;
+    my $self = $args[0];
+    if ( scalar @args > 1 ) {
+        $self->{name} = $args[1];
+    }
+    return $self->{name};
+}
+sub offset
+{
+    my @args = @_;
+    my $self = $args[0];
+    if ( scalar @args > 1 ) {
+        $self->{offset} = $args[1];
+    }
+    return $self->{offset};
 }
 
 1;
