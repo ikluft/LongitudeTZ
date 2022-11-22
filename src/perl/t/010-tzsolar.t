@@ -34,7 +34,7 @@ Readonly::Scalar my $fp_epsilon            => 2**-24;    # fp epsilon for fp_equ
 # count tests
 sub count_tests
 {
-    return (( scalar keys %constants ) + ( $constants{MAX_DEGREES} - 1 ) * 4 );
+    return (( scalar keys %constants ) + ( $constants{MAX_DEGREES} + 1 ) * 4 );
 }
 
 # floating point equality comparison utility function
@@ -79,13 +79,14 @@ sub expect_lon2tz
         # handle special case of tz centered on Prime Meridian (0° longitude)
         $tz_name = sprintf( "%s%s%0*d", $tz_type, "+", $tz_digits, 0 );
         $offset = 0;
-    } elsif ( $lon >= $tz_max - $tz_degree_width/2 ) {
+    } elsif ( $lon >= $tz_max - $tz_degree_width/2 or $lon == -180 ) {
         # handle special case of half-wide tz at positive side of solar date line (180° longitude)
+        # special case of -180: expect results for +180
         $tz_name = sprintf( "%s%s%0*d", $tz_type, "+", $tz_digits,
             $constants{MAX_LONGITUDE_INT} / $tz_degree_width );
         $offset = 720;
     } elsif ( $lon <= -$tz_max + $tz_degree_width/2 ) {
-        # handle special case of half-wide tz at negativ< side of solar date line (180° longitude)
+        # handle special case of half-wide tz at negative side of solar date line (180° longitude)
         $tz_name = sprintf( "%s%s%0*d", $tz_type, "-", $tz_digits,
             $constants{MAX_LONGITUDE_INT} / $tz_degree_width );
         $offset = -720
@@ -105,7 +106,7 @@ sub test_lon
     my $lon = shift;
 
     # hourly and longitude time zones without latitude
-    foreach my $use_lon_tz ( qw( 0 1 )) {
+    foreach my $use_lon_tz ( 0, 1 ) {
         my $stz = TimeZone::Solar->new( longitude => $lon, use_lon_tz => $use_lon_tz );
         my ( $name, $offset ) = expect_lon2tz( lon => $lon, use_lon_tz => $use_lon_tz );
         is ( $stz->name(), $name, sprintf( "%-04d lon: name = %s", $lon, $name ));
@@ -116,11 +117,9 @@ sub test_lon
 # check against every integer longitude value around the globe
 sub test_global
 {
-    for ( my $lon = -179; $lon <= 179; $lon++ ) {
+    for ( my $lon = -180; $lon <= 180; $lon++ ) {
         test_lon($lon);
     }
-
-    # TODO - test half-wide special case timezones either side of solar date line
 }
 
 # main
