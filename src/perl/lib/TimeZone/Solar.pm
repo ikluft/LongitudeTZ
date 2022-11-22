@@ -42,6 +42,7 @@ Readonly::Hash my %constants => (
 
 # access constants - for use by tests
 # throws exception if requested contant name doesn't exist
+## no critic ( Subroutines::ProhibitUnusedPrivateSubroutines )
 sub _get_const
 {
     my ( $class, $name ) = @_;
@@ -50,6 +51,7 @@ sub _get_const
     }
     return $constants{$name};
 }
+## critic ( Subroutines::ProhibitUnusedPrivateSubroutines )
 
 # return TimeZone::Solar (or subclass) version number
 sub version
