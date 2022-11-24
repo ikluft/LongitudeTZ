@@ -16,12 +16,8 @@ nytprof.out
 
 # Dizt::Zilla
 /.build/
-main/.build/
-main/WebFetch-[0-9]*.tar.gz
-main/WebFetch-[0-9]*/
-submodules/*/.build/
-submodules/*/WebFetch-*-[0-9]*.tar.gz
-submodules/*/WebFetch-*-[0-9]*/
+/TimeZone-Solar-*-[0-9]*.tar.gz
+/TimeZone-Solar-*-[0-9]*/
 
 # Module::Build
 _build/
