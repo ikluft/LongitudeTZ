@@ -29,7 +29,7 @@ Readonly::Scalar my $MAX_LATITUDE_FP   => $MAX_DEGREES / 4.0;                 # 
 Readonly::Scalar my $POLAR_UTC_AREA    => 10;                                 # latitude degrees around poles to use UTC
 Readonly::Scalar my $LIMIT_LATITUDE    => $MAX_LATITUDE_FP - $POLAR_UTC_AREA; # max latitude for solar time zones
 Readonly::Scalar my $MINUTES_PER_DEGREE_LON => 4;                             # minutes per degree longitude
-Readonly::Hash my %constants => (
+Readonly::Hash my %constants => (                                             # allow tests to check constants
     PRECISION_DIGITS       => $PRECISION_DIGITS,
     PRECISION_FP           => $PRECISION_FP,
     MAX_DEGREES            => $MAX_DEGREES,
@@ -41,12 +41,36 @@ Readonly::Hash my %constants => (
     MINUTES_PER_DEGREE_LON => $MINUTES_PER_DEGREE_LON,
 );
 
+# enforce class access
+sub _class_guard
+{
+    my $class = shift;
+    my $classname = ref $class ? ref $class : $class;
+    if ( not defined $classname ) {
+        croak( "incompatible class: invalid method call on undefined value" );
+    }
+    if ( not $class->isa(__PACKAGE__) ) {
+        croak( "incompatible class: invalid method call for '$classname': not in " . __PACKAGE__ . " hierarchy" );
+    }
+    return;
+}
+
 # access constants - for use by tests
+# if no name parameter is provided, return list of constant names
 # throws exception if requested contant name doesn't exist
 ## no critic ( Subroutines::ProhibitUnusedPrivateSubroutines )
 sub _get_const
 {
-    my ( $class, $name ) = @_;
+    my @args = @_;
+    my ( $class, $name ) = @args;
+    _class_guard($class);
+
+    # if no name provided, return list of keys
+    if ( scalar @args <= 1 ) {
+        return ( sort keys %constants );
+    }
+
+    # require valid name parameter
     if ( not exists $constants{$name} ) {
         croak "non-existent constant requested: $name";
     }
@@ -58,13 +82,8 @@ sub _get_const
 sub version
 {
     my $class = shift;
+    _class_guard($class);
 
-    if ( not defined $class ) {
-        throw_incompatible_class("invalid version() call on undefined value");
-    }
-    if ( not $class->isa(__PACKAGE__) ) {
-        throw_incompatible_class( "invalid version() call for '$class': not in " . __PACKAGE__ . " hierarchy" );
-    }
     {
         ## no critic (TestingAndDebugging::ProhibitNoStrict)
         no strict 'refs';
@@ -82,17 +101,14 @@ sub _init_latitude
     my $class = ref $self;
 
     # safety check on latitude
-    if (   $self->{latitude} > $MAX_LATITUDE_FP
-        or $self->{latitude} < -$MAX_LATITUDE_FP )
-    {
+    if ( abs ( $self->{latitude} ) > $MAX_LATITUDE_FP + $PRECISION_FP ) {
         croak "$class: latitude when provided must be in range -90..+90";
     }
 
     # special case: use Solar+00 (equal to UTC) within 10° latitude of poles
-    if (   $self->{latitude} >= $LIMIT_LATITUDE
-        or $self->{latitude} <= -$LIMIT_LATITUDE )
-    {
-        $self->name("Solar+00");
+    if ( abs( $self->{latitude} ) >= $LIMIT_LATITUDE - $PRECISION_FP ) {
+        my $use_lon_tz      = ( exists $self->{use_lon_tz} and $self->{use_lon_tz} );
+        $self->name($use_lon_tz ? "Lon+000" : "Solar+00");
         $self->offset(0);
     }
     return;
@@ -122,9 +138,7 @@ sub init
     #
 
     # safety check on longitude
-    if (   $self->{longitude} > $MAX_LONGITUDE_FP
-        or $self->{longitude} < -$MAX_LONGITUDE_FP )
-    {
+    if (  abs( $self->{longitude} ) > $MAX_LONGITUDE_FP + $PRECISION_FP ) {
         croak "$class: longitude must be in range -180 to +180";
     }
 
@@ -142,9 +156,7 @@ sub init
     my $tz_digits       = $use_lon_tz ? 3     : 2;
 
     # handle special case of tz centered on Prime Meridian (0° longitude)
-    if (    $self->{longitude} > -$tz_degree_width / 2.0
-        and $self->{longitude} < $tz_degree_width / 2.0 )
-    {
+    if ( abs( $self->{longitude} ) < $tz_degree_width / 2.0 - $PRECISION_FP ) {
         my $tz_name = sprintf "%s%s%0*d", $tz_type, "+", $tz_digits, 0;
         $self->name($tz_name);
         $self->offset(0);
@@ -152,7 +164,7 @@ sub init
     }
 
     # handle special case of half-wide tz at positive side of solar date line (180° longitude)
-    if ( $self->{longitude} >= $tz_max - $tz_degree_width / 2 - $PRECISION_FP ) {
+    if ( $self->{longitude} >= $tz_max - $tz_degree_width / 2.0 - $PRECISION_FP ) {
         my $tz_name = sprintf "%s%s%0*d", $tz_type, "+", $tz_digits, $MAX_LONGITUDE_INT / $tz_degree_width;
         $self->name($tz_name);
         $self->offset(720);
@@ -160,7 +172,7 @@ sub init
     }
 
     # handle special case of half-wide tz at negativ< side of solar date line (180° longitude)
-    if ( $self->{longitude} <= -$tz_max + $tz_degree_width / 2 + $PRECISION_FP ) {
+    if ( $self->{longitude} <= -$tz_max + $tz_degree_width / 2.0 + $PRECISION_FP ) {
         my $tz_name = sprintf "%s%s%0*d", $tz_type, "-", $tz_digits, $MAX_LONGITUDE_INT / $tz_degree_width;
         $self->name($tz_name);
         $self->offset(-720);
@@ -168,10 +180,10 @@ sub init
     }
 
     # handle other times zones
-    my $tz_name = sprintf "%s%s%0*d", $tz_type,
-        $self->{longitude} >= 0 ? "+" : "-",
-        $tz_digits, int( abs( $self->{longitude} / $tz_degree_width ) - 0.5 );
-    my $offset = int( $self->{longitude} / $tz_degree_width - 0.5 ) * ( $MINUTES_PER_DEGREE_LON * $tz_degree_width );
+    my $tz_int = int( abs( $self->{longitude} ) / $tz_degree_width + 0.5 + $PRECISION_FP );
+    my $sign = ( $self->{longitude} > -$tz_degree_width + $PRECISION_FP ) ? 1 : -1;
+    my $tz_name = sprintf "%s%s%0*d", $tz_type, $sign > 0 ? "+" : "-", $tz_digits, $tz_int;
+    my $offset = $sign * $tz_int * ( $MINUTES_PER_DEGREE_LON * $tz_degree_width );
     $self->name($tz_name);
     $self->offset($offset);
     return;
