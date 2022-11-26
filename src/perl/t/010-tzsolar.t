@@ -16,6 +16,7 @@ use Carp;
 use Test::More;
 use Test::Exception;
 use Readonly;
+use IO::File;
 use TimeZone::Solar;
 
 # constants
@@ -112,29 +113,24 @@ sub expect_lon2tz
 {
     my %params          = @_;
     my $lon             = $params{longitude};
+    my $precision       = $constants{PRECISION_FP};
     my $use_lon_tz      = ( exists $params{use_lon_tz} and $params{use_lon_tz} );
     my $tz_degree_width = $use_lon_tz ? 1 : 15;                     # 1 for longitude-based tz, 15 for hour-based tz
-    my $tz_max = $constants{MAX_LONGITUDE_INT} / $tz_degree_width;  # ±180 for longitude-based tz, ±12 for hour-based tz
-    my $tz_type   = $use_lon_tz ? "Lon" : "Solar";
-    my $tz_digits = $use_lon_tz ? 3     : 2;
-    my $precision = $constants{PRECISION_FP};
+    my $tz_type         = $use_lon_tz ? "Lon" : "Solar";
+    my $tz_digits       = $use_lon_tz ? 3     : 2;
 
     # generate time zone name and offset
     my ( $tz_name, $offset );
-    if ( abs( $lon ) < $tz_degree_width / 2.0 - $precision ) {
-
-        # handle special case of tz centered on Prime Meridian (0° longitude)
-        $tz_name = sprintf( "%s%s%0*d", $tz_type, "+", $tz_digits, 0 );
-        $offset  = 0;
-        $debug_mode and say STDERR "debug expect_lon2tz(): tz_name=$tz_name offset=$offset (case: prime meridian)";
-    } elsif ( $lon >= $tz_max - $tz_degree_width / 2.0 - $precision or $lon <= -180.0 + $precision ) {
+    if ( $lon >= $constants{MAX_LONGITUDE_INT} - $tz_degree_width / 2.0 - $precision
+        or $lon <= -$constants{MAX_LONGITUDE_INT} + $precision )
+    {
 
         # handle special case of half-wide tz at positive side of solar date line (180° longitude)
         # special case of -180: expect results for +180
         $tz_name = sprintf( "%s%s%0*d", $tz_type, "+", $tz_digits, $constants{MAX_LONGITUDE_INT} / $tz_degree_width );
         $offset  = 720;
         $debug_mode and say STDERR "debug expect_lon2tz(): tz_name=$tz_name offset=$offset (case: date line +)";
-    } elsif ( $lon <= -$tz_max + $tz_degree_width / 2.0 + $precision ) {
+    } elsif ( $lon <= (-$constants{MAX_LONGITUDE_INT} + $tz_degree_width / 2.0 + $precision )) {
 
         # handle special case of half-wide tz at negative side of solar date line (180° longitude)
         $tz_name = sprintf( "%s%s%0*d", $tz_type, "-", $tz_digits, $constants{MAX_LONGITUDE_INT} / $tz_degree_width );
@@ -144,8 +140,8 @@ sub expect_lon2tz
 
         # handle other times zones
         my $tz_int = int( abs( $lon ) / $tz_degree_width + 0.5 + $precision );
-        my $sign = ( $lon > -$tz_degree_width + $precision ) ? 1 : -1;
-        $tz_name = sprintf( "%s%s%0*d", $tz_type,   $sign > 0 ? "+" : "-", $tz_digits, $tz_int );
+        my $sign = ( $lon > -$tz_degree_width / 2.0 + $precision ) ? 1 : -1;
+        $tz_name = sprintf( "%s%s%0*d", $tz_type, $sign > 0 ? "+" : "-", $tz_digits, $tz_int );
         $offset = $sign * $tz_int * ( $constants{MINUTES_PER_DEGREE_LON} * $tz_degree_width );
         $debug_mode and say STDERR "debug expect_lon2tz(): tz_name=$tz_name offset=$offset (case: general)";
     }
@@ -163,8 +159,8 @@ sub test_lon
     foreach my $use_lon_tz ( 0, 1 ) {
         my $stz = TimeZone::Solar->new( longitude => $lon, use_lon_tz => $use_lon_tz );
         my ( $name, $offset ) = expect_lon2tz( longitude => $lon, use_lon_tz => $use_lon_tz );
-        is( $stz->name(),   $name,   sprintf( "%-04d lon: name = %s",   $lon, $name ) );
-        is( $stz->offset(), $offset, sprintf( "%-04d lon: offset = %d", $lon, $offset ) );
+        is( $stz->name(),   $name,   sprintf( "lon: %-04d name = %s", $lon, $name ) );
+        is( $stz->offset(), $offset, sprintf( "lon: %-04d offset = %d", $lon, $offset ) );
     }
     return;
 }
@@ -178,12 +174,13 @@ sub test_global
     return;
 }
 
-# tests for polar latitudes - not needed at every degree of longitude
+# tests for polar latitudes
+# tests border cases - not needed at every degree of longitude
 sub test_polar
 {
     my $precision = $constants{PRECISION_FP};
     foreach my $test_point ( @polar_test_points ) {
-        my $use_lon = ( abs( $test_point->{latitude} ) < $constants{LIMIT_LATITUDE} - $precision )
+        my $use_lon = ( abs( $test_point->{latitude} ) <= $constants{LIMIT_LATITUDE} - $precision )
             ? $test_point->{longitude}
             : 0;
         my @result = expect_lon2tz( longitude => $use_lon, use_lon_tz => $test_point->{use_lon_tz} );
@@ -201,6 +198,7 @@ sub test_polar
 
 # main
 plan tests => count_tests();
+autoflush STDOUT 1;
 test_functions();
 test_constants();
 test_global();
