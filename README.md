@@ -1,7 +1,7 @@
 # Longitude-based Time Zones Project
-Many people are tired of changing their clocks twice a year for daylight time. But that remains the law across many mid- to high-latitudes. DST is based on an antiquated tradition [which we now know doesn't do any good](https://www.webmd.com/sleep-disorders/news/20211105/harmful-effects-of-daylight-savings). Anyone can look up sunrise and sunset times for events that need to be scheduled around it.
+Many people are tired of changing their clocks twice a year for daylight time. DST is an antiquated tradition [which we now know doesn't do any good](https://www.webmd.com/sleep-disorders/news/20211105/harmful-effects-of-daylight-savings). Anyone can look up sunrise and sunset times for events that need to be scheduled around daylight.
 
-National and regional governments continue to cling to daylight saving time partly because almost everyone else has such a standard. In this age where our computers and cell phones are integral to scheduling, we really only need a new de-facto standard. Fortunately, there are standards we can build upon.
+National and regional governments continue to cling to daylight saving time partly because almost everyone else has such a standard. In this age where our computers and cell phones are integral to scheduling, we really only need a de-facto standard. _It is possible to just stop using DST_, and let our computers convert the times to and from others who continue to use DST. Fortunately, there are standards we can build upon.
 * Lines of longitude are a well-established standard.
 * Ships at sea use "nautical time" based on time zones 15 degrees of longitude wide.
 * Time zones (without daylight saving offsets) are based on average solar noon at the Prime Meridian. Standard Time in each time zone lines up with average solar noon on the meridian at the center of each time zone, at 15-degree of longitude increments.

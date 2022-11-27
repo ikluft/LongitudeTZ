@@ -101,6 +101,9 @@ sub _init_latitude
     my $class = ref $self;
 
     # safety check on latitude
+    if ( not $self->{latitude} =~ /^[-+]?\d+(\.\d+)?$/x ) {
+        croak("$class: latitude '".$self->{latitude}."' is not numeric")
+    }
     if ( abs ( $self->{latitude} ) > $MAX_LATITUDE_FP + $PRECISION_FP ) {
         croak "$class: latitude when provided must be in range -90..+90";
     }
@@ -138,8 +141,11 @@ sub init
     #
 
     # safety check on longitude
-    if (  abs( $self->{longitude} ) > $MAX_LONGITUDE_FP + $PRECISION_FP ) {
-        croak "$class: longitude must be in range -180 to +180";
+    if ( not $self->{longitude} =~ /^[-+]?\d+(\.\d+)?$/x ) {
+        croak("$class: longitude '".$self->{longitude}."' is not numeric")
+    }
+    if ( abs( $self->{longitude} ) > $MAX_LONGITUDE_FP + $PRECISION_FP ) {
+        croak "$class: longitude must be in the range -180 to +180";
     }
 
     # set flag for longitude time zones: 0 = hourly 1-hour/15-degree zones, 1 = longitude 4-minute/1-degree zones
@@ -201,27 +207,25 @@ sub new
 #
 # accessor methods
 #
+
+# longitude: read-only accessor
 sub longitude
 {
     my @args = @_;
     my $self = $args[0];
-    if ( scalar @args > 1 ) {
-        $self->{longitude} = $args[1];
-    }
     return $self->{longitude};
 }
 
+# latitude read-only accessor
 sub latitude
 {
     my @args = @_;
     my $self = $args[0];
-    if ( scalar @args > 1 ) {
-        $self->{latitude} = $args[1];
-    }
     return if not exists $self->{latitude};
     return $self->{latitude};
 }
 
+# name: read/write accessor
 sub name
 {
     my @args = @_;
@@ -232,6 +236,7 @@ sub name
     return $self->{name};
 }
 
+# offset read/write accessor
 sub offset
 {
     my @args = @_;
@@ -244,7 +249,7 @@ sub offset
 
 #
 # DateTime::TimeZone interface compatibility methods
-# by definition, there is never a Daylight Savings change in the Solar time zones
+# By definition, there is never a Daylight Savings change in the Solar time zones.
 #
 sub has_dst_changes { return 0; }
 sub is_floating { return 0; }
@@ -254,7 +259,7 @@ sub is_utc { my $self = shift; return $self->offset() == 0 ? 1 : 0; }
 sub is_dst_for_datetime { return 0; }
 sub offset_for_datetime { my $self = shift; return $self->offset(); }
 sub offset_for_local_datetime { my $self = shift; return $self->offset(); }
-# sub short_name_for_datetime { } # TODO
+sub short_name_for_datetime {my $self = shift; return $self->name();  }
 
 1;
 
