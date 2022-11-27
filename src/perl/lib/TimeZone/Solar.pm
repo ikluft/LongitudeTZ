@@ -198,7 +198,30 @@ sub new
     return $self;
 }
 
+#
 # accessor methods
+#
+sub longitude
+{
+    my @args = @_;
+    my $self = $args[0];
+    if ( scalar @args > 1 ) {
+        $self->{longitude} = $args[1];
+    }
+    return $self->{longitude};
+}
+
+sub latitude
+{
+    my @args = @_;
+    my $self = $args[0];
+    if ( scalar @args > 1 ) {
+        $self->{latitude} = $args[1];
+    }
+    return if not exists $self->{latitude};
+    return $self->{latitude};
+}
+
 sub name
 {
     my @args = @_;
@@ -218,6 +241,20 @@ sub offset
     }
     return $self->{offset};
 }
+
+#
+# DateTime::TimeZone interface compatibility methods
+# by definition, there is never a Daylight Savings change in the Solar time zones
+#
+sub has_dst_changes { return 0; }
+sub is_floating { return 0; }
+sub is_olson { return 0; }
+sub category { return "Solar"; }
+sub is_utc { my $self = shift; return $self->offset() == 0 ? 1 : 0; }
+sub is_dst_for_datetime { return 0; }
+sub offset_for_datetime { my $self = shift; return $self->offset(); }
+sub offset_for_local_datetime { my $self = shift; return $self->offset(); }
+# sub short_name_for_datetime { } # TODO
 
 1;
 
