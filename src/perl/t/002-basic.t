@@ -29,15 +29,17 @@ Readonly::Scalar my $date_jul => DateTime->new(year => 2023, month => 7, day => 
 sub run_tests
 {
     for (my $long=-180; $long <= 180; $long+=30) {
+      my $use_long = $long;
+      if ( $long == -180 ) {
+          $use_long = 180;
+      }
       my $tz = TimeZone::Solar->new( 
-        longitude => $long, 
+        longitude => $use_long, 
       );
-      my $short_name = $long == -180
-        ? "Solar+12"
-        : sprintf("Solar%s%02d", $long >= 0 ? "+" : "-", int(abs( $long / $tz_degree_width )));
+      my $short_name = sprintf("%s%02d", $use_long >= 0 ? "East" : "West", int(abs( $long / $tz_degree_width )));
       my $is_utc = ($long == 0) ? 1 : 0;
       isa_ok( $tz, 'TimeZone::Solar' );
-      is( $tz->longitude,                      $long,     "longitude: $long" );
+      is( $tz->longitude,                      $use_long, "longitude: $use_long" );
       is( $tz->is_floating,                    0,         "should not be floating ($long)" );
       is( $tz->is_utc,                         $is_utc,   "is UTC: ".($is_utc ? "true" : "false")." ($long)" );
       is( $tz->is_olson,                       0,         "should not be based on Olson database ($long)" );

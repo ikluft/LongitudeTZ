@@ -18,8 +18,14 @@ use utf8;
 use autodie;
 use Carp qw(croak);
 use Readonly;
+use DateTime::TimeZone qw(0.80);
+use Try::Tiny;
 
 # constants
+Readonly::Scalar my $debug_mode => (exists $ENV{TZSOLAR_DEBUG} and $ENV{TZSOLAR_DEBUG}) ? 1 : 0;
+Readonly::Scalar my $TZSOLAR_LON_ZONE_RE   => qr((Lon0[0-9][0-9][EW]) | (Lon1[0-7][0-9][EW]) | (Lon180[EW]))x;
+Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE   => qr((East|West)(0[0-9] | 1[0-2]))x;
+Readonly::Scalar my $TZSOLAR_ZONE_RE   => qr( $TZSOLAR_LON_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE )x;
 Readonly::Scalar my $PRECISION_DIGITS  => 6;                                  # max decimal digits of precision
 Readonly::Scalar my $PRECISION_FP      => ( 10**-$PRECISION_DIGITS ) / 2.0;   # 1/2 width of floating point equality
 Readonly::Scalar my $MAX_DEGREES       => 360;                                # maximum degrees = 360
@@ -40,6 +46,9 @@ Readonly::Hash my %constants => (                                             # 
     LIMIT_LATITUDE         => $LIMIT_LATITUDE,
     MINUTES_PER_DEGREE_LON => $MINUTES_PER_DEGREE_LON,
 );
+
+# file globals
+my %_INSTANCES;
 
 # enforce class access
 sub _class_guard
@@ -95,45 +104,59 @@ sub version
 }
 
 # check latitude data and initialize special case for polar regions - internal method called by init()
-sub _init_latitude
+sub _tz_params_latitude
 {
-    my $self  = shift;
-    my $class = ref $self;
+    my $param_ref = shift;
 
     # safety check on latitude
-    if ( not $self->{latitude} =~ /^[-+]?\d+(\.\d+)?$/x ) {
-        croak("$class: latitude '".$self->{latitude}."' is not numeric")
+    if ( not $param_ref->{latitude} =~ /^[-+]?\d+(\.\d+)?$/x ) {
+        croak(__PACKAGE__."::_tz_params_latitude: latitude '".$param_ref->{latitude}."' is not numeric")
     }
-    if ( abs ( $self->{latitude} ) > $MAX_LATITUDE_FP + $PRECISION_FP ) {
-        croak "$class: latitude when provided must be in range -90..+90";
+    if ( abs ( $param_ref->{latitude} ) > $MAX_LATITUDE_FP + $PRECISION_FP ) {
+        croak __PACKAGE__."::_tz_params_latitude: latitude when provided must be in range -90..+90";
     }
 
     # special case: use Solar+00 (equal to UTC) within 10° latitude of poles
-    if ( abs( $self->{latitude} ) >= $LIMIT_LATITUDE - $PRECISION_FP ) {
-        my $use_lon_tz = ( exists $self->{use_lon_tz} and $self->{use_lon_tz} );
-        $self->name($use_lon_tz ? "Lon+000" : "Solar+00");
-        $self->offset(0);
+    if ( abs( $param_ref->{latitude} ) >= $LIMIT_LATITUDE - $PRECISION_FP ) {
+        my $use_lon_tz = ( exists $param_ref->{use_lon_tz} and $param_ref->{use_lon_tz} );
+        $param_ref->{short_name} = $use_lon_tz ? "Lon000E" : "East00";
+        $param_ref->{name} = "Solar/".$param_ref->{short_name};
+        $param_ref->{offset_min} = 0;
+        $param_ref->{offset} = _offset_min2str(0);
+        return $param_ref;
     }
     return;
 }
 
-# initialize - called by new()
-sub init
+# formatting functions
+sub _tz_prefix
 {
-    my $self  = shift;
-    my $class = ref $self;
-    if ( not exists $self->{longitude} ) {
-        croak "$class: longitude parameter missing";
+    my ( $use_lon_tz, $sign ) = @_;
+    return $use_lon_tz ? "Lon" : ( $sign > 0 ? "East" : "West" );
+}
+sub _tz_suffix
+{
+    my ( $use_lon_tz, $sign ) = @_;
+    return $use_lon_tz ? ( $sign > 0 ? "E" : "W" ) : ""
+}
+
+# get timezone parameters (name and minutes offset) - called by new()
+sub _tz_params
+{
+    my %params = @_;
+    if ( not exists $params{longitude} ) {
+        croak __PACKAGE__."::_tz_params: longitude parameter missing";
     }
 
     # if latitude is provided, use UTC within 10° latitude of poles
-    if ( exists $self->{latitude} ) {
+    if ( exists $params{latitude} ) {
 
-        # check latitude data and initialize special case for polar regions
-        $self->_init_latitude();
+        # check latitude data and special case for polar regions
+        my $lat_params = _tz_params_latitude(\%params);
 
         # return if initialized, otherwise fall through to set time zone from longitude as usual
-        return if exists $self->{name} and exists $self->{offset};
+        return $lat_params
+            if ref $lat_params eq "HASH";
     }
 
     #
@@ -141,46 +164,120 @@ sub init
     #
 
     # safety check on longitude
-    if ( not $self->{longitude} =~ /^[-+]?\d+(\.\d+)?$/x ) {
-        croak("$class: longitude '".$self->{longitude}."' is not numeric")
+    if ( not $params{longitude} =~ /^[-+]?\d+(\.\d+)?$/x ) {
+        croak(__PACKAGE__."::_tz_params: longitude '".$params{longitude}."' is not numeric")
     }
-    if ( abs( $self->{longitude} ) > $MAX_LONGITUDE_FP + $PRECISION_FP ) {
-        croak "$class: longitude must be in the range -180 to +180";
+    if ( abs( $params{longitude} ) > $MAX_LONGITUDE_FP + $PRECISION_FP ) {
+        croak __PACKAGE__."::_tz_params: longitude must be in the range -180 to +180";
     }
 
     # set flag for longitude time zones: 0 = hourly 1-hour/15-degree zones, 1 = longitude 4-minute/1-degree zones
     # defaults to hourly time zone ($use_lon_tz=0)
-    my $use_lon_tz      = ( exists $self->{use_lon_tz} and $self->{use_lon_tz} );
+    my $use_lon_tz      = ( exists $params{use_lon_tz} and $params{use_lon_tz} );
     my $tz_degree_width = $use_lon_tz ? 1 : 15;                     # 1 for longitude-based tz, 15 for hour-based tz
-    my $tz_type         = $use_lon_tz ? "Lon" : "Solar";
     my $tz_digits       = $use_lon_tz ? 3     : 2;
 
     # handle special case of half-wide tz at positive side of solar date line (180° longitude)
-    if ( $self->{longitude} >= $MAX_LONGITUDE_INT - $tz_degree_width / 2.0 - $PRECISION_FP
-        or $self->{longitude} <= -$MAX_LONGITUDE_INT + $PRECISION_FP )
+    if ( $params{longitude} >= $MAX_LONGITUDE_INT - $tz_degree_width / 2.0 - $PRECISION_FP
+        or $params{longitude} <= -$MAX_LONGITUDE_INT + $PRECISION_FP )
     {
-        my $tz_name = sprintf "%s%s%0*d", $tz_type, "+", $tz_digits, $MAX_LONGITUDE_INT / $tz_degree_width;
-        $self->name($tz_name);
-        $self->offset(720);
-        return;
+        my $tz_name = sprintf "%s%0*d%s",
+            _tz_prefix( $use_lon_tz, 1 ),
+            $tz_digits, $MAX_LONGITUDE_INT / $tz_degree_width,
+            _tz_suffix( $use_lon_tz, 1 );
+        $params{short_name} = $tz_name;
+        $params{name} = "Solar/".$tz_name;
+        $params{offset_min} = 720;
+        $params{offset} = _offset_min2str( 720 );
+        return \%params;
     }
 
     # handle special case of half-wide tz at negativ< side of solar date line (180° longitude)
-    if ( $self->{longitude} <= -$MAX_LONGITUDE_INT + $tz_degree_width / 2.0 + $PRECISION_FP ) {
-        my $tz_name = sprintf "%s%s%0*d", $tz_type, "-", $tz_digits, $MAX_LONGITUDE_INT / $tz_degree_width;
-        $self->name($tz_name);
-        $self->offset(-720);
-        return;
+    if ( $params{longitude} <= -$MAX_LONGITUDE_INT + $tz_degree_width / 2.0 + $PRECISION_FP ) {
+        my $tz_name = sprintf "%s%0*d%s",
+            _tz_prefix( $use_lon_tz, -1 ),
+            $tz_digits, $MAX_LONGITUDE_INT / $tz_degree_width,
+            _tz_suffix( $use_lon_tz, -1 );
+        $params{short_name} = $tz_name;
+        $params{name} = "Solar/".$tz_name;
+        $params{offset_min} = -720;
+        $params{offset} = _offset_min2str( -720 );
+        return \%params;
     }
 
     # handle other times zones
-    my $tz_int = int( abs( $self->{longitude} ) / $tz_degree_width + 0.5 + $PRECISION_FP );
-    my $sign = ( $self->{longitude} > -$tz_degree_width / 2.0 + $PRECISION_FP ) ? 1 : -1;
-    my $tz_name = sprintf "%s%s%0*d", $tz_type, $sign > 0 ? "+" : "-", $tz_digits, $tz_int;
+    my $tz_int = int( abs( $params{longitude} ) / $tz_degree_width + 0.5 + $PRECISION_FP );
+    my $sign = ( $params{longitude} > -$tz_degree_width / 2.0 + $PRECISION_FP ) ? 1 : -1;
+    my $tz_name = sprintf "%s%0*d%s",
+        _tz_prefix( $use_lon_tz, $sign ),
+        $tz_digits, $tz_int,
+        _tz_suffix( $use_lon_tz, $sign );
     my $offset = $sign * $tz_int * ( $MINUTES_PER_DEGREE_LON * $tz_degree_width );
-    $self->name($tz_name);
-    $self->offset($offset);
-    return;
+    $params{short_name} = $tz_name;
+    $params{name} = "Solar/".$tz_name;
+    $params{offset_min} = $offset;
+    $params{offset} = _offset_min2str( $offset );
+    return \%params;
+}
+
+# get timezone instance
+sub _tz_instance
+{
+    my $hashref = shift;
+
+    # consistency checks
+    if ( not defined $hashref ) {
+        croak __PACKAGE__."::_tz_instance: object not found in parameters";
+    }
+    if ( ref $hashref ne "HASH" ) {
+        croak __PACKAGE__."::_tz_instance: received non-hash ".(ref $hashref)." for object";
+    }
+    if ( not exists $hashref->{short_name}) {
+        croak __PACKAGE__."::_tz_instance: name attribute missing";
+    }
+    if ( $hashref->{short_name} !~ $TZSOLAR_ZONE_RE ) {
+        croak __PACKAGE__."::_tz_instance: name attrbute ".$hashref->{short_name}." is not a valid Solar timezone";
+    }
+
+    # look up class instance, return it if found
+    my $class = "DateTime::TimeZone::Solar::".$hashref->{short_name};
+    if ( exists $_INSTANCES{$class}) {
+        # forward lat/lon parameters to the existing instance, mainly so tests can see where it came from
+        foreach my $key ( qw(longitude latitude) ) {
+            if (exists $hashref->{$key}) {
+                $_INSTANCES{$class}->{$key} = $hashref->{$key};
+            } else {
+                delete $_INSTANCES{$class}->{$key};
+            }
+        }
+        return $_INSTANCES{$class};
+    }
+
+    # make sure the new singleton object's class is a subclass of TimeZone::Solar
+    if ( not $class->isa( __PACKAGE__ )) {
+        ## no critic (BuiltinFunctions::ProhibitStringyEval)
+        my $class_check = 0;
+        try {
+            if (eval "package $class { \@".$class."::ISA = qw(".__PACKAGE__."); }") {
+                $class_check = 1;
+            }
+        };
+        if ( not $class_check ) {
+            croak __PACKAGE__."::_tz_instance: unable to create class $class";
+        }
+    }
+
+
+    # bless the new object into the timezone subclass and save the singleton instance
+    my $obj = bless $hashref, $class;
+    $_INSTANCES{$class} = $obj;
+
+    # stuff aliases for the short and long names into DateTime::TimeZone::Catalog
+    $DateTime::TimeZone::Catalog::LINKS{$hashref->{short_name}} = $obj->offset();
+    $DateTime::TimeZone::Catalog::LINKS{$hashref->{name}} = $obj->offset();
+
+    # return the new object
+    return $obj;
 }
 
 # instantiate a new TimeZone::Solar object
@@ -194,10 +291,12 @@ sub new
         croak __PACKAGE__ . "->new() prohibited for unrelated class $class";
     }
 
-    # instantiate object with @args data
-    my $self = bless {@args}, $class;
+    # use @args to look up a timezone singleton instance
+    # make a new one if it doesn't yet exist
+    my $tz_params = _tz_params( @args );
+    my $self = _tz_instance( $tz_params );
 
-    # use init() method of proper class, possibly a derived class
+    # use init() method, with support for derived classes that may override it
     if ( my $init_func = $self->can("init") ) {
         $init_func->($self);
     }
@@ -211,16 +310,14 @@ sub new
 # longitude: read-only accessor
 sub longitude
 {
-    my @args = @_;
-    my $self = $args[0];
+    my $self = shift;
     return $self->{longitude};
 }
 
 # latitude read-only accessor
 sub latitude
 {
-    my @args = @_;
-    my $self = $args[0];
+    my $self = shift;
     return if not exists $self->{latitude};
     return $self->{latitude};
 }
@@ -236,15 +333,61 @@ sub name
     return $self->{name};
 }
 
-# offset read/write accessor
-sub offset
+# short_name: read/write accessor
+sub short_name
 {
     my @args = @_;
     my $self = $args[0];
     if ( scalar @args > 1 ) {
-        $self->{offset} = $args[1];
+        $self->{short_name} = $args[1];
     }
+    return $self->{short_name};
+}
+
+# long_name: read accessor
+sub long_name { my $self = shift; return $self->name(); }
+
+# offset read accessor
+sub offset
+{
+    my $self = shift;
     return $self->{offset};
+}
+
+# offset_min read accessor
+sub offset_min
+{
+    my $self = shift;
+    return $self->{offset_min};
+}
+
+
+#
+# conversion functions
+#
+
+# convert offset minutes to string
+sub _offset_min2str
+{
+    my $offset_min = shift;
+    my $sign = $offset_min >= 0 ? "+" : "-";
+    my $hours = int( abs($offset_min) / 60 );
+    my $minutes = abs($offset_min) % 60;
+    return sprintf "%s%02d%s%02d", $sign, $hours, ":", $minutes;
+}
+
+# offset minutes as string from
+sub offset_str
+{
+    my $self = shift;
+    return $self->{offset};
+}
+
+# convert offset minutes to seconds
+sub offset_sec
+{
+    my $self = shift;
+    return $self->{offset_min} * 60;
 }
 
 #
@@ -255,11 +398,11 @@ sub has_dst_changes { return 0; }
 sub is_floating { return 0; }
 sub is_olson { return 0; }
 sub category { return "Solar"; }
-sub is_utc { my $self = shift; return $self->offset() == 0 ? 1 : 0; }
+sub is_utc { my $self = shift; return $self->{offset_min} == 0 ? 1 : 0; }
 sub is_dst_for_datetime { return 0; }
-sub offset_for_datetime { my $self = shift; return $self->offset(); }
-sub offset_for_local_datetime { my $self = shift; return $self->offset(); }
-sub short_name_for_datetime {my $self = shift; return $self->name();  }
+sub offset_for_datetime { my $self = shift; return $self->offset_sec(); }
+sub offset_for_local_datetime { my $self = shift; return $self->offset_sec(); }
+sub short_name_for_datetime {my $self = shift; return $self->short_name(); }
 
 1;
 
@@ -273,8 +416,10 @@ __END__
 
   my $solar_tz1 = TimeZone::Solar->new(lat => $latiude, lon => $longitude);
   my $solar_tz2 = TimeZone::Solar->new(lon => $longitude); # assumes latitude between 80N and 80S
-  my $tz_name = $solar_tz1->name();
-  my $tz_offset = $solar_tz1->offset(); # minutes difference from GMT
+  my $tz_name = $solar_tz1->name();                        # long name 'Solar/xxxxxx'
+  my $tz_short_name = $solar_tz1->short_name();            # short name without 'Solar/'
+  my $tz_offset = $solar_tz1->offset();                    # difference from GMT as string: +nn:nn or -nn:nn
+  my $tz_offset = $solar_tz1->offset_min();                # difference from GMT in minutes
 
 =head1 DESCRIPTION
 
