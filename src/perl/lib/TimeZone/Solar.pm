@@ -23,6 +23,7 @@ use Try::Tiny;
 
 # constants
 Readonly::Scalar my $debug_mode => (exists $ENV{TZSOLAR_DEBUG} and $ENV{TZSOLAR_DEBUG}) ? 1 : 0;
+Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
 Readonly::Scalar my $TZSOLAR_LON_ZONE_RE   => qr((Lon0[0-9][0-9][EW]) | (Lon1[0-7][0-9][EW]) | (Lon180[EW]))x;
 Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE   => qr((East|West)(0[0-9] | 1[0-2]))x;
 Readonly::Scalar my $TZSOLAR_ZONE_RE   => qr( $TZSOLAR_LON_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE )x;
@@ -46,6 +47,44 @@ Readonly::Hash my %constants => (                                             # 
     LIMIT_LATITUDE         => $LIMIT_LATITUDE,
     MINUTES_PER_DEGREE_LON => $MINUTES_PER_DEGREE_LON,
 );
+
+# create timezone subclass
+# this must be before the BEGIN block which uses it
+sub _tz_subclass
+{
+    my $class = shift;
+
+    ## no critic (BuiltinFunctions::ProhibitStringyEval)
+    my $class_check = 0;
+    try {
+        $class_check = eval "package $class { \@".$class."::ISA = qw(".__PACKAGE__.") }";
+    };
+    if ( not $class_check ) {
+        croak __PACKAGE__."::_tz_instance: unable to create class $class";
+    }
+    return;
+}
+
+# create subclasses for DateTime::TimeZone::Solar::* time zones
+# Set subclass @ISA to point here as its parent. Then the subclass inherits methods from this class.
+BEGIN {
+    # duplicate constant within BEGIN scope because it runs before constant assignments
+    Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
+
+    # hour-based timezones from -12 to +12
+    foreach my $tz_dir ( qw( East West )) {
+        foreach my $tz_int ( 0 .. 12 ) {
+            _tz_subclass ( sprintf ( "%s%s%02d", $TZSOLAR_CLASS_PREFIX, $tz_dir, $tz_int ) );
+        }
+    }
+
+    # longitude-based time zones from -180 to +180
+    foreach my $tz_dir ( qw( E W )) {
+        foreach my $tz_int ( 0 .. 180 ) {
+            _tz_subclass ( sprintf ( "%sLon%03d%s", $TZSOLAR_CLASS_PREFIX, $tz_int, $tz_dir ) );
+        }
+    }
+}
 
 # file globals
 my %_INSTANCES;
@@ -240,7 +279,7 @@ sub _tz_instance
     }
 
     # look up class instance, return it if found
-    my $class = "DateTime::TimeZone::Solar::".$hashref->{short_name};
+    my $class = $TZSOLAR_CLASS_PREFIX.$hashref->{short_name};
     if ( exists $_INSTANCES{$class}) {
         # forward lat/lon parameters to the existing instance, mainly so tests can see where it came from
         foreach my $key ( qw(longitude latitude) ) {
@@ -254,17 +293,9 @@ sub _tz_instance
     }
 
     # make sure the new singleton object's class is a subclass of TimeZone::Solar
+    # this should have already been done by the BEGIN block for all solar timezone subclasses
     if ( not $class->isa( __PACKAGE__ )) {
-        ## no critic (BuiltinFunctions::ProhibitStringyEval)
-        my $class_check = 0;
-        try {
-            if (eval "package $class { \@".$class."::ISA = qw(".__PACKAGE__."); }") {
-                $class_check = 1;
-            }
-        };
-        if ( not $class_check ) {
-            croak __PACKAGE__."::_tz_instance: unable to create class $class";
-        }
+        _tz_subclass( $class );
     }
 
 
@@ -283,7 +314,7 @@ sub _tz_instance
 # instantiate a new TimeZone::Solar object
 sub new
 {
-    my ( $in_class, @args ) = @_;
+    my ( $in_class, %args ) = @_;
     my $class = ref($in_class) || $in_class;
 
     # safety check
@@ -291,9 +322,31 @@ sub new
         croak __PACKAGE__ . "->new() prohibited for unrelated class $class";
     }
 
-    # use @args to look up a timezone singleton instance
+    # if we got here via DataTime::TimeZone::Solar::*->new(), override longitude/use_lon_tz parameters from class name
+    if ( $in_class =~ qr( $TZSOLAR_CLASS_PREFIX ( $TZSOLAR_ZONE_RE ))x ) {
+        my $in_tz = $1;
+        if ( substr( $in_tz, 0, 4 ) eq "East" ) {
+            my $tz_int = int substr( $in_tz, 4, 2 );
+            $args{longitude} = $tz_int * 15;
+            $args{use_lon_tz} = 0;
+        } elsif ( substr( $in_tz, 0, 4 ) eq "West" ) {
+            my $tz_int = int substr( $in_tz, 4, 2 );
+            $args{longitude} = -$tz_int * 15;
+            $args{use_lon_tz} = 0;
+        } elsif (  substr( $in_tz, 0, 3 ) eq "Lon" ) {
+            my $tz_int = int substr( $in_tz, 3, 3 );
+            my $sign = ( substr( $in_tz, 6, 1 ) eq "E" ? 1 : -1 );
+            $args{longitude} = $sign * $tz_int;
+            $args{use_lon_tz} = 1;
+        } else {
+            croak __PACKAGE__ . "->new() received unrecognized class name $in_class";
+        }
+        delete $args{latitude};
+    }
+
+    # use %args to look up a timezone singleton instance
     # make a new one if it doesn't yet exist
-    my $tz_params = _tz_params( @args );
+    my $tz_params = _tz_params( %args );
     my $self = _tz_instance( $tz_params );
 
     # use init() method, with support for derived classes that may override it
