@@ -60,7 +60,7 @@ sub _tz_subclass
         $class_check = eval "package $class { \@".$class."::ISA = qw(".__PACKAGE__.") }";
     };
     if ( not $class_check ) {
-        croak __PACKAGE__."::_tz_instance: unable to create class $class";
+        croak __PACKAGE__."::_tz_subclass: unable to create class $class";
     }
     return;
 }
@@ -74,14 +74,22 @@ BEGIN {
     # hour-based timezones from -12 to +12
     foreach my $tz_dir ( qw( East West )) {
         foreach my $tz_int ( 0 .. 12 ) {
-            _tz_subclass ( sprintf ( "%s%s%02d", $TZSOLAR_CLASS_PREFIX, $tz_dir, $tz_int ) );
+            my $short_name = sprintf ( "%s%02d", $tz_dir, $tz_int );
+            my $long_name = "Solar/".$short_name;
+            my $class_name = $TZSOLAR_CLASS_PREFIX.$short_name;
+            _tz_subclass ( $class_name );
+            $DateTime::TimeZone::Catalog::LINKS{$short_name} = $long_name;
         }
     }
 
     # longitude-based time zones from -180 to +180
     foreach my $tz_dir ( qw( E W )) {
         foreach my $tz_int ( 0 .. 180 ) {
-            _tz_subclass ( sprintf ( "%sLon%03d%s", $TZSOLAR_CLASS_PREFIX, $tz_int, $tz_dir ) );
+            my $short_name = sprintf ( "Lon%03d%s", $tz_int, $tz_dir );
+            my $long_name = "Solar/".$short_name;
+            my $class_name = $TZSOLAR_CLASS_PREFIX.$short_name;
+            _tz_subclass ( $class_name );
+            $DateTime::TimeZone::Catalog::LINKS{$short_name} = $long_name;
         }
     }
 }
@@ -97,11 +105,25 @@ sub _class_guard
     if ( not defined $classname ) {
         croak( "incompatible class: invalid method call on undefined value" );
     }
-    if ( not $class->isa(__PACKAGE__) ) {
+    if ( not $class->isa( __PACKAGE__ )) {
         croak( "incompatible class: invalid method call for '$classname': not in " . __PACKAGE__ . " hierarchy" );
     }
     return;
 }
+
+# Override isa() method from UNIVERSAL to trick DateTime::TimeZone to accept our timezones as its subclasses.
+# We don't inherit from DateTime::TimeZone as a base class because it's about Olson TZ db processing we don't need.
+# But DateTime uses DateTime::TimeZone to look up time zones, and this makes solar timezones fit in.
+## no critic ( Subroutines::ProhibitBuiltinHomonyms )
+sub isa
+{
+    my ( $class, $type ) = @_;
+    if ( $type eq "DateTime::TimeZone" ) {
+        return 1;
+    }
+    return $class->SUPER::isa( $type );
+}
+## critic ( Subroutines::ProhibitBuiltinHomonyms )
 
 # access constants - for use by tests
 # if no name parameter is provided, return list of constant names
@@ -303,10 +325,6 @@ sub _tz_instance
     my $obj = bless $hashref, $class;
     $_INSTANCES{$class} = $obj;
 
-    # stuff aliases for the short and long names into DateTime::TimeZone::Catalog
-    $DateTime::TimeZone::Catalog::LINKS{$hashref->{short_name}} = $obj->offset();
-    $DateTime::TimeZone::Catalog::LINKS{$hashref->{name}} = $obj->offset();
-
     # return the new object
     return $obj;
 }
@@ -447,6 +465,7 @@ sub offset_sec
 # DateTime::TimeZone interface compatibility methods
 # By definition, there is never a Daylight Savings change in the Solar time zones.
 #
+sub spans { return []; }
 sub has_dst_changes { return 0; }
 sub is_floating { return 0; }
 sub is_olson { return 0; }
@@ -456,6 +475,15 @@ sub is_dst_for_datetime { return 0; }
 sub offset_for_datetime { my $self = shift; return $self->offset_sec(); }
 sub offset_for_local_datetime { my $self = shift; return $self->offset_sec(); }
 sub short_name_for_datetime {my $self = shift; return $self->short_name(); }
+
+# instance method to respond to DateTime::TimeZone
+sub instance
+{
+    my ( $class, %args ) = @_;
+    _class_guard($class);
+    delete $args{is_olson};
+    return $class->new(%args);
+}
 
 1;
 
