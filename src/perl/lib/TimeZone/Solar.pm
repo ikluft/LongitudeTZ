@@ -1,5 +1,5 @@
 # TimeZone::Solar
-# ABSTRACT: local solar timezone lookup and utilities
+# ABSTRACT: local solar timezone lookup and utilities including DateTime compatibility
 # part of Perl implementation of solar timezones library
 #
 # Copyright © 2020-2022 Ian Kluft. This program is free software; you can
@@ -487,20 +487,51 @@ sub instance
 
 1;
 
-__END__
+=pod
 
 =encoding utf8
 
 =head1 SYNOPSIS
 
-  use TimeZone::Solar;
+Using TimeZone::Solar alone, with longitude and latitude:
 
-  my $solar_tz1 = TimeZone::Solar->new(lat => $latiude, lon => $longitude);
-  my $solar_tz2 = TimeZone::Solar->new(lon => $longitude); # assumes latitude between 80N and 80S
-  my $tz_name = $solar_tz1->name();                        # long name 'Solar/xxxxxx'
-  my $tz_short_name = $solar_tz1->short_name();            # short name without 'Solar/'
-  my $tz_offset = $solar_tz1->offset();                    # difference from GMT as string: +nn:nn or -nn:nn
-  my $tz_offset = $solar_tz1->offset_min();                # difference from GMT in minutes
+  use TimeZone::Solar;
+  use feature qw(say);
+
+  # example including latitude
+  my $solar_tz_lat = TimeZone::Solar->new(lat => $latiude, lon => $longitude);
+  say $solar_tz_lat;
+
+Using TimeZone::Solar alone, with longitude only: 
+
+  use TimeZone::Solar;
+  use feature qw(say);
+
+  # example without latitude - assumes between 80N and 80S latitude
+  my $solar_tz = TimeZone::Solar->new(lon => $longitude);
+  my $tz_name = $solar_tz1->name();             # long name 'Solar/xxxxxx'
+  my $tz_short_name = $solar_tz1->short_name(); # short name without 'Solar/'
+  my $tz_offset = $solar_tz1->offset();         # offset from GMT as string
+  my $tz_offset = $solar_tz1->offset_min();     # offset from GMT in minutes
+
+Using TimeZone::Solar with DateTime:
+
+  use DateTime;
+  use TimeZone::Solar;
+  use feature qw(say);
+
+  # noon local solar time at 122W longitude, i.e. San Jose CA or Seattle WA
+  my $dt = DateTime->new( year => 2022, month => 6, hour => 1,
+    time_zone => "Solar/West08" );
+
+  # convert to US Pacific Time (works for Standard or Daylight conversion)
+  $dt->set_time_zone( "US/Pacific" );
+  say $dt;
+
+This code prints "2022-06-01T13:00:00", which is 1PM, because Solar/West08
+is equivalent to US Pacific Standard Time, centered on 120W longitude. And
+Standard Time is 1 hour off from Daylight Time, which changed noon Solar Time
+to 1PM Daylight Time.
 
 =head1 DESCRIPTION
 
