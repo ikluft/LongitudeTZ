@@ -16,6 +16,9 @@ package TimeZone::Solar;
 
 use utf8;
 use autodie;
+use overload
+    '""' => "as_string",
+    'eq' => "eq_string";
 use Carp qw(croak);
 use Readonly;
 use DateTime::TimeZone qw(0.80);
@@ -67,6 +70,7 @@ sub _tz_subclass
 
 # create subclasses for DateTime::TimeZone::Solar::* time zones
 # Set subclass @ISA to point here as its parent. Then the subclass inherits methods from this class.
+# This modifies %DateTime::TimeZone::Catalog::LINKS the same way it allows DateTime::TimeZone::Alias to.
 BEGIN {
     # duplicate constant within BEGIN scope because it runs before constant assignments
     Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
@@ -432,7 +436,6 @@ sub offset_min
     return $self->{offset_min};
 }
 
-
 #
 # conversion functions
 #
@@ -474,15 +477,34 @@ sub is_utc { my $self = shift; return $self->{offset_min} == 0 ? 1 : 0; }
 sub is_dst_for_datetime { return 0; }
 sub offset_for_datetime { my $self = shift; return $self->offset_sec(); }
 sub offset_for_local_datetime { my $self = shift; return $self->offset_sec(); }
-sub short_name_for_datetime {my $self = shift; return $self->short_name(); }
+sub short_name_for_datetime { my $self = shift; return $self->short_name(); }
 
-# instance method to respond to DateTime::TimeZone
+# instance method to respond to DateTime::TimeZone as it expects its timezone subclasses to
 sub instance
 {
     my ( $class, %args ) = @_;
     _class_guard($class);
-    delete $args{is_olson};
+    delete $args{is_olson}; # never accept the is_olson attribute since it isn't true for solar timezones
     return $class->new(%args);
+}
+
+# convert to string for printing
+# used to overload "" (to string) operator
+sub as_string
+{
+    my $self = shift;
+    return $self->name()." ".$self->offset();
+}
+
+# equality comparison
+# used to overload eq (string equality) operator
+sub eq_string
+{
+    my ( $self, $arg ) = @_;
+    if ( ref $arg and $arg->isa( __PACKAGE__ )) {
+        return $self->name eq $arg->name;
+    }
+    return $self->name eq $arg;
 }
 
 1;
@@ -498,9 +520,12 @@ Using TimeZone::Solar alone, with longitude and latitude:
   use TimeZone::Solar;
   use feature qw(say);
 
-  # example including latitude
-  my $solar_tz_lat = TimeZone::Solar->new(lat => $latiude, lon => $longitude);
+  # example with latitude (location: SJC airport, San Jose, California)
+  my $solar_tz_lat = TimeZone::Solar->new( latitude => 37.363,
+    longitude => -121.929, use_lon_tz => 1 );
   say $solar_tz_lat;
+
+This outputs "Solar/Lon122W -08:08" using a longitude-based time zone.
 
 Using TimeZone::Solar alone, with longitude only: 
 
@@ -508,11 +533,11 @@ Using TimeZone::Solar alone, with longitude only:
   use feature qw(say);
 
   # example without latitude - assumes between 80N and 80S latitude
-  my $solar_tz = TimeZone::Solar->new(lon => $longitude);
-  my $tz_name = $solar_tz1->name();             # long name 'Solar/xxxxxx'
-  my $tz_short_name = $solar_tz1->short_name(); # short name without 'Solar/'
-  my $tz_offset = $solar_tz1->offset();         # offset from GMT as string
-  my $tz_offset = $solar_tz1->offset_min();     # offset from GMT in minutes
+  my $solar_tz = TimeZone::Solar->new( longitude => -121.929 );
+  say join " ", ( $solar_tz->name, $solar_tz->short_name, $solar_tz->offset,
+    $solar_tz->offset_min );
+
+This outputs "Solar/West08 West08 -08:00 -480" using an hour-based time zone.
 
 Using TimeZone::Solar with DateTime:
 
@@ -528,10 +553,10 @@ Using TimeZone::Solar with DateTime:
   $dt->set_time_zone( "US/Pacific" );
   say $dt;
 
-This code prints "2022-06-01T13:00:00", which is 1PM, because Solar/West08
-is equivalent to US Pacific Standard Time, centered on 120W longitude. And
-Standard Time is 1 hour off from Daylight Time, which changed noon Solar Time
-to 1PM Daylight Time.
+This code prints "2022-06-01T13:00:00", which means noon was converted to
+1PM, because Solar/West08 is equivalent to US Pacific Standard Time,
+centered on 120W longitude. And Standard Time is 1 hour off from Daylight
+Time, which changed noon Solar Time to 1PM Daylight Time.
 
 =head1 DESCRIPTION
 
@@ -555,6 +580,14 @@ and are not available when running directly from a source code repository.
 TimeZone::Solar is Open Source software licensed under the GNU General Public License Version 3.
 See L<https://www.gnu.org/licenses/gpl-3.0-standalone.html>.
 
+=head1 SEE ALSO
+
+LongitudeTZ on Github: https://github.com/ikluft/LongitudeTZ
+
 =head1 BUGS AND LIMITATIONS
+
+Please report bugs via GitHub at L<https://github.com/ikluft/LongitudeTZ/issues>
+
+Patches and enhancements may be submitted via a pull request at L<https://github.com/ikluft/LongitudeTZ/pulls>
 
 =cut
