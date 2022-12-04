@@ -22,8 +22,8 @@ Solar TimeZone libraries implementations in different programming languages:
 * Rust - TODO
 * others coming, code contributions accepted
 
-## The Solar Time Zones Standard
-The Solar Time Zones Standard includes the following rules.
+## The Solar Time Zones Definition
+The Solar time zones definition includes the following rules.
 * There are 24 hour-based Solar Time Zones, named West12, West11, West10, West09 through East12. East00 is equivalent to UTC. West00 is an alias for East00.
   * Hour-based time zones are spaced in one-hour time increments, or 15 degrees of longitude.
   * Each hour-based time zone is centered on a meridian at a multiple of 15 degrees. In positive and negative integers, these are 0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165 and 180.

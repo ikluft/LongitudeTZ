@@ -560,9 +560,111 @@ Time, which changed noon Solar Time to 1PM Daylight Time.
 
 =head1 DESCRIPTION
 
+I<TimeZone::Solar> provides lookup and conversion utilities for Solar time zones, which are based on 
+the longitude of any location on Earth. See the next subsection below for more information.
+
+Through compatibility with L<DateTime::TimeZone>, I<TimeZone::Solar> allows the L<DateTime> module to
+convert either direction between standard (Olson Database) timezones and Solar time zones.
+
+=head2 Overview of Solar time zones
+
+Solar time zones are based on the longitude of a location.  Each time zone is defined around having
+local solar noon, on average, the same as noon on the clock.
+
+Solar time zones are always in Standard Time. There are no Daylight Time changes, by definition. The main point
+is to have a way to opt out of Daylight Saving Time by using solar time.
+
+The Solar time zones build upon existing standards.
+
+=over
+
+=item *
+Lines of longitude are a well-established standard.
+
+=item *
+Ships at sea use "nautical time" based on time zones 15 degrees of longitude wide.
+
+=item *
+Time zones (without daylight saving offsets) are based on average solar noon at the Prime Meridian. Standard Time in e
+ach time zone lines up with average solar noon on the meridian at the center of each time zone, at 15-degree of longitud
+e increments.
+
+=back
+
+15 degrees of longitude appears more than once above. That isn't a coincidence. It's derived from 360 degrees
+of rotation in a day, divided by 24 hours in a day. The result is 15 degrees of longitude representing 1 hour
+in Earth's rotation. That makes each time zone one hour wide. So Solar time zones use that too.
+
+The Solar Time Zones proposal is intended as a potential de-facto standard which people can use in their
+local areas, providing for routine computational time conversion to and from local standard or daylight time.
+In order for the proposal to become a de-facto standard, made in force by the number of people using it,
+it starts with technical early adopters choosing to use it. At some point it would actually become an
+official alternative via publication of an Internet RFC and adding the new time zones into the
+Internet Assigned Numbers Authority (IANA) Time Zone Database files. The Time Zone Database feeds
+the time zone conversions used by computers including servers, desktops, phones and embedded devices.
+
+There are normal variations of a matter of minutes between local solar noon and clock noon, depending on
+the latitude and time of year. That variation is always the same number of minutes as local solar noon
+differs from noon UTC at the same latitude on the Prime Meridian (0° longitude), due to seasonal effects
+of the tilt in Earth's axis relative to our orbit around the Sun.
+
+The Solaer time zones also have another set of overlay time zones the width of 1 degree of longitude, which puts
+them in 4-minute intervals of time. These are a hyper-local niche for potential use by outdoor events or activities
+which must be scheduled around daylight. They can also be used by anyone who wants the middle of the scheduling day
+to coincide closely with local solar noon.
+
+=head2 Definition of Solar time zones
+
+The Solar time zones definition includes the following rules.
+
+=over
+
+=item *
+There are 24 hour-based Solar Time Zones, named West12, West11, West10, West09 through East12. East00 is equivalent to UTC. West00 is an alias for East00.
+
+=over
+
+=item *
+Hour-based time zones are spaced in one-hour time increments, or 15 degrees of longitude.
+
+=item *
+Each hour-based time zone is centered on a meridian at a multiple of 15 degrees. In positive and negative integers, these are 0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165 and 180.
+
+=item *
+Each hour-based time zone spans the area ±7.5 degrees of longitude either side of its meridian.
+
+=back
+
+=item *
+There are 360 longitude-based Solar Time Zones, named Lon180W for 180 degrees West through Lon180E for 180 degrees East. Lon000E is equivalent to UTC. Lon000W is an alias for Lon000E.
+
+=over
+
+=item *
+Longitude-based time zones are spaced in 4-minute time increments, or 1 degree of longitude.
+
+=item *
+Each longitude-based time zone is centered on the meridian of an integer degree of longitude.
+
+=item *
+Each longitude-based time zone spans the area ±0.5 degrees of longitude either side of its meridian.
+
+=back
+
+=item *
+In both hourly and longitude-based time zones, there is a limit to their usefulness at the poles. Beyond 80 degrees north or south, the definition uses UTC (East00 or Lon000E). This boundary is the only reason to include latitude in the computation of the time zone.
+
+=item *
+When converting coordinates to a time zone, each time zone includes its boundary meridian at the lower end of its absolute value, which is in the direction toward 0 (UTC). The exception is at exactly ±180.0 degrees, which would be excluded from both sides by this rule. That case is arbitrarily set as +180 just to pick one.
+
+=item *
+The category "Solar" is used for the longer names for these time zones. The names listed above are the short names. The full long name of each time zone is prefixed with "Solar/" such as "Solar/East00" or "Solar/Lon000E".
+
+=back
+
 =head1 FUNCTIONS AND METHODS
 
-=over 1
+=over
 
 =item TimeZone::Solar->version()
 
