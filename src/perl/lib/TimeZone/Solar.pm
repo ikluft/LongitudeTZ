@@ -585,9 +585,9 @@ Lines of longitude are a well-established standard.
 Ships at sea use "nautical time" based on time zones 15 degrees of longitude wide.
 
 =item *
-Time zones (without daylight saving offsets) are based on average solar noon at the Prime Meridian. Standard Time in e
-ach time zone lines up with average solar noon on the meridian at the center of each time zone, at 15-degree of longitud
-e increments.
+Time zones (without daylight saving offsets) are based on average solar noon at the Prime Meridian. Standard Time in
+each time zone lines up with average solar noon on the meridian at the center of each time zone, at 15-degree of
+longitud e increments.
 
 =back
 
