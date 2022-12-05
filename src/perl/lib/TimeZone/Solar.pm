@@ -527,7 +527,7 @@ Using TimeZone::Solar alone, with longitude and latitude:
 
 This outputs "Solar/Lon122W -08:08" using a longitude-based time zone.
 
-Using TimeZone::Solar alone, with longitude only: 
+Using TimeZone::Solar alone, with longitude only:
 
   use TimeZone::Solar;
   use feature qw(say);
@@ -560,7 +560,7 @@ Time, which changed noon Solar Time to 1PM Daylight Time.
 
 =head1 DESCRIPTION
 
-I<TimeZone::Solar> provides lookup and conversion utilities for Solar time zones, which are based on 
+I<TimeZone::Solar> provides lookup and conversion utilities for Solar time zones, which are based on
 the longitude of any location on Earth. See the next subsection below for more information.
 
 Through compatibility with L<DateTime::TimeZone>, I<TimeZone::Solar> allows the L<DateTime> module to
@@ -664,6 +664,8 @@ The category "Solar" is used for the longer names for these time zones. The name
 
 =head1 FUNCTIONS AND METHODS
 
+=head2 Class methods
+
 =over
 
 =item $obj = TimeZone::Solar->new( longitude => $float, use_lon_tz => $bool, [latitude => $float] )
@@ -687,6 +689,11 @@ I<DateTime::TimeZone::Solar::*> hierarchy, it obtains the time zone parameters f
 If an instance exists for that solar time zone class, then that instance is returned.
 If not, a new one is instantiated and returned.
 
+=item $obj = DateTime::TimeZone::Solar::I<timezone>->instance()
+
+For compatibility with I<DateTime::TimeZone>, the instance() method returns the class' instance if it exists.
+Otherwise it is created using the class name to fill in its parameters via the new() method.
+
 =item TimeZone::Solar->version()
 
 Return the version number of TimeZone::Solar, or for any subclass which inherits the method.
@@ -698,9 +705,107 @@ and are not available when running directly from a source code repository.
 
 =back
 
+=head2 instance methods
+
+=over
+
+=item $obj->longitude()
+
+returns the longitude which was used to instantiate the time zone object.
+This is mainly intended for testing. Once instantiated the time zone object serves all areas in its boundary.
+
+=item $obj->latitude()
+
+returns the latitude which was used to instantiate the time zone object, or undef if none was provided.
+This is mainly intended for testing. Once instantiated the time zone object serves all areas in its boundary.
+
+=item $obj->name()
+
+returns a string with the long name, including the "Solar/" prefix, of the time zone.
+
+=item $obj->long_name()
+
+returns a string with the long name, including the "Solar/" prefix, of the time zone.
+This is equivalent to $obj->name().
+
+=item $obj->short_name()
+
+returns a string with the short name, excluding the "Solar/" prefix, of the time zone.
+
+=item $obj->offset()
+
+returns a string with the time zone's offset from UTC in hour-minute format like +01:01 or -01:01 .
+If seconds matter, it will include them in the format +01:01:01 or -01:01:01 .
+
+=item $obj->offset_str()
+
+returns a string with the time zone's offset from UTC in hour-minute format, equivalent to $obj->offset().
+
+=item $obj->offset_min()
+
+returns an integer with the number of minutes of the time zone's offest from UTC.
+
+=item $obj->offset_sec()
+
+returns an integer with the number of seconds of the time zone's offest from UTC.
+
+=back
+
+=head2 DateTime::TimeZone compatibility methods
+
+=over
+
+=item spans()
+
+always returns an empty list because there are never any Daylight Time transitions in solar time zones.
+
+=item has_dst_changes()
+
+always returns 0 (false) because there are never any Daylight Time transitions in solar time zones.
+
+=item is_floating()
+
+always returns 0 (false) because the solar time zones are not floating time zones.
+
+=item is_olson()
+
+always returns 0 (false) because the solar time zones are not in the Olson time zone database.
+(Maybe some day.)
+
+=item category()
+
+always returns "Solar" for the time zone category.
+
+=item is_utc()
+
+Returns 1 (true) if the time zone is equivalent to UTC, meaning at 0 offset from UTC. This is only the case for
+Solar/East00, Solar/West00 (which is an alias for Solar/East00), Solar/Lon000E and Solar/Lon000W (which is an alias
+for Solar/Lon000E). Otherwise it returns 0 because the time zone is not UTC.
+
+=item is_dst_for_datetime()
+
+always returns 0 (false) because Daylight Saving Time never occurs in Solar time zones.
+
+=item offset_for_datetime()
+
+returns the time zone's offset from UTC in seconds. This is equivalent to $obj->offset_sec().
+
+=item offset_for_local_datetime()
+
+returns the time zone's offset from UTC in seconds. This is equivalent to $obj->offset_sec().
+
+=item short_name_for_datetime()
+
+returns the time zone's short name, without "Solar/". This is equivalent to $obj->short_name().
+
+=back
+
+I<TimeZone::Solar> also overloads the eq (string equality) and "" (convert to string) operators for
+compatibility with I<DateTime::TimeZone>.
+
 =head1 LICENSE
 
-TimeZone::Solar is Open Source software licensed under the GNU General Public License Version 3.
+I<TimeZone::Solar> is Open Source software licensed under the GNU General Public License Version 3.
 See L<https://www.gnu.org/licenses/gpl-3.0-standalone.html>.
 
 =head1 SEE ALSO
