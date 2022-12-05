@@ -450,7 +450,7 @@ sub _offset_min2str
     return sprintf "%s%02d%s%02d", $sign, $hours, ":", $minutes;
 }
 
-# offset minutes as string from
+# offset minutes as string
 sub offset_str
 {
     my $self = shift;
@@ -665,6 +665,27 @@ The category "Solar" is used for the longer names for these time zones. The name
 =head1 FUNCTIONS AND METHODS
 
 =over
+
+=item $obj = TimeZone::Solar->new( longitude => $float, use_lon_tz => $bool, [latitude => $float] )
+
+Create a new instance of the time zone for the given longitude as a floating point number. The "use_lon_tz" parameter
+is a boolean flag which if true selects longitude-based time zones, at a width of 1 degree of longitude. If false or
+omitted, it selects hour-based time zones, at a width of 15 degrees of longitude.
+
+If a latitude parameter is provided, it only makes a difference if the latitude is within 10° of the poles,
+at or beyond 80° North or South latitude. In the polar regions, it uses the equivalent of UTC, which is Solar/East00
+for hour-based time zones or Solar/Lon000E for longitude-based time zones.
+
+I<TimeZone::Solar> uses a singleton pattern. So if a given solar time zone's class within the
+I<DateTime::TimeZone::Solar::*> hierarchy already has an instance, that one will be returned.
+A new instance is only returned the first time.
+
+=item $obj = DateTime::TimeZone::Solar::I<timezone>->new()
+
+This is the same class method as TimeZone::Solar->new() except that if called with a class in the
+I<DateTime::TimeZone::Solar::*> hierarchy, it obtains the time zone parameters from the class name.
+If an instance exists for that solar time zone class, then that instance is returned.
+If not, a new one is instantiated and returned.
 
 =item TimeZone::Solar->version()
 
