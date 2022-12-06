@@ -31,21 +31,22 @@ Readonly::Hash my %constants => (
     LIMIT_LATITUDE         => 80,
     MINUTES_PER_DEGREE_LON => 4,
 );
-Readonly::Scalar my $debug_mode => (exists $ENV{TZSOLAR_DEBUG} and $ENV{TZSOLAR_DEBUG}) ? 1 : 0;
-Readonly::Scalar my $fp_epsilon => 2**-24;    # fp epsilon for fp_equal() based on 32-bit floats
+Readonly::Scalar my $debug_mode      => ( exists $ENV{TZSOLAR_DEBUG} and $ENV{TZSOLAR_DEBUG} ) ? 1 : 0;
+Readonly::Scalar my $fp_epsilon      => 2**-24;                   # fp epsilon for fp_equal() based on 32-bit floats
 Readonly::Scalar my $total_constants => scalar keys %constants;
-Readonly::Array my @test_point_longitudes => qw( 180.0 179.99999 -7.5 -7.49999 0.0 7.49999 7.5 -180.0 -179.99999 60.0 90.0 89.5 89.49999 120.0 );
+Readonly::Array my @test_point_longitudes =>
+    qw( 180.0 179.99999 -7.5 -7.49999 0.0 7.49999 7.5 -180.0 -179.99999 60.0 90.0 89.5 89.49999 120.0 );
 Readonly::Array my @test_point_latitudes => qw( 80.0 79.99999 -80.0 -79.99999 );
-Readonly::Array my @polar_test_points => ( gen_polar_test_points() );
+Readonly::Array my @polar_test_points    => ( gen_polar_test_points() );
 
 # generate polar test points array
 # used to generate @polar_test_points constant listed above
 sub gen_polar_test_points
 {
     my @polar_test_points;
-    foreach my $use_lon_tz ( qw( 0 1 ) ) {
-        foreach my $longitude ( @test_point_longitudes ) {
-            foreach my $latitude ( @test_point_latitudes ) {
+    foreach my $use_lon_tz (qw( 0 1 )) {
+        foreach my $longitude (@test_point_longitudes) {
+            foreach my $latitude (@test_point_latitudes) {
                 push @polar_test_points, { longitude => $longitude, latitude => $latitude, use_lon_tz => $use_lon_tz };
             }
         }
@@ -57,10 +58,10 @@ sub gen_polar_test_points
 sub count_tests
 {
     return (
-        4                                       # in test_functions()
-        + $total_constants                      # number of constants, in test_constants()
-        + ( $constants{MAX_DEGREES} + 1 ) * 10   # per-degree tests from -180 to +180, in test_lon()
-        + ( scalar @polar_test_points )         # in test_polar()
+        4                                             # in test_functions()
+            + $total_constants                        # number of constants, in test_constants()
+            + ( $constants{MAX_DEGREES} + 1 ) * 10    # per-degree tests from -180 to +180, in test_lon()
+            + ( scalar @polar_test_points )           # in test_polar()
     );
 }
 
@@ -76,14 +77,20 @@ sub fp_equal
 sub test_functions
 {
     # tests which throw exceptions
-    throws_ok( sub { TimeZone::Solar::_class_guard() }, qr/invalid method call on undefined value/,
-        "expected exception: _class_guard(undef)" );
-    throws_ok( sub { TimeZone::Solar::_class_guard("UNIVERSAL") }, qr/invalid method call for 'UNIVERSAL':/,
-        "expected exception: _class_guard(UNIVERSAL)" );
+    throws_ok(
+        sub { TimeZone::Solar::_class_guard() },
+        qr/invalid method call on undefined value/,
+        "expected exception: _class_guard(undef)"
+    );
+    throws_ok(
+        sub { TimeZone::Solar::_class_guard("UNIVERSAL") },
+        qr/invalid method call for 'UNIVERSAL':/,
+        "expected exception: _class_guard(UNIVERSAL)"
+    );
 
     # tests which should not throw exceptions
     my @constant_keys;
-    lives_ok ( sub { @constant_keys = TimeZone::Solar->_get_const() }, "runs without exception: _get_const()" );
+    lives_ok( sub { @constant_keys = TimeZone::Solar->_get_const() }, "runs without exception: _get_const()" );
     is_deeply( \@constant_keys, [ sort keys %constants ], "list of constants matches" );
 }
 
@@ -112,19 +119,20 @@ sub _tz_prefix
     my ( $use_lon_tz, $sign ) = @_;
     return $use_lon_tz ? "Lon" : ( $sign > 0 ? "East" : "West" );
 }
+
 sub _tz_suffix
 {
     my ( $use_lon_tz, $sign ) = @_;
-    return $use_lon_tz ? ( $sign > 0 ? "E" : "W" ) : ""
+    return $use_lon_tz ? ( $sign > 0 ? "E" : "W" ) : "";
 }
 
 # convert offset minutes to string
 sub _offset_min2str
 {
     my $offset_min = shift;
-    my $sign = $offset_min >= 0 ? "+" : "-";
-    my $hours = int( abs ($offset_min) / 60 );
-    my $minutes = abs($offset_min) % 60;
+    my $sign       = $offset_min >= 0 ? "+" : "-";
+    my $hours      = int( abs($offset_min) / 60 );
+    my $minutes    = abs($offset_min) % 60;
     return sprintf "%s%02d%s%02d", $sign, $hours, ":", $minutes;
 }
 
@@ -137,12 +145,12 @@ sub expect_lon2tz
     my $lon             = $params{longitude};
     my $precision       = $constants{PRECISION_FP};
     my $use_lon_tz      = ( exists $params{use_lon_tz} and $params{use_lon_tz} );
-    my $tz_degree_width = $use_lon_tz ? 1 : 15;                     # 1 for longitude-based tz, 15 for hour-based tz
-    my $tz_digits       = $use_lon_tz ? 3     : 2;
+    my $tz_degree_width = $use_lon_tz ? 1 : 15;    # 1 for longitude-based tz, 15 for hour-based tz
+    my $tz_digits       = $use_lon_tz ? 3 : 2;
 
     # generate time zone name and offset
     my ( $tz_name, $offset_min );
-    if ( $lon >= $constants{MAX_LONGITUDE_INT} - $tz_degree_width / 2.0 - $precision
+    if (   $lon >= $constants{MAX_LONGITUDE_INT} - $tz_degree_width / 2.0 - $precision
         or $lon <= -$constants{MAX_LONGITUDE_INT} + $precision )
     {
 
@@ -150,35 +158,36 @@ sub expect_lon2tz
         # special case of -180: expect results for +180
         $tz_name = sprintf( "%s%0*d%s",
             _tz_prefix( $use_lon_tz, 1 ),
-            $tz_digits, $constants{MAX_LONGITUDE_INT} / $tz_degree_width,
-            _tz_suffix( $use_lon_tz, 1 ));
-        $offset_min  = 720;
+            $tz_digits,
+            $constants{MAX_LONGITUDE_INT} / $tz_degree_width,
+            _tz_suffix( $use_lon_tz, 1 ) );
+        $offset_min = 720;
         $debug_mode and say STDERR "debug expect_lon2tz(): tz_name=$tz_name offset_min=$offset_min (case: date line +)";
-    } elsif ( $lon <= (-$constants{MAX_LONGITUDE_INT} + $tz_degree_width / 2.0 + $precision )) {
+    } elsif ( $lon <= ( -$constants{MAX_LONGITUDE_INT} + $tz_degree_width / 2.0 + $precision ) ) {
 
         # handle special case of half-wide tz at negative side of solar date line (180° longitude)
         $tz_name = sprintf( "%s%0*d%s",
             _tz_prefix( $use_lon_tz, -1 ),
-            $tz_digits, $constants{MAX_LONGITUDE_INT} / $tz_degree_width,
-            _tz_suffix( $use_lon_tz, -1 ));
-        $offset_min  = -720;
+            $tz_digits,
+            $constants{MAX_LONGITUDE_INT} / $tz_degree_width,
+            _tz_suffix( $use_lon_tz, -1 ) );
+        $offset_min = -720;
         $debug_mode and say STDERR "debug expect_lon2tz(): tz_name=$tz_name offset_min=$offset_min (case: date line -)";
     } else {
 
         # handle other times zones
-        my $tz_int = int( abs( $lon ) / $tz_degree_width + 0.5 + $precision );
-        my $sign = ( $lon > -$tz_degree_width / 2.0 + $precision ) ? 1 : -1;
+        my $tz_int = int( abs($lon) / $tz_degree_width + 0.5 + $precision );
+        my $sign   = ( $lon > -$tz_degree_width / 2.0 + $precision ) ? 1 : -1;
         $tz_name = sprintf( "%s%0*d%s",
             _tz_prefix( $use_lon_tz, $sign ),
-            $tz_digits, $tz_int,
-            _tz_suffix( $use_lon_tz, $sign ));
+            $tz_digits, $tz_int, _tz_suffix( $use_lon_tz, $sign ) );
         $offset_min = $sign * $tz_int * ( $constants{MINUTES_PER_DEGREE_LON} * $tz_degree_width );
         $debug_mode and say STDERR "debug expect_lon2tz(): tz_name=$tz_name offset_min=$offset_min (case: general)";
     }
 
-    my $class = "DateTime::TimeZone::Solar::".$tz_name;
-    my $offset_str = _offset_min2str( $offset_min );
-    $debug_mode and say STDERR "debug(lon:$lon,type:".($use_lon_tz ? "lon" : "hour").") -> $tz_name, $offset_min";
+    my $class      = "DateTime::TimeZone::Solar::" . $tz_name;
+    my $offset_str = _offset_min2str($offset_min);
+    $debug_mode and say STDERR "debug(lon:$lon,type:" . ( $use_lon_tz ? "lon" : "hour" ) . ") -> $tz_name, $offset_min";
     return ( short_name => $tz_name, offset_min => $offset_min, offset => $offset_str, class => $class );
 }
 
@@ -189,17 +198,19 @@ sub test_lon
 
     # hourly and longitude time zones without latitude
     foreach my $use_lon_tz ( 0, 1 ) {
-        my $stz = TimeZone::Solar->new( longitude => $lon, use_lon_tz => $use_lon_tz );
+        my $stz      = TimeZone::Solar->new( longitude => $lon, use_lon_tz => $use_lon_tz );
         my %expected = expect_lon2tz( longitude => $lon, use_lon_tz => $use_lon_tz );
         isa_ok( $stz, $expected{class} );
         is( $stz->short_name(), $expected{short_name},
             sprintf( "lon: %-04d short name = %s", $lon, $expected{short_name} ) );
-        is( $stz->long_name(),  "Solar/".$expected{short_name},
-            sprintf( "lon: %-04d long name = %s", $lon, "Solar/".$expected{short_name} ) );
+        is(
+            $stz->long_name(),
+            "Solar/" . $expected{short_name},
+            sprintf( "lon: %-04d long name = %s", $lon, "Solar/" . $expected{short_name} )
+        );
         is( $stz->offset_min(), $expected{offset_min},
             sprintf( "lon: %-04d offset_min = %d", $lon, $expected{offset_min} ) );
-        is( $stz->offset(),     $expected{offset},
-            sprintf( "lon: %-04d offset = %s", $lon, $expected{offset} ) );
+        is( $stz->offset(), $expected{offset}, sprintf( "lon: %-04d offset = %s", $lon, $expected{offset} ) );
     }
     return;
 }
@@ -218,24 +229,32 @@ sub test_global
 sub test_polar
 {
     my $precision = $constants{PRECISION_FP};
-    foreach my $test_point ( @polar_test_points ) {
-        my $use_lon = ( abs( $test_point->{latitude} ) <= $constants{LIMIT_LATITUDE} - $precision )
+    foreach my $test_point (@polar_test_points) {
+        my $use_lon =
+            ( abs( $test_point->{latitude} ) <= $constants{LIMIT_LATITUDE} - $precision )
             ? $test_point->{longitude}
             : 0;
-        my %expected = expect_lon2tz( longitude => $use_lon, use_lon_tz => $test_point->{use_lon_tz} );
-        my $test_name = sprintf( "longitude=%-10s latitude=%-9s use_lon_tz=%d",
-                $test_point->{longitude}, $test_point->{latitude}, $test_point->{use_lon_tz} )
-            ." => ("
-            .join(" ", map { $expected{$_} } sort keys %expected)
-            .")";
-        my $stz = TimeZone::Solar->new( %$test_point );
-        my $expect_class = "DateTime::TimeZone::Solar::".$stz->short_name();
-        is_deeply( {
+        my %expected  = expect_lon2tz( longitude => $use_lon, use_lon_tz => $test_point->{use_lon_tz} );
+        my $test_name = sprintf(
+            "longitude=%-10s latitude=%-9s use_lon_tz=%d",
+            $test_point->{longitude},
+            $test_point->{latitude},
+            $test_point->{use_lon_tz}
+            )
+            . " => ("
+            . join( " ", map { $expected{$_} } sort keys %expected ) . ")";
+        my $stz          = TimeZone::Solar->new(%$test_point);
+        my $expect_class = "DateTime::TimeZone::Solar::" . $stz->short_name();
+        is_deeply(
+            {
                 short_name => $stz->short_name(),
                 offset_min => $stz->offset_min(),
-                offset => $stz->offset(),
-                class => $expect_class },
-            \%expected, $test_name );
+                offset     => $stz->offset(),
+                class      => $expect_class
+            },
+            \%expected,
+            $test_name
+        );
     }
     return;
 }
