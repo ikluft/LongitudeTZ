@@ -60,11 +60,22 @@ sub _tz_subclass
     ## no critic (BuiltinFunctions::ProhibitStringyEval)
     my $class_check = 0;
     try {
-        $class_check = eval "package $class { \@".$class."::ISA = qw(".__PACKAGE__.") }";
+        $class_check = eval "package $class {"
+            ."\@".$class."::ISA = qw(".__PACKAGE__.");"
+            ."\$".$class."::VERSION = \$".__PACKAGE__."::VERSION;"
+            ."1;"
+        ."}";
     };
     if ( not $class_check ) {
         croak __PACKAGE__."::_tz_subclass: unable to create class $class";
     }
+
+    # generate class file path for use in %INC so require() considers this class loaded
+    my $classpath = $class;
+    $classpath =~ s/::/\//gx;
+    $classpath .= ".pm";
+    ## no critic ( Variables::RequireLocalizedPunctuationVars) # this must be global to work
+    $INC{$classpath} = 1;
     return;
 }
 
@@ -587,7 +598,7 @@ Ships at sea use "nautical time" based on time zones 15 degrees of longitude wid
 =item *
 Time zones (without daylight saving offsets) are based on average solar noon at the Prime Meridian. Standard Time in
 each time zone lines up with average solar noon on the meridian at the center of each time zone, at 15-degree of
-longitud e increments.
+longitude increments.
 
 =back
 
