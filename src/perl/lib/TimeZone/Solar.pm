@@ -206,7 +206,7 @@ sub _tz_params_latitude
         croak __PACKAGE__ . "::_tz_params_latitude: latitude when provided must be in range -90..+90";
     }
 
-    # special case: use Solar+00 (equal to UTC) within 10° latitude of poles
+    # special case: use East00/Lon000E (equal to UTC) within 10° latitude of poles
     if ( abs( $param_ref->{latitude} ) >= $LIMIT_LATITUDE - $PRECISION_FP ) {
         my $use_lon_tz = ( exists $param_ref->{use_lon_tz} and $param_ref->{use_lon_tz} );
         $param_ref->{short_name} = $use_lon_tz ? "Lon000E" : "East00";
@@ -324,11 +324,11 @@ sub _tz_instance
         croak __PACKAGE__ . "::_tz_instance: received non-hash " . ( ref $hashref ) . " for object";
     }
     if ( not exists $hashref->{short_name} ) {
-        croak __PACKAGE__ . "::_tz_instance: name attribute missing";
+        croak __PACKAGE__ . "::_tz_instance: short_name attribute missing";
     }
     if ( $hashref->{short_name} !~ $TZSOLAR_ZONE_RE ) {
         croak __PACKAGE__
-            . "::_tz_instance: name attrbute "
+            . "::_tz_instance: short_name attrbute "
             . $hashref->{short_name}
             . " is not a valid Solar timezone";
     }
