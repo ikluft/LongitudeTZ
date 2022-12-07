@@ -20,7 +20,7 @@ use Readonly;
 use TimeZone::Solar;
 
 # constants
-Readonly::Scalar my $total_tests => 10;
+Readonly::Scalar my $total_tests => 11;
 
 # perform tests
 sub run_tests
@@ -38,6 +38,9 @@ sub run_tests
     dies_ok { my $tz = TimeZone::Solar->new( longitude => -181 ); } "Longitude must be >= -180";
     dies_ok { my $tz = TimeZone::Solar->new( longitude => 0, latitude => 91 ); } "Latitude must be <=  90";
     dies_ok { my $tz = TimeZone::Solar->new( longitude => 0, latitude => -91 ); } "Latitude must be >= -90";
+
+    # test coverage by forcing unlikely failures
+    dies_ok { _tz_subclass( "TimeZone::Solar::Flare", test_break_eval => 1 ) } "_tz_subclass force fail";
 }
 
 # main

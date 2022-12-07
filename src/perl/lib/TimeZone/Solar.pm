@@ -55,7 +55,15 @@ Readonly::Hash my %constants => (                                             # 
 # this must be before the BEGIN block which uses it
 sub _tz_subclass
 {
-    my $class = shift;
+    my ( $class, %opts ) = @_;
+
+    # for test coverage: if $opts{test_break_eval} is set, break the eval below
+    # under normal circumstances, %opts parameters should be omitted
+    my $result_sub = (
+        ( exists $opts{test_break_eval} and $opts{test_break_eval} )
+        ? sub { croak 'break due to test_break_eval'; }
+        : sub { return 1 }
+    );
 
     ## no critic (BuiltinFunctions::ProhibitStringyEval)
     my $class_check = 0;
@@ -68,7 +76,8 @@ sub _tz_subclass
             . $class
             . "::VERSION = \$"
             . __PACKAGE__
-            . "::VERSION;" . "1;" . "}";
+            . "::VERSION;"
+            . "\$result_sub->(); " . "}";
     };
     if ( not $class_check ) {
         croak __PACKAGE__ . "::_tz_subclass: unable to create class $class";
