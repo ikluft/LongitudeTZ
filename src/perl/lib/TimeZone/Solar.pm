@@ -59,10 +59,10 @@ sub _tz_subclass
 
     # for test coverage: if $opts{test_break_eval} is set, break the eval below
     # under normal circumstances, %opts parameters should be omitted
-    my $result_sub = (
+    my $result_cmd = (
         ( exists $opts{test_break_eval} and $opts{test_break_eval} )
-        ? sub { croak 'break due to test_break_eval'; }
-        : sub { return 1 }
+        ? "croak 'break due to test_break_eval'" # for testing we can force the eval to break
+        : "1" # normally the class definition returns 1
     );
 
     ## no critic (BuiltinFunctions::ProhibitStringyEval)
@@ -77,7 +77,8 @@ sub _tz_subclass
             . "::VERSION = \$"
             . __PACKAGE__
             . "::VERSION;"
-            . "\$result_sub->(); " . "}";
+            . "$result_cmd; "
+            . "}";
     };
     if ( not $class_check ) {
         croak __PACKAGE__ . "::_tz_subclass: unable to create class $class";
