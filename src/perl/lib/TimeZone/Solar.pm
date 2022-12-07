@@ -534,18 +534,6 @@ sub eq_string
 
 =head1 SYNOPSIS
 
-Using TimeZone::Solar alone, with longitude and latitude:
-
-  use TimeZone::Solar;
-  use feature qw(say);
-
-  # example with latitude (location: SJC airport, San Jose, California)
-  my $solar_tz_lat = TimeZone::Solar->new( latitude => 37.363,
-    longitude => -121.929, use_lon_tz => 1 );
-  say $solar_tz_lat;
-
-This outputs "Solar/Lon122W -08:08" using a longitude-based time zone.
-
 Using TimeZone::Solar alone, with longitude only:
 
   use TimeZone::Solar;
@@ -557,6 +545,18 @@ Using TimeZone::Solar alone, with longitude only:
     $solar_tz->offset_min );
 
 This outputs "Solar/West08 West08 -08:00 -480" using an hour-based time zone.
+
+Using TimeZone::Solar alone, with longitude and latitude:
+
+  use TimeZone::Solar;
+  use feature qw(say);
+
+  # example with latitude (location: SJC airport, San Jose, California)
+  my $solar_tz_lat = TimeZone::Solar->new( latitude => 37.363,
+    longitude => -121.929, use_lon_tz => 1 );
+  say $solar_tz_lat;
+
+This outputs "Solar/Lon122W -08:08" using a longitude-based time zone.
 
 Using TimeZone::Solar with DateTime:
 
