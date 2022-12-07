@@ -20,16 +20,19 @@ use Readonly;
 use TimeZone::Solar;
 
 # constants
-Readonly::Scalar my $total_tests => 11;
+Readonly::Scalar my $total_tests => 13;
 
 # perform tests
 sub run_tests
 {
     # class method calls from unsupported class
+    my $uni_obj = bless {}, "UNIVERSAL";
     dies_ok { TimeZone::Solar::version(); } "undefined class in version()";
-    dies_ok { TimeZone::Solar::version("UNIVERSAL"); } "invalid class access to version()";
+    dies_ok { TimeZone::Solar::version("UNIVERSAL"); } "invalid class access to version() - name";
+    dies_ok { TimeZone::Solar::version($uni_obj); } "invalid class access to version() - ref";
     dies_ok { TimeZone::Solar::_get_const(); } "undefined class in _get_const()";
-    dies_ok { TimeZone::Solar::_get_const( "UNIVERSAL", "PRECISION_DIGITS" ); } "invalid class access to _get_const()";
+    dies_ok { TimeZone::Solar::_get_const( "UNIVERSAL", "PRECISION_DIGITS" ); } "invalid class in _get_const() - name";
+    dies_ok { TimeZone::Solar::_get_const( $uni_obj, "PRECISION_DIGITS" ); } "invalid class in _get_const() - ref";
 
     # instantiation tests
     dies_ok { my $tz = TimeZone::Solar->new(); } "Longitude is mandatory";
@@ -39,7 +42,7 @@ sub run_tests
     dies_ok { my $tz = TimeZone::Solar->new( longitude => 0, latitude => 91 ); } "Latitude must be <=  90";
     dies_ok { my $tz = TimeZone::Solar->new( longitude => 0, latitude => -91 ); } "Latitude must be >= -90";
 
-    # test coverage by forcing unlikely failures
+    # force unlikely failures
     dies_ok { _tz_subclass( "TimeZone::Solar::Flare", test_break_eval => 1 ) } "_tz_subclass force fail";
 }
 
