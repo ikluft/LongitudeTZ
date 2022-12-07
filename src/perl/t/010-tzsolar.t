@@ -239,6 +239,8 @@ sub test_polar
             ? $test_point->{longitude}
             : 0;
         my %expected  = expect_lon2tz( longitude => $use_lon, use_lon_tz => $test_point->{use_lon_tz} );
+        $expected{longitude} = $test_point->{longitude};
+        $expected{latitude} = $test_point->{latitude};
         my $test_name = sprintf(
             "longitude=%-10s latitude=%-9s use_lon_tz=%d",
             $test_point->{longitude},
@@ -251,6 +253,8 @@ sub test_polar
         my $expect_class = "DateTime::TimeZone::Solar::" . $stz->short_name();
         is_deeply(
             {
+                longitude  => $stz->longitude(),
+                latitude   => $stz->latitude(),
                 short_name => $stz->short_name(),
                 offset_min => $stz->offset_min(),
                 offset     => $stz->offset(),

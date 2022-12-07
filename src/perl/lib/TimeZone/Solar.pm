@@ -426,25 +426,17 @@ sub latitude
     return $self->{latitude};
 }
 
-# name: read/write accessor
+# name: read accessor
 sub name
 {
-    my @args = @_;
-    my $self = $args[0];
-    if ( scalar @args > 1 ) {
-        $self->{name} = $args[1];
-    }
+    my $self = shift;
     return $self->{name};
 }
 
-# short_name: read/write accessor
+# short_name: read accessor
 sub short_name
 {
-    my @args = @_;
-    my $self = $args[0];
-    if ( scalar @args > 1 ) {
-        $self->{short_name} = $args[1];
-    }
+    my $self = shift;
     return $self->{short_name};
 }
 
