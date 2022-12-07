@@ -59,7 +59,7 @@ sub count_tests
 {
     return (
         4                                             # in test_functions()
-            + $total_constants                        # number of constants, in test_constants()
+            + $total_constants + 1                    # number of constants, in test_constants()
             + ( $constants{MAX_DEGREES} + 1 ) * 10    # per-degree tests from -180 to +180, in test_lon()
             + ( scalar @polar_test_points )           # in test_polar()
     );
@@ -97,6 +97,7 @@ sub test_functions
 # check constants
 sub test_constants
 {
+    # check defined constants
     foreach my $key ( sort keys %constants ) {
         if ( substr( $key, -3 ) eq "_FP" ) {
 
@@ -111,6 +112,9 @@ sub test_constants
             is( TimeZone::Solar->_get_const($key), $constants{$key}, "constant check: $key = $constants{$key}" );
         }
     }
+
+    # non-existent constant throws exception
+    dies_ok( sub { TimeZone::Solar->_get_const("non-existent") }, "non-existent constant fails as expected" );
 }
 
 # formatting functions
