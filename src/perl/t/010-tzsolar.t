@@ -21,7 +21,14 @@ use IO::File;
 use TimeZone::Solar;
 
 # constants
+Readonly::Scalar my $TZSOLAR_LON_ZONE_RE  => qr((Lon0[0-9][0-9][EW]) | (Lon1[0-7][0-9][EW]) | (Lon180[EW]))x;
+Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE => qr((East|West)(0[0-9] | 1[0-2]))x;
+Readonly::Scalar my $TZSOLAR_ZONE_RE      => qr( $TZSOLAR_LON_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE )x;
 Readonly::Hash my %constants => (
+    TZSOLAR_CLASS_PREFIX   => "DateTime::TimeZone::Solar::",
+    TZSOLAR_LON_ZONE_RE    => $TZSOLAR_LON_ZONE_RE,
+    TZSOLAR_HOUR_ZONE_RE   => $TZSOLAR_HOUR_ZONE_RE,
+    TZSOLAR_ZONE_RE        => $TZSOLAR_ZONE_RE,
     PRECISION_DIGITS       => 6,
     PRECISION_FP           => 0.0000005,
     MAX_DEGREES            => 360,

@@ -24,11 +24,12 @@ use Carp qw(croak);
 use Readonly;
 use DateTime::TimeZone qw(0.80);
 use Try::Tiny;
+Readonly::Scalar my $debug_mode           => ( exists $ENV{TZSOLAR_DEBUG} and $ENV{TZSOLAR_DEBUG} ) ? 1 : 0;
 
 # constants
+## no critic ( Modules::ProhibitMultiplePackages )
 package TimeZone::Solar::Constant {
     use Carp qw(croak);
-    Readonly::Scalar my $debug_mode           => ( exists $ENV{TZSOLAR_DEBUG} and $ENV{TZSOLAR_DEBUG} ) ? 1 : 0;
     Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
     Readonly::Scalar my $TZSOLAR_LON_ZONE_RE  => qr((Lon0[0-9][0-9][EW]) | (Lon1[0-7][0-9][EW]) | (Lon180[EW]))x;
     Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE => qr((East|West)(0[0-9] | 1[0-2]))x;
@@ -61,7 +62,7 @@ package TimeZone::Solar::Constant {
     # get list of constant names/keys
     sub names
     {
-        return keys %constants;
+        return ( sort keys %constants );
     }
 
     # get the value of a constant by name
@@ -76,18 +77,22 @@ package TimeZone::Solar::Constant {
         return $constants{$name};
     }
 }
+## critic ( Modules::ProhibitMultiplePackages )
 
 # get list of constants
+## no critic ( Subroutines::ProhibitUnusedPrivateSubroutines )
 sub _const_names
 {
     return TimeZone::Solar::Constant::names();
 }
+## critic ( Subroutines::ProhibitUnusedPrivateSubroutines )
 
 # access constants
 # throws exception if requested contant name doesn't exist
 sub _const
 {
-    return TimeZone::Solar::Constant::get(@_);
+    my $name = shift;
+    return TimeZone::Solar::Constant::get($name);
 }
 
 # create timezone subclass
@@ -144,7 +149,7 @@ BEGIN {
         foreach my $tz_int ( 0 .. 12 ) {
             my $short_name = sprintf( "%s%02d", $tz_dir, $tz_int );
             my $long_name  = "Solar/" . $short_name;
-            my $class_name = _const("TZSOLAR_CLASS_PREFIX") . $short_name;
+            my $class_name = $TZSOLAR_CLASS_PREFIX . $short_name;
             _tz_subclass($class_name);
             $DateTime::TimeZone::Catalog::LINKS{$short_name} = $long_name;
         }
@@ -155,7 +160,7 @@ BEGIN {
         foreach my $tz_int ( 0 .. 180 ) {
             my $short_name = sprintf( "Lon%03d%s", $tz_int, $tz_dir );
             my $long_name  = "Solar/" . $short_name;
-            my $class_name = _const("TZSOLAR_CLASS_PREFIX") . $short_name;
+            my $class_name = $TZSOLAR_CLASS_PREFIX . $short_name;
             _tz_subclass($class_name);
             $DateTime::TimeZone::Catalog::LINKS{$short_name} = $long_name;
         }
