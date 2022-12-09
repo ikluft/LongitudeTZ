@@ -91,7 +91,8 @@ sub test_functions
 
     # tests which should not throw exceptions
     my @constant_keys;
-    lives_ok( sub { @constant_keys = TimeZone::Solar->_get_const() }, "runs without exception: _get_const()" );
+    lives_ok( sub { @constant_keys = TimeZone::Solar::Constant::names() },
+        "runs without exception: TimeZone::Solar::Constant->names()" );
     is_deeply( \@constant_keys, [ sort keys %constants ], "list of constants matches" );
 }
 
@@ -104,18 +105,18 @@ sub test_constants
 
             # floating point value
             ok(
-                fp_equal( TimeZone::Solar->_get_const($key), $constants{$key} ),
+                fp_equal( TimeZone::Solar::Constant::get($key), $constants{$key} ),
                 sprintf( "constant check: %s = %.7f", $key, $constants{$key} )
             );
         } else {
 
             # other types
-            is( TimeZone::Solar->_get_const($key), $constants{$key}, "constant check: $key = $constants{$key}" );
+            is( TimeZone::Solar::Constant::get($key), $constants{$key}, "constant check: $key = $constants{$key}" );
         }
     }
 
     # non-existent constant throws exception
-    dies_ok( sub { TimeZone::Solar->_get_const("non-existent") }, "non-existent constant fails as expected" );
+    dies_ok( sub { TimeZone::Solar::Constant::get("non-existent") }, "non-existent constant fails as expected" );
 }
 
 # formatting functions
