@@ -11,3 +11,4 @@ dynamic = ["version", "description"]
 
 [project.urls]
 Home = "https://github.com/ikluft/LongitudeTZ"
+Bug_Tracker = "https://github.com/ikluft/LongitudeTZ/labels/Python"

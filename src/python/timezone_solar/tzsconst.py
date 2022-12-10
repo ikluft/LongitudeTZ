@@ -41,18 +41,16 @@ class TZSConst:
         for key in cls.__dict__:
             if not key.startswith('__') and not callable(cls.__dict__.get(key)):
                 keys.append(key)
-        return keys
+        return keys.sort()
 
     @classmethod
     def get(cls, name):
         """
         returns value of constant by name
         """
-
-        if name.startswith('__'):
+        if name is None or name.startswith('__'):
             return None
         value = cls.__dict__.get(name)
         if value is None or callable(value):
             return None
         return value
-
