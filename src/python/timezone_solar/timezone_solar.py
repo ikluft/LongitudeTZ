@@ -1,6 +1,6 @@
 """local solar timezone lookup and utilities including datetime compatibility"""
 
-from .tzsconst import TZSConst
+from tzsconst import TZSConst
 from datetime import tzinfo, timedelta, datetime
 
 class TimeZoneSolar(tzinfo):

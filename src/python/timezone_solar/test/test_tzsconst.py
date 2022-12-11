@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 """unit tests for tzsconst"""
 
-import unittest
-from datetime import timedelta
 import re
-from ..tzsconst import TZSConst
+import unittest
+from pycotap import TAPTestRunner
+from datetime import timedelta
+from timezone_solar.tzsconst import TZSConst
 
 # constants for comparison, same as in TZSConst for double-checking
 TZSOLAR_LON_ZONE_STR = '(Lon0[0-9][0-9][EW])|(Lon1[0-7][0-9][EW])|(Lon180[EW])'
@@ -41,20 +42,37 @@ def fp_equal(fp_x: float, fp_y: float):
 
 class TestConstants(unittest.TestCase):
     """unit tests for constants in TZSConst"""
+    longMessage = True
 
-    def test_values(self):
-        """check constant values"""
+    @staticmethod
+    def make_const_test(const_name, expect_value):
+        """generate test case function for constant from name and expected value"""
+        def check(self):
+            got_value = TZSConst.get(const_name)
+            description = f"check constant {const_name}: {expect_value}"
+            if const_name.endswith("_FP"):
+                # floating point numbers are checked if within FP_EPSILON; equality not reliable
+                self.assertTrue(fp_equal(got_value, expect_value), description)
+            else:
+                # others checked for equality
+                self.assertEqual(got_value, expect_value, description)
+        return check
 
-        keys = CONSTANTS.keys().sort()
-        subtest=1
-        for name in keys:
-            with self.subTest(i=subtest):
-                value = TZSConst.get(name)
-                if name.endswith("_FP"):
-                    self.assertTrue(fp_equal(value, CONSTANTS[name]))
-                else:
-                    self.assertEqual(value, CONSTANTS[name])
-            subtest += 1
+    @classmethod
+    def generate_tests(cls):
+        """generate test functions for all the items in CONSTANTS dictionary"""
+        for name, expect_value in CONSTANTS.items():
+            #print( f"generating {name} test..." )
+            check_func = cls.make_const_test(name, expect_value)
+            setattr(cls, f"test_{name}", check_func)
 
-if __name__ == "__main__":
-    unittest.main()
+if __name__ == '__main__':
+    print( "starting..." )
+    TestConstants.generate_tests()
+    print( "test functions:" )
+    for fn_name in TestConstants.__dict__:
+        if callable(TestConstants.__dict__.get(fn_name)):
+            print( f"  {fn_name}" )
+    #unittest.main()
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestConstants)
+    TAPTestRunner().run(suite)
