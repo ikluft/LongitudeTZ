@@ -214,7 +214,7 @@ sub version
     return "00-dev";
 }
 
-# check latitude data and initialize special case for polar regions - internal method called by init()
+# check latitude data and initialize special case for polar regions - internal method called by _tz_params()
 sub _tz_params_latitude
 {
     my $param_ref = shift;
@@ -422,11 +422,6 @@ sub new
     # make a new one if it doesn't yet exist
     my $tz_params = _tz_params(%args);
     my $self      = _tz_instance($tz_params);
-
-    # use init() method, with support for derived classes that may override it
-    if ( my $init_func = $self->can("init") ) {
-        $init_func->($self);
-    }
     return $self;
 }
 

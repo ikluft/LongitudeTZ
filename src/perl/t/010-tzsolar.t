@@ -201,7 +201,8 @@ sub expect_lon2tz
     my $class      = "DateTime::TimeZone::Solar::" . $tz_name;
     my $offset_str = _offset_min2str($offset_min);
     $debug_mode and say STDERR "debug(lon:$lon,type:" . ( $use_lon_tz ? "lon" : "hour" ) . ") -> $tz_name, $offset_min";
-    return ( short_name => $tz_name, offset_min => $offset_min, offset => $offset_str, class => $class );
+    return ( short_name => $tz_name, offset_min => $offset_min, offset_str => $offset_str, offset => $offset_str,
+        class => $class, has_dst_changes => 0, spans => [] );
 }
 
 # perform tests for a degree of longitude
@@ -262,12 +263,15 @@ sub test_polar
         my $expect_class = "DateTime::TimeZone::Solar::" . $stz->short_name();
         is_deeply(
             {
-                longitude  => $stz->longitude(),
-                latitude   => $stz->latitude(),
-                short_name => $stz->short_name(),
-                offset_min => $stz->offset_min(),
-                offset     => $stz->offset(),
-                class      => $expect_class
+                longitude       => $stz->longitude(),
+                latitude        => $stz->latitude(),
+                short_name      => $stz->short_name(),
+                offset_min      => $stz->offset_min(),
+                offset_str      => $stz->offset_str(),
+                offset          => $stz->offset(),
+                class           => $expect_class,
+                has_dst_changes => 0,
+                spans           => [],
             },
             \%expected,
             $test_name
