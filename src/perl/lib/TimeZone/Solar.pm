@@ -849,7 +849,21 @@ See L<https://www.gnu.org/licenses/gpl-3.0-standalone.html>.
 
 =head1 SEE ALSO
 
-LongitudeTZ on Github: https://github.com/ikluft/LongitudeTZ
+=over
+
+=item LongitudeTZ project on Github
+
+https://github.com/ikluft/LongitudeTZ
+
+=item Perl source
+
+https://github.com/ikluft/LongitudeTZ/tree/main/src/perl
+
+=item "Time zone and daylight saving time data" at Internet Assigned Numbers Authority (IANA)
+
+https://data.iana.org/time-zones/tz-link.html
+
+=back
 
 =head1 BUGS AND LIMITATIONS
 

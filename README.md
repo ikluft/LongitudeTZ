@@ -20,7 +20,8 @@ The project also makes another set of overlay time zones the width of 1 degree o
 Solar TimeZone libraries implementations in different programming languages:
 * [Perl](src/perl/) as _TimeZone::Solar_ module
   * [![Perl](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml)
-* Python - TODO
+  * available on MetaCPAN: https://metacpan.org/pod/TimeZone::Solar
+* [Python](src/python/) - as _timezone_solar_ module
 * Rust - TODO
 * others coming, code contributions accepted
 
