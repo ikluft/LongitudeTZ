@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 """unit tests for tzsconst"""
 
+import os
+import sys
 import re
 import unittest
-from pycotap import TAPTestRunner
+from tap import TAPTestRunner
 from datetime import timedelta
 from timezone_solar.tzsconst import TZSConst
 
@@ -52,7 +54,7 @@ class TestConstants(unittest.TestCase):
             description = f"check constant {const_name}: {expect_value}"
             if const_name.endswith("_FP"):
                 # floating point numbers are checked if within FP_EPSILON; equality not reliable
-                self.assertTrue(fp_equal(got_value, expect_value), description)
+                self.assertTrue(fp_equal(got_value, expect_value), msg=description)
             else:
                 # others checked for equality
                 self.assertEqual(got_value, expect_value, description)
@@ -70,9 +72,12 @@ if __name__ == '__main__':
     print( "starting..." )
     TestConstants.generate_tests()
     print( "test functions:" )
-    for fn_name in TestConstants.__dict__:
-        if callable(TestConstants.__dict__.get(fn_name)):
-            print( f"  {fn_name}" )
-    #unittest.main()
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestConstants)
-    TAPTestRunner().run(suite)
+
+    tests_dir = os.path.dirname(os.path.abspath(__file__))
+    loader = unittest.TestLoader()
+    tests = loader.discover(tests_dir)
+    runner = TAPTestRunner()
+    runner.set_stream(True)
+    runner.set_format("{method_name}: {short_description}")
+    result = runner.run(tests)
+    sys.exit(0 if result.wasSuccessful() else 1)

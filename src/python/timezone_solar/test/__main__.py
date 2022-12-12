@@ -2,13 +2,12 @@
 import os
 import sys
 import unittest
-from pycotap import TAPTestRunner
+from tap import TAPTestRunner
 
 here = os.path.dirname(__file__)
 loader = unittest.defaultTestLoader
 
 # generate test suite from classes, call generate_tests() in classes which have it
-test_suite = unittest.TestSuite()
 for func in os.listdir(here):
     # process source files that start with "test"
     if func.startswith("test") and func.endswith(".py"):
@@ -33,7 +32,12 @@ for func in os.listdir(here):
                 #print( f"*** generated tests in {key}")
 
         # let unittest load test functions it finds in the module
+        test_suite = unittest.TestSuite()
         test_suite.addTest(loader.loadTestsFromModule(module))
 
-# run the collected test suite from all the modules in the directory
-TAPTestRunner().run(test_suite)
+        # run the collected test suite from all the modules in the directory
+        runner = TAPTestRunner()
+        runner.set_stream(True)
+        runner.set_format("{method_name}: {short_description}")
+        result = runner.run(test_suite)
+        sys.exit(0 if result.wasSuccessful() else 1)
