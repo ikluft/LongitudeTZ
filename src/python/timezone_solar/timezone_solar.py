@@ -37,6 +37,18 @@ class TimeZoneSolar(tzinfo):
                 TZSConst.get("PRECISION_FP"):
             raise Exception( "_tz_params: longitude must be in the range -180 to +180" )
 
+        # set flag for longitude time zones:
+        # 0 = hourly 1-hour/15-degree zones, 1 = longitude 4-minute/1-degree zones
+        # defaults to hourly time zone ($use_lon_tz=0)
+        use_lon_tz = tz_params["use_lon_tz"] is not None and tz_params["use_lon_tz"]
+        tz_degree_width = 1 if use_lon_tz else 15
+        tz_digits = 3 if use_lon_tz else 2
+
+        # handle special case of half-wide tz at positive side of solar date line (180° longitude)
+        if tz_params["longitude"] <= -TZSConst.get("MAX_LONGITUDE_INT") + tz_degree_width / 2.0 \
+                + TZSConst.get("PRECISION_FP"):
+            # tz_name = ... translate string formatting
+
         # TODO
         return tz_params
 
