@@ -11,6 +11,24 @@ class TimeZoneSolar(tzinfo):
     _instances = {}
 
     #
+    # utility methods
+    #
+
+    # generate a solar time zone name
+    # required parameters:
+    #   longitude: integer number of degrees of longitude for time zone
+    #   use_lon_tz: true=use longitude-based time zones, false=use hour-based time zones
+    #   sign: +1 = positive/zero, -1 = negative
+    @staticmethod
+    def _tz_name(**params):
+        prefix = "Lon" if params["use_lon_tz"] else ("East" if params["sign"] > 0 else "West" )
+        suffix = "" if not  params["use_lon_tz"] else ("E" if params["sign"] > 0 else "W")
+        tz_degree_width = 1 if params["use_lon_tz"] else 15
+        tz_digits = 3 if params["use_lon_tz"] else 2
+        tz_num = str(int(params["longitude"] / tz_degree_width)).zfill(tz_digits)
+        return prefix + tz_num + suffix
+
+    #
     # TimeZoneSolar core class methods
     #
 
@@ -34,7 +52,7 @@ class TimeZoneSolar(tzinfo):
         if not re.fullmatch( r'^[-+]?\d+(\.\d+)?$', tz_params["longitude"]):
             raise Exception( f"_tz_params: longitude {tz_params['longitude']}" )
         if abs(tz_params["longitude"]) > TZSConst.get("MAX_LONGITUDE_FP") + \
-                TZSConst.get("PRECISION_FP"):
+            TZSConst.get("PRECISION_FP"):
             raise Exception( "_tz_params: longitude must be in the range -180 to +180" )
 
         # set flag for longitude time zones:
@@ -42,12 +60,41 @@ class TimeZoneSolar(tzinfo):
         # defaults to hourly time zone ($use_lon_tz=0)
         use_lon_tz = tz_params["use_lon_tz"] is not None and tz_params["use_lon_tz"]
         tz_degree_width = 1 if use_lon_tz else 15
-        tz_digits = 3 if use_lon_tz else 2
 
         # handle special case of half-wide tz at positive side of solar date line (180° longitude)
-        if tz_params["longitude"] <= -TZSConst.get("MAX_LONGITUDE_INT") + tz_degree_width / 2.0 \
+        if tz_params["longitude"] >= TZSConst.get("MAX_LONGITUDE_INT") - tz_degree_width / 2.0 \
+                - TZSConst.get("PRECISION_FP") \
+            or tz_params["longitude"] <= -TZSConst.get("MAX_LONGITUDE_INT") \
                 + TZSConst.get("PRECISION_FP"):
-            # tz_name = ... translate string formatting
+            tz_name = cls._tz_name(use_lon_tz=use_lon_tz, sign=1, \
+                longitude=TZSConst.get("MAX_LONGITUDE_INT"))
+            tz_params["short_name"] = tz_name
+            tz_params["name"] = f"Solar/{tz_name}"
+            tz_params["offset_min"] = 720
+            # tz_params["offset"] = cls._offset_min2str(720) # TODO verify library needs this
+
+        elif tz_params["longitude"] <= -TZSConst.get("MAX_LONGITUDE_INT") + tz_degree_width / 2.0 \
+                + TZSConst.get("PRECISION_FP"):
+            tz_name = cls._tz_name(use_lon_tz=use_lon_tz, sign=-1, \
+                longitude=TZSConst.get("MAX_LONGITUDE_INT"))
+            tz_params["short_name"] = tz_name
+            tz_params["name"] = f"Solar/{tz_name}"
+            tz_params["offset_min"] = -720
+            # tz_params["offset"] = cls._offset_min2str(-720) # TODO verify library needs this
+
+        else:
+            tz_int = int(abs(tz_params["longitude"]) / tz_degree_width / 2.0 \
+                + TZSConst.get("PRECISION_FP"))
+            sign = 1 \
+                if tz_params["longitude"] > -tz_degree_width / 2.0 + TZSConst.get("PRECISION_FP") \
+                else -1
+            offset = sign * tz_int * TZSConst.get("MINUTES_PER_DEGREE_LON") * tz_degree_width
+            tz_name = cls._tz_name(use_lon_tz=use_lon_tz, sign=sign, longitude=tz_int)
+            tz_params["short_name"] = tz_name
+            tz_params["name"] = f"Solar/{tz_name}"
+            tz_params["offset_min"] = offset
+            # tz_params["offset"] = cls._offset_min2str(offset) # TODO verify library needs this
+
 
         # TODO
         return tz_params
