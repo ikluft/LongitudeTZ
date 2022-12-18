@@ -95,13 +95,17 @@ class TimeZoneSolar(tzinfo):
             tz_params["offset_min"] = offset
             # tz_params["offset"] = cls._offset_min2str(offset) # TODO verify library needs this
 
-
-        # TODO
         return tz_params
 
     # fetch or create a timezone instance for __new__
     @classmethod
-    def _tz_instance(cls, tz_params):
+    def _tz_instance(cls, **params):
+        # consistency checks
+        if params["short_name"] is None:
+            raise Exception( "_tz_instance: short_name parameter missing" )
+        if not re.fullmatch( TZSConst.get("TZSOLAR_ZONE_RE"), params["short_name"]):
+            raise Exception( "_tz_instance: short_name parameter is not a solar time zone name" )
+
         # TODO
         pass
 
