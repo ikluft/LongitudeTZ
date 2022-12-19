@@ -4,11 +4,11 @@ from tzsconst import TZSConst
 from datetime import tzinfo, timedelta, datetime
 import re
 
+# instances of each time zone's singleton object
+_instances = {}
+
 class TimeZoneSolar(tzinfo):
     """local solar timezone"""
-
-    # instances of each time zone's singleton object
-    _instances = {}
 
     #
     # utility methods
@@ -101,10 +101,21 @@ class TimeZoneSolar(tzinfo):
     @classmethod
     def _tz_instance(cls, **params):
         # consistency checks
-        if params["short_name"] is None:
+        short_name = params["short_name"]
+        if short_name is None:
             raise Exception( "_tz_instance: short_name parameter missing" )
-        if not re.fullmatch( TZSConst.get("TZSOLAR_ZONE_RE"), params["short_name"]):
+        if not re.fullmatch( TZSConst.get("TZSOLAR_ZONE_RE"), short_name):
             raise Exception( "_tz_instance: short_name parameter is not a solar time zone name" )
+
+        # look up class instance, return it if found
+        if short_name in _instances:
+            # forward lat/lon parameters to existing instance, so tests can see where it came from
+            for key in ["latitude", "longitude"]:
+                if key in params:
+                    _instances[short_name][key] = params[key]
+                else:
+                    if key in _instances[short_name]:
+                        del _instances[short_name][key]
 
         # TODO
         pass
