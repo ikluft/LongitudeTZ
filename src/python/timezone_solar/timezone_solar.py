@@ -116,13 +116,20 @@ class TimeZoneSolar(tzinfo):
                 else:
                     if key in _instances[short_name]:
                         del _instances[short_name][key]
+            return _instances[short_name]
 
+        # make and save the singleton instance for that short_name class
+        obj = cls.__new__(params)
+        _instances[short_name] = obj
+        return obj
+
+    @classmethod
+    def __new__(cls, *args, **kwargs):
+        # unfinished translation:
+        #return cls._tz_instance(cls._tz_params(args))
         # TODO
         pass
 
-    @classmethod
-    def __new__(cls, **args):
-        return cls._tz_instance(cls._tz_params(args))
 
     #
     # implementation of datetime.tzinfo interface
