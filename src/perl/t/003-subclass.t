@@ -41,13 +41,13 @@ sub test_subclass_name
     my $subclass = shift;
     isa_ok( $subclass, $TZSOLAR_CLASS );
     my $expect_type = exists $differences{$subclass} ? $differences{$subclass} : $subclass;
-    my ($obj, $obj2);
+    my ( $obj, $obj2 );
     lives_ok( sub { $obj = $subclass->new() }, "instantiate $subclass from new()" );
     is( ref $obj, $expect_type, exists $differences{$subclass}
         ? "got $expect_type from $subclass as expected"
         : "got $subclass as expected" );
     lives_ok( sub { $obj2 = $subclass->instance() }, "get instance() of $subclass" );
-    ok( $obj eq $obj2, "eq comparison of $subclass objects");
+    ok( $obj eq $obj2, "eq comparison of $subclass objects" );
     return;
 }
 

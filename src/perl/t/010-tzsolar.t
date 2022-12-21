@@ -98,8 +98,10 @@ sub test_functions
 
     # tests which should not throw exceptions
     my @constant_keys;
-    lives_ok( sub { @constant_keys = TimeZone::Solar::Constant::names() },
-        "runs without exception: TimeZone::Solar::Constant->names()" );
+    lives_ok(
+        sub { @constant_keys = TimeZone::Solar::Constant::names() },
+        "runs without exception: TimeZone::Solar::Constant->names()"
+    );
     is_deeply( \@constant_keys, [ sort keys %constants ], "list of constants matches" );
 }
 
@@ -201,8 +203,15 @@ sub expect_lon2tz
     my $class      = "DateTime::TimeZone::Solar::" . $tz_name;
     my $offset_str = _offset_min2str($offset_min);
     $debug_mode and say STDERR "debug(lon:$lon,type:" . ( $use_lon_tz ? "lon" : "hour" ) . ") -> $tz_name, $offset_min";
-    return ( short_name => $tz_name, offset_min => $offset_min, offset_str => $offset_str, offset => $offset_str,
-        class => $class, has_dst_changes => 0, spans => [] );
+    return (
+        short_name      => $tz_name,
+        offset_min      => $offset_min,
+        offset_str      => $offset_str,
+        offset          => $offset_str,
+        class           => $class,
+        has_dst_changes => 0,
+        spans           => []
+    );
 }
 
 # perform tests for a degree of longitude
@@ -248,9 +257,9 @@ sub test_polar
             ( abs( $test_point->{latitude} ) <= $constants{LIMIT_LATITUDE} - $precision )
             ? $test_point->{longitude}
             : 0;
-        my %expected  = expect_lon2tz( longitude => $use_lon, use_lon_tz => $test_point->{use_lon_tz} );
+        my %expected = expect_lon2tz( longitude => $use_lon, use_lon_tz => $test_point->{use_lon_tz} );
         $expected{longitude} = $test_point->{longitude};
-        $expected{latitude} = $test_point->{latitude};
+        $expected{latitude}  = $test_point->{latitude};
         my $test_name = sprintf(
             "longitude=%-10s latitude=%-9s use_lon_tz=%d",
             $test_point->{longitude},

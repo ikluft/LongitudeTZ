@@ -24,7 +24,7 @@ use Carp qw(croak);
 use Readonly;
 use DateTime::TimeZone qw(0.80);
 use Try::Tiny;
-Readonly::Scalar my $debug_mode           => ( exists $ENV{TZSOLAR_DEBUG} and $ENV{TZSOLAR_DEBUG} ) ? 1 : 0;
+Readonly::Scalar my $debug_mode => ( exists $ENV{TZSOLAR_DEBUG} and $ENV{TZSOLAR_DEBUG} ) ? 1 : 0;
 
 # constants
 ## no critic ( Modules::ProhibitMultiplePackages )
@@ -72,7 +72,7 @@ package TimeZone::Solar::Constant {
 
         # require valid name parameter
         if ( not exists $constants{$name} ) {
-            croak( __PACKAGE__.": non-existent constant requested: $name" );
+            croak( __PACKAGE__ . ": non-existent constant requested: $name" );
         }
         return $constants{$name};
     }
@@ -105,8 +105,8 @@ sub _tz_subclass
     # under normal circumstances, %opts parameters should be omitted
     my $result_cmd = (
         ( exists $opts{test_break_eval} and $opts{test_break_eval} )
-        ? "croak 'break due to test_break_eval'" # for testing we can force the eval to break
-        : "1" # normally the class definition returns 1
+        ? "croak 'break due to test_break_eval'"    # for testing we can force the eval to break
+        : "1"                                       # normally the class definition returns 1
     );
 
     ## no critic (BuiltinFunctions::ProhibitStringyEval)
@@ -121,8 +121,7 @@ sub _tz_subclass
             . "::VERSION = \$"
             . __PACKAGE__
             . "::VERSION;"
-            . "$result_cmd; "
-            . "}";
+            . "$result_cmd; " . "}";
     };
     if ( not $class_check ) {
         croak __PACKAGE__ . "::_tz_subclass: unable to create class $class";
@@ -396,7 +395,7 @@ sub new
 
     # if we got here via DataTime::TimeZone::Solar::*->new(), override longitude/use_lon_tz parameters from class name
     my $tzsolar_class_prefix = _const("TZSOLAR_CLASS_PREFIX");
-    my $tzsolar_zone_re = _const("TZSOLAR_ZONE_RE");
+    my $tzsolar_zone_re      = _const("TZSOLAR_ZONE_RE");
     if ( $in_class =~ qr( $tzsolar_class_prefix ( $tzsolar_zone_re ))x ) {
         my $in_tz = $1;
         if ( substr( $in_tz, 0, 4 ) eq "East" ) {

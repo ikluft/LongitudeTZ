@@ -34,14 +34,14 @@ sub run_tests
 
     # feed bad parameters to _tz_instance() => 4 tests
     dies_ok { TimeZone::Solar::_tz_instance() } "_tz_instance() croaks on undef hashref";
-    dies_ok { TimeZone::Solar::_tz_instance( 0 ) } "_tz_instance() croaks on non-hash value for hashref";
+    dies_ok { TimeZone::Solar::_tz_instance(0) } "_tz_instance() croaks on non-hash value for hashref";
     my %bad_params;
     dies_ok { TimeZone::Solar::_tz_instance( \%bad_params ) } "_tz_instance() croaks on missing short_name";
     $bad_params{short_name} = "Invalid001";
     dies_ok { TimeZone::Solar::_tz_instance( \%bad_params ) } "_tz_instance() croaks on misformatted short_name";
 
     # instantiation tests => 8 tests
-    dies_ok { my $tz = TimeZone::Solar::new( "UNIVERSAL" ); } "invalid class to new()";
+    dies_ok { my $tz = TimeZone::Solar::new("UNIVERSAL"); } "invalid class to new()";
     dies_ok { my $tz = TimeZone::Solar->new(); } "Longitude is mandatory";
     dies_ok { my $tz = TimeZone::Solar->new( longitude => 'zero' ); } "Longitude must be numeric";
     dies_ok { my $tz = TimeZone::Solar->new( longitude => 0, latitude => 'zero' ); } "Latitude must be numeric";
