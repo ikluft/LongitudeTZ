@@ -99,7 +99,7 @@ class TimeZoneSolar(tzinfo):
 
     # fetch or create a timezone instance for __new__
     @classmethod
-    def _tz_instance(cls, **params):
+    def _tz_instance(cls, params):
         # consistency checks
         short_name = params["short_name"]
         if short_name is None:
@@ -119,17 +119,14 @@ class TimeZoneSolar(tzinfo):
             return _instances[short_name]
 
         # make and save the singleton instance for that short_name class
-        obj = cls.__new__(params)
+        obj = super().__new__(cls, params)
         _instances[short_name] = obj
         return obj
 
-    @classmethod
-    def __new__(cls, *args, **kwargs):
-        # unfinished translation:
-        #return cls._tz_instance(cls._tz_params(args))
-        # TODO
-        pass
-
+    # return a singleton instance for the requested time zone
+    # create a new instance only if it didn't already exist
+    def __new__(cls, **kwargs):
+        return cls._tz_instance(cls._tz_params(kwargs))
 
     #
     # implementation of datetime.tzinfo interface
