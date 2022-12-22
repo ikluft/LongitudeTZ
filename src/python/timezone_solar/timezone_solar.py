@@ -136,8 +136,7 @@ class TimeZoneSolar(tzinfo):
         """
         returns a timedelta of the offset from UTC
         """
-        # TODO
-        return timedelta(0)
+        return timedelta(minutes = self["offset_min"])
 
     def dst(self, dt):
         """
@@ -146,5 +145,7 @@ class TimeZoneSolar(tzinfo):
         return False
 
     def tzname(self, dt):
-        # TODO
-        pass
+        """
+        returns short name of time zone
+        """
+        return self["name"]
