@@ -1,8 +1,8 @@
 """local solar timezone lookup and utilities including datetime compatibility"""
 
-from tzsconst import TZSConst
-from datetime import tzinfo, timedelta, datetime
+from datetime import tzinfo, timedelta
 import re
+from .tzsconst import TZSConst
 
 # instances of each time zone's singleton object
 _instances = {}
@@ -62,25 +62,24 @@ class TimeZoneSolar(tzinfo):
         tz_degree_width = 1 if use_lon_tz else 15
 
         # handle special case of half-wide tz at positive side of solar date line (180° longitude)
-        if tz_params["longitude"] >= TZSConst.get("MAX_LONGITUDE_INT") - tz_degree_width / 2.0 \
+        max_longitude = TZSConst.get("MAX_LONGITUDE_INT")
+        if tz_params["longitude"] >= max_longitude - tz_degree_width / 2.0 \
                 - TZSConst.get("PRECISION_FP") \
-            or tz_params["longitude"] <= -TZSConst.get("MAX_LONGITUDE_INT") \
+            or tz_params["longitude"] <= -max_longitude \
                 + TZSConst.get("PRECISION_FP"):
             tz_name = cls._tz_name(use_lon_tz=use_lon_tz, sign=1, \
                 longitude=TZSConst.get("MAX_LONGITUDE_INT"))
             tz_params["short_name"] = tz_name
             tz_params["name"] = f"Solar/{tz_name}"
             tz_params["offset_min"] = 720
-            # tz_params["offset"] = cls._offset_min2str(720) # TODO verify library needs this
 
-        elif tz_params["longitude"] <= -TZSConst.get("MAX_LONGITUDE_INT") + tz_degree_width / 2.0 \
+        elif tz_params["longitude"] <= -max_longitude + tz_degree_width / 2.0 \
                 + TZSConst.get("PRECISION_FP"):
             tz_name = cls._tz_name(use_lon_tz=use_lon_tz, sign=-1, \
-                longitude=TZSConst.get("MAX_LONGITUDE_INT"))
+                longitude=max_longitude)
             tz_params["short_name"] = tz_name
             tz_params["name"] = f"Solar/{tz_name}"
             tz_params["offset_min"] = -720
-            # tz_params["offset"] = cls._offset_min2str(-720) # TODO verify library needs this
 
         else:
             tz_int = int(abs(tz_params["longitude"]) / tz_degree_width / 2.0 \
@@ -93,7 +92,6 @@ class TimeZoneSolar(tzinfo):
             tz_params["short_name"] = tz_name
             tz_params["name"] = f"Solar/{tz_name}"
             tz_params["offset_min"] = offset
-            # tz_params["offset"] = cls._offset_min2str(offset) # TODO verify library needs this
 
         return tz_params
 
