@@ -47,26 +47,58 @@ class TestConstants(unittest.TestCase):
     longMessage = True
 
     @staticmethod
-    def make_const_test(const_name, expect_value):
+    def make_value_test(const_name, expect_value):
         """generate test case function for constant from name and expected value"""
-        def check(self):
+        def check_value(self):
             got_value = TZSConst.get(const_name)
-            description = f"check constant {const_name}: {expect_value}"
+            description = f"check value of constant {const_name}: {expect_value}"
             if const_name.endswith("_FP"):
                 # floating point numbers are checked if within FP_EPSILON; equality not reliable
                 self.assertTrue(fp_equal(got_value, expect_value), msg=description)
             else:
                 # others checked for equality
                 self.assertEqual(got_value, expect_value, description)
-        return check
+        return check_value
+
+    @staticmethod
+    def make_getattr_test(const_name, expect_value):
+        """generate test case function for constant via object access"""
+        def check_getattr(self):
+            const = TZSConst()
+            if expect_value is None:
+                with self.assertRaises( AttributeError ):
+                    object.__getattribute__(const.__class__, const_name)
+                return
+            got_value = object.__getattribute__(const.__class__, const_name)
+            description = f"check constant via getattr: {const_name} = {expect_value}"
+            if const_name.endswith("_FP"):
+                # floating point numbers are checked if within FP_EPSILON; equality not reliable
+                self.assertTrue(fp_equal(got_value, expect_value), msg=description)
+            else:
+                # others checked for equality
+                self.assertEqual(got_value, expect_value, description)
+        return check_getattr
 
     @classmethod
     def generate_tests(cls):
         """generate test functions for all the items in CONSTANTS dictionary"""
+
+        # test existing values
+        testnum = 0
         for name, expect_value in CONSTANTS.items():
             #print( f"generating {name} test..." )
-            check_func = cls.make_const_test(name, expect_value)
-            setattr(cls, f"test_{name}", check_func)
+            check_value_func = cls.make_value_test(name, expect_value)
+            setattr(cls, f"test_{testnum:03}_const_{name}", check_value_func)
+            check_getattr_func = cls.make_getattr_test(name, expect_value)
+            setattr(cls, f"test_{testnum:03}_getattr_{name}", check_getattr_func)
+            testnum += 1
+
+        # test non-existent value
+        bad_name = "NONEXISTENT"
+        check_value_func = cls.make_value_test(bad_name, None)
+        setattr(cls, f"test_{testnum:03}_const_{bad_name}_none", check_value_func)
+        check_getattr_func = cls.make_getattr_test(bad_name, None)
+        setattr(cls, f"test_{testnum:03}_getattr_{bad_name}_fails", check_getattr_func)
 
 if __name__ == '__main__':
     print( "starting..." )

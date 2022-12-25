@@ -55,40 +55,12 @@ class TZSConst:
             return None
         return value
 
-    def gen_func_float(self, key):
+    def __getattr__(self, name):
         """
-        generate read-accessor function for floating point constant
+        accessor for class constants
         """
-        def const_float() -> float:
-            return float(self.__class__.get(key))
-        self.__dict__[key.casefold()] = const_float
-
-    def gen_func_int(self, key):
-        """
-        generate read-accessor function for integer constant
-        """
-        def const_int() -> int:
-            return int(self.__class__.get(key))
-        self.__dict__[key.casefold()] = const_int
-
-    def gen_func_str(self, key):
-        """
-        generate read-accessor function for string constant
-        """
-        self.__dict__[key.casefold()] = lambda: str(self.__dict__.get(key))
-        def const_str() -> str:
-            return str(self.__class__.get(key))
-        self.__dict__[key.casefold()] = const_str
-
-    def __init__(self):
-        """
-        generate read-accessor functions for constants
-        """
-        for key in self.__dict__:
-            if not key.startswith('__') and not callable(self.__dict__.get(key)):
-                if re.fullmatch('^.*_FP$', key):
-                    self.gen_func_float(key)
-                if re.fullmatch('^.*_INT$', key):
-                    self.gen_func_int(key)
-                else:
-                    self.gen_func_str(key)
+        up_name = name.upper()
+        value = self.__class__.get(up_name)
+        if value is None:
+            raise AttributeError(f"module {__name__!r} has no attribute {up_name!r}")
+        return value
