@@ -18,11 +18,13 @@ class TimeZoneSolar(tzinfo):
     #   sign: +1 = positive/zero, -1 = negative
     @staticmethod
     def _tz_name(**params) -> str:
+        const = TZSConst()
         prefix = "Lon" if params["use_lon_tz"] else ("East" if params["sign"] > 0 else "West" )
-        suffix = "" if not  params["use_lon_tz"] else ("E" if params["sign"] > 0 else "W")
+        suffix = "" if not params["use_lon_tz"] else ("E" if params["sign"] > 0 else "W")
         tz_degree_width = 1 if params["use_lon_tz"] else 15
         tz_digits = 3 if params["use_lon_tz"] else 2
-        tz_num = str(int(params["longitude"] / tz_degree_width)).zfill(tz_digits)
+        tz_num = str(int(abs(params["longitude"]) / tz_degree_width + 0.5 + const.precision_fp)) \
+            .zfill(tz_digits)
         return prefix + tz_num + suffix
 
     #
@@ -74,7 +76,7 @@ class TimeZoneSolar(tzinfo):
             tz_params["offset_min"] = -720
 
         else:
-            tz_int = int(abs(longitude) / tz_degree_width / 2.0 + const.precision_fp)
+            tz_int = int(abs(longitude) / tz_degree_width + 0.5 + const.precision_fp)
             sign = 1 \
                 if longitude > -tz_degree_width / 2.0 + const.precision_fp \
                 else -1
