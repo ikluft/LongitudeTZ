@@ -44,10 +44,9 @@ def fp_equal(fp_x: float, fp_y: float):
 
 class TestConstants(unittest.TestCase):
     """unit tests for constants in TZSConst"""
-    longMessage = True
 
-    @staticmethod
-    def make_value_test(const_name, expect_value):
+    @classmethod
+    def make_value_test(cls, const_name, expect_value):
         """generate test case function for constant from name and expected value"""
         description = f"check value of constant {const_name}: {expect_value}"
         def check_value(self):
@@ -61,8 +60,8 @@ class TestConstants(unittest.TestCase):
         check_value.__doc__ = description
         return check_value
 
-    @staticmethod
-    def make_getattr_test(const_name, expect_value):
+    @classmethod
+    def make_getattr_test(cls, const_name, expect_value):
         """generate test case function for constant via object access"""
         description = f"check constant via getattr: {const_name} = {expect_value}"
         def check_getattr(self):

@@ -104,13 +104,8 @@ class TimeZoneSolar(tzinfo):
 
         # look up class instance, return it if found
         if short_name in _instances:
-            # forward lat/lon parameters to existing instance, so tests can see where it came from
-            for key in ["latitude", "longitude"]:
-                if key in params:
-                    _instances[short_name][key] = params[key]
-                else:
-                    if key in _instances[short_name]:
-                        del _instances[short_name][key]
+            # forward lat/lon parameters to existing instance, for testing & troubleshooting
+            _instances[short_name].update_lon_lat(params)
             return _instances[short_name]
 
         # make and save the singleton instance for that short_name class
@@ -120,25 +115,42 @@ class TimeZoneSolar(tzinfo):
 
     # return a singleton instance for the requested time zone
     # create a new instance only if it didn't already exist
-    def __new__(cls, **kwargs):
-        return cls._tz_instance(cls._tz_params(kwargs))
+    def __new__(cls, **params):
+        return cls._tz_instance(cls._tz_params(**params))
 
     #
+    # attribute access methods
+    #
+
+    # update lat/lon to record source data
+    def update_lon_lat(self, params):
+        """
+        update longitude and optional latitude to record source data for testing/troubleshooting
+        """
+        for key in ["longitude", "latitude"]:
+            if key in params:
+                self.setattr(key, params[key])
+            else:
+                self.delattr(key)
+
+    # get UTC offset
     # implementation of datetime.tzinfo interface
-    #
-
     def utcoffset(self, dt):
         """
         returns a timedelta of the offset from UTC
         """
         return timedelta(minutes = self["offset_min"])
 
+    # get DST flag (always false for solar time zones)
+    # implementation of datetime.tzinfo interface
     def dst(self, dt):
         """
         returns Daylight Saving Time flag, always false because solar time zones don't use DST
         """
         return False
 
+    # get time zone name string
+    # implementation of datetime.tzinfo interface
     def tzname(self, dt):
         """
         returns short name of time zone
