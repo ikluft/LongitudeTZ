@@ -30,8 +30,7 @@ class TestBasic(unittest.TestCase):
         tz_digits = 3 if use_lon_tz else 2
 
         # generate time zone name and offset
-        tz_name = None
-        offset = None
+        expect = dict()
         if lon >= const.max_longitude_int - tz_degree_width / 2.0 - const.precision_fp \
                 or lon <= -const.max_longitude_int + const.precision_fp:
             # handle special case of half-wide tz at positive side of date line (180°)
@@ -39,15 +38,15 @@ class TestBasic(unittest.TestCase):
             tz_num_str = str(const.max_longitude_int/tz_degree_width).zfill(tz_digits)
             prefix = cls._tz_prefix(use_lon_tz, 1)
             suffix = cls._tz_suffix(use_lon_tz, 1)
-            tz_name = f"{prefix}{tz_num_str}{suffix}"
-            offset = timedelta(minutes=720)
+            expect["short_name"] = f"{prefix}{tz_num_str}{suffix}"
+            expect["offset_min"] = 720
         elif lon <= ( -const.max_longitude_int + tz_degree_width / 2.0 + const.precision_fp ):
             # handle special case of half-wide tz at negative side of date line (180°)
             tz_num_str = str(const.max_longitude_int/tz_degree_width).zfill(tz_digits)
             prefix = cls._tz_prefix(use_lon_tz, -1)
             suffix = cls._tz_suffix(use_lon_tz, -1)
-            tz_name = f"{prefix}{tz_num_str}{suffix}"
-            offset = timedelta(minutes=-720)
+            expect["short_name"] = f"{prefix}{tz_num_str}{suffix}"
+            expect["offset_min"] = -720
         else:
             # handle all other times zones
             tz_int = int(abs(lon) / tz_degree_width + 0.5 + const.precision_fp)
@@ -55,13 +54,12 @@ class TestBasic(unittest.TestCase):
             sign = 1 if lon > -tz_degree_width / 2.0 + const.precision_fp else -1
             prefix = cls._tz_prefix(use_lon_tz, sign)
             suffix = cls._tz_suffix(use_lon_tz, sign)
-            tz_name = f"{prefix}{tz_num_str}{suffix}"
-            offset_min = sign * tz_int * (const.minutes_per_degree_lon * tz_degree_width)
-            offset = timedelta(minutes=offset_min)
+            expect["short_name"] = f"{prefix}{tz_num_str}{suffix}"
+            expect["offset_min"] = sign * tz_int * (const.minutes_per_degree_lon * tz_degree_width)
 
         # return expected values for tests
         # expand this as needed when adding more tests
-        return dict(short_name=tz_name, offset=offset)
+        return expect
 
     @classmethod
     def make_tzname_test(cls, testnum, longitude, use_lon_tz) -> callable:
@@ -72,7 +70,7 @@ class TestBasic(unittest.TestCase):
             + f"→ name {expected['short_name']}"
         def check(self):
             obj = TimeZoneSolar(longitude=longitude, use_lon_tz=use_lon_tz)
-            self.assertEqual(obj.name, expected["short_name"])
+            self.assertEqual(obj.short_name, expected["short_name"])
         check.__doc__ = description
         return check
 
@@ -82,10 +80,10 @@ class TestBasic(unittest.TestCase):
         expected = cls.expect_lon2tz(longitude, use_lon_tz)
         tz_type = "deg" if use_lon_tz else "hour"
         description = f"test {testnum:03}: lon {longitude}, tz by {tz_type} " \
-            + f"→ offset {expected['offset']}"
+            + f"→ offset {expected['offset_min']}"
         def check(self):
             obj = TimeZoneSolar(longitude=longitude, use_lon_tz=use_lon_tz)
-            self.assertEqual(obj.offset, expected["offset"])
+            self.assertEqual(obj.offset_min, expected["offset_min"])
         check.__doc__ = description
         return check
 
