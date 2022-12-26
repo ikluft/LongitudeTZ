@@ -49,20 +49,22 @@ class TestConstants(unittest.TestCase):
     @staticmethod
     def make_value_test(const_name, expect_value):
         """generate test case function for constant from name and expected value"""
+        description = f"check value of constant {const_name}: {expect_value}"
         def check_value(self):
             got_value = TZSConst.get(const_name)
-            description = f"check value of constant {const_name}: {expect_value}"
             if const_name.endswith("_FP"):
                 # floating point numbers are checked if within FP_EPSILON; equality not reliable
                 self.assertTrue(fp_equal(got_value, expect_value), msg=description)
             else:
                 # others checked for equality
                 self.assertEqual(got_value, expect_value, description)
+        check_value.__doc__ = description
         return check_value
 
     @staticmethod
     def make_getattr_test(const_name, expect_value):
         """generate test case function for constant via object access"""
+        description = f"check constant via getattr: {const_name} = {expect_value}"
         def check_getattr(self):
             const = TZSConst()
             if expect_value is None:
@@ -70,13 +72,13 @@ class TestConstants(unittest.TestCase):
                     object.__getattribute__(const.__class__, const_name)
                 return
             got_value = object.__getattribute__(const.__class__, const_name)
-            description = f"check constant via getattr: {const_name} = {expect_value}"
             if const_name.endswith("_FP"):
                 # floating point numbers are checked if within FP_EPSILON; equality not reliable
                 self.assertTrue(fp_equal(got_value, expect_value), msg=description)
             else:
                 # others checked for equality
                 self.assertEqual(got_value, expect_value, description)
+        check_getattr.__doc__ = description
         return check_getattr
 
     @classmethod
