@@ -84,26 +84,24 @@ def main_tests(*files) -> None:
     test_suite = unittest.TestSuite()
 
     # generate test suite from classes, call generate_tests() in classes which have it
-    success = True
     try:
         for file in files:
-            if not process_file(file, loader, test_suite):
-                success = False
+            process_file(file, loader, test_suite)
     except Exception as exception:
         exception.add_note(f"exception thrown during unit testing in {file}")
         raise exception
 
-
     # run the collected test suite from all the modules in the directory
     result = runner.run(test_suite)
-    success = success and result.wasSuccessful()
+    success = result.wasSuccessful()
     sys.stdout.flush()
 
     # close taptest pipe
     if pipe_proc is not None:
         close_tapview(pipe_proc)
 
-    # exit with standard Unix exitcode 0=success nonzero=fail
+    # return standard Unix exitcode 0=success nonzero=error
+    print(f"result: success={success}")
     sys.exit(0 if success else 1)
 
 if __name__ == '__main__':
