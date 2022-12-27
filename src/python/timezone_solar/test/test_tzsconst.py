@@ -102,15 +102,5 @@ class TestConstants(unittest.TestCase):
         setattr(cls, f"test_{testnum:03}_getattr_{bad_name}_fails", check_getattr_func)
 
 if __name__ == '__main__':
-    print( "starting..." )
-    TestConstants.generate_tests()
-    print( "test functions:" )
-
-    tests_dir = os.path.dirname(os.path.abspath(__file__))
-    loader = unittest.TestLoader()
-    tests = loader.discover(tests_dir)
-    runner = TAPTestRunner()
-    runner.set_stream(True)
-    runner.set_format("{method_name}: {short_description}")
-    result = runner.run(tests)
-    sys.exit(0 if result.wasSuccessful() else 1)
+    from timezone_solar.test.run_tests import main_tests
+    main_tests(os.path.basename(__file__))
