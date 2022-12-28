@@ -6,6 +6,7 @@ on:  # yamllint disable-line rule:truthy
     paths: ['src/python/**', '.github/workflows/test-python.yml']
   pull_request:
     paths: ['src/python/**', '.github/workflows/test-python.yml']
+  workflow_dispatch:
 jobs:
   test:
     strategy:
@@ -19,35 +20,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Get changed files
-        uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          list-files: shell
-          filters: |
-            py_modified:
-              - added|modified: "./**/*.py"
       - name: Setup Python
-        if: ${{ steps.filter.outputs.py_modified == 'true' }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{matrix.python-version}}
           architecture: x64
           cache: 'pip'
       - name: Install dependencies
-        if: ${{ steps.filter.outputs.py_modified == 'true' }}
         run: |
           export PYTHONPATH=$PWD/src/python
           cd src/python/timezone_solar
           pip install -r requirements.txt
       - name: Run flake8
-        if: ${{ steps.filter.outputs.py_modified == 'true' }}
         run: |
           export PYTHONPATH=$PWD/src/python
           cd src/python/timezone_solar
-          flake8 ${{ steps.filter.outputs.py_modified_files }}
+          flake8 *.py test/*.py
       - name: Run unit tests
-        if: ${{ steps.filter.outputs.py_modified == 'true' }}
         run: |
           export PYTHONPATH=$PWD/src/python
           cd src/python/timezone_solar
