@@ -2,10 +2,7 @@
 """unit tests for timezone_solar"""
 
 import os
-import sys
 import unittest
-from datetime import timedelta
-from tap import TAPTestRunner
 from timezone_solar.tzsconst import TZSConst
 from timezone_solar import TimeZoneSolar
 
@@ -30,7 +27,7 @@ class TestBasic(unittest.TestCase):
         tz_digits = 3 if use_lon_tz else 2
 
         # generate time zone name and offset
-        expect = dict()
+        expect = {}
         if lon >= const.max_longitude_int - tz_degree_width / 2.0 - const.precision_fp \
                 or lon <= -const.max_longitude_int + const.precision_fp:
             # handle special case of half-wide tz at positive side of date line (180°)

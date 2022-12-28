@@ -2,11 +2,9 @@
 """unit tests for tzsconst"""
 
 import os
-import sys
 import re
 import unittest
 from datetime import timedelta
-from tap import TAPTestRunner
 from timezone_solar.tzsconst import TZSConst
 
 # constants for comparison, same as in TZSConst for double-checking
