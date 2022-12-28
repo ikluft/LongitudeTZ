@@ -22,6 +22,7 @@ Solar TimeZone libraries implementations in different programming languages:
   * [![Perl](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml)
   * available on MetaCPAN: https://metacpan.org/pod/TimeZone::Solar
 * [Python](src/python/) - as _timezone_solar_ package
+  * [![Python](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-python.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-python.yml)
 * Rust - TODO
 * others coming, code contributions accepted
 
