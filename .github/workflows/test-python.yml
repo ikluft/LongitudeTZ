@@ -4,8 +4,6 @@ name: Python
 on:  # yamllint disable-line rule:truthy
   push:
     paths: ['src/python/**', '.github/workflows/test-python.yml']
-  pull_request:
-    paths: ['src/python/**', '.github/workflows/test-python.yml']
   workflow_dispatch:
 jobs:
   test:
@@ -27,13 +25,15 @@ jobs:
           cache: 'pip'
       - name: Set Python path on Windows
         if: ${{ startsWith( matrix.runner, 'windows-') }}
-        run: echo "PYTHONPATH=${{env.GITHUB_WORKSPACE}}\src\python" >> $GITHUB_ENV
+        run: echo "PYTHONPATH=${{env.GITHUB_WORKSPACE}}\src\python" >> ${{ env.GITHUB_ENV }}
       - name: Set Python path on Linux & MacOS
         if: ${{ startsWith( matrix.runner, 'ubuntu-') || startsWith( matrix.runner, 'macos-') }}
         run: echo "PYTHONPATH=${{env.GITHUB_WORKSPACE}}/src/python" >> $GITHUB_ENV
       - name: Install dependencies
         working-directory: src/python/timezone_solar
         run: |
+          python -VV
+          python -m site
           pip install -r requirements.txt
       - name: Run flake8
         working-directory: src/python/timezone_solar
@@ -42,4 +42,5 @@ jobs:
       - name: Run tests
         working-directory: src/python/timezone_solar
         run: |
+          echo "directory: $(pwd) pythonpath: ${{ env.PYTHONPATH }}"
           python test --tapview
