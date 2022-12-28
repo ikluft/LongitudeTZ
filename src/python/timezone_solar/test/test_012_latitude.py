@@ -8,6 +8,7 @@ from timezone_solar import TimeZoneSolar
 from timezone_solar.test.utils import LongitudeUtils
 
 # constants
+PROGNUM=12
 test_point_longitudes = [180.0, 179.99999, -7.5, -7.49999, 0.0, 7.49999, 7.5, -180.0, -179.99999, \
         60.0, 90.0, 89.5, 89.49999, 120.0]
 test_point_latitudes = [ 80.0, 79.99999, -80.0, -79.99999 ]
@@ -38,7 +39,7 @@ class TestLatitude(unittest.TestCase, LongitudeUtils):
     def make_key_check(cls, testnum, key, expected) -> callable:
         """generate test case function for specific lat/lon coordinate"""
         tz_type = "deg" if expected["use_lon_tz"] else "hour"
-        description = f"test {testnum:03}: lat={expected['latitude']}," \
+        description = f"test {PROGNUM:03}-{testnum:03}: lat={expected['latitude']}," \
             + f"lon={expected['longitude']},{tz_type} " \
             + f"→ {key}={expected[key]}"
         print(f"make test: {description}")
@@ -69,10 +70,10 @@ class TestLatitude(unittest.TestCase, LongitudeUtils):
             # generate test
             lon_str = cls.coord2str(expected['longitude'])
             lat_str = cls.coord2str(expected['latitude'])
-            func_name_base=f"test_{testnum:03}_lon_{lon_str}_lat_{lat_str}"
+            func_name_base=f"test_{PROGNUM:03}_{testnum:03}_lon_{lon_str}_lat_{lat_str}"
             for key in ["longitude", "latitude", "short_name", "name", "offset_min", "use_lon_tz"]:
                 func_name = f"{func_name_base}_key_{key}"
-                print( f"generating test {testnum:03} as {func_name}..." )
+                print( f"generating test {PROGNUM:03}-{testnum:03} as {func_name}..." )
                 check_func = cls.make_key_check(testnum, key, expected)
                 setattr(cls, func_name, check_func)
             testnum += 1

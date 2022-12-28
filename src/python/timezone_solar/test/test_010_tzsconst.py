@@ -7,6 +7,7 @@ from datetime import timedelta
 from timezone_solar.tzsconst import TZSConst
 
 # constants for comparison, same as in TZSConst for double-checking
+PROGNUM=10
 TZSOLAR_LON_ZONE_STR = '(Lon0[0-9][0-9][EW])|(Lon1[0-7][0-9][EW])|(Lon180[EW])'
 TZSOLAR_HOUR_ZONE_STR = '(East|West)(0[0-9]| 1[0-2])'
 TZSOLAR_ZONE_STR = TZSOLAR_LON_ZONE_STR + "|" + TZSOLAR_HOUR_ZONE_STR
@@ -86,17 +87,17 @@ class TestConstants(unittest.TestCase):
         for name, expect_value in CONSTANTS.items():
             #print( f"generating {name} test..." )
             check_value_func = cls.make_value_test(name, expect_value)
-            setattr(cls, f"test_{testnum:03}_const_{name}", check_value_func)
+            setattr(cls, f"test_{PROGNUM:03}_{testnum:03}_const_{name}", check_value_func)
             check_getattr_func = cls.make_getattr_test(name, expect_value)
-            setattr(cls, f"test_{testnum:03}_getattr_{name}", check_getattr_func)
+            setattr(cls, f"test_{PROGNUM:03}_{testnum:03}_getattr_{name}", check_getattr_func)
             testnum += 1
 
         # test non-existent value
         bad_name = "NONEXISTENT"
         check_value_func = cls.make_value_test(bad_name, None)
-        setattr(cls, f"test_{testnum:03}_const_{bad_name}_none", check_value_func)
+        setattr(cls, f"test_{PROGNUM:03}_{testnum:03}_const_{bad_name}_none", check_value_func)
         check_getattr_func = cls.make_getattr_test(bad_name, None)
-        setattr(cls, f"test_{testnum:03}_getattr_{bad_name}_fails", check_getattr_func)
+        setattr(cls, f"test_{PROGNUM:03}_{testnum:03}_getattr_{bad_name}_fails", check_getattr_func)
 
 if __name__ == '__main__':
     from timezone_solar.test.run_tests import main_tests_per_file

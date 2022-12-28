@@ -42,7 +42,7 @@ def process_file(file, loader, test_suite) -> None:
 
         # inspect contents of the newly-loaded module for a generate_tests() method
         #mod_name = module.__name__
-        for key in dir(module):
+        for key in sorted(dir(module)):
             #key_type = type(module.__dict__[key])
             #print( f"module {mod_name} key {key} type {key_type}")
             if not isinstance(module.__dict__[key], type):
@@ -90,7 +90,7 @@ def main_tests(*files) -> None:
 
     # generate test suite from classes, call generate_tests() in classes which have it
     try:
-        for file in files:
+        for file in sorted(files):
             process_file(file, loader, test_suite)
     except Exception as exception:
         exception.add_note(f"exception thrown during unit testing in {file}")
