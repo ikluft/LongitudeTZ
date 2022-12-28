@@ -26,10 +26,10 @@ jobs:
           architecture: x64
           cache: 'pip'
       - name: Set Python path on Windows
-        if: startsWith( matrix.runner, 'windows-')}}
+        if: ${{ startsWith( matrix.runner, 'windows-') }}
         run: echo "PYTHONPATH=${{env.GITHUB_WORKSPACE}}\src\python" >> $GITHUB_ENV
       - name: Set Python path on Linux & MacOS
-        if: startsWith( matrix.runner, 'ubuntu-')}} || startsWith( matrix.runner, 'macos-')}}
+        if: ${{ startsWith( matrix.runner, 'ubuntu-') || startsWith( matrix.runner, 'macos-') }}
         run: echo "PYTHONPATH=${{env.GITHUB_WORKSPACE}}/src/python" >> $GITHUB_ENV
       - name: Install dependencies
         working-directory: src/python/timezone_solar
