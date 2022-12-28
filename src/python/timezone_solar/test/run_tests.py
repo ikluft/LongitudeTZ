@@ -22,13 +22,13 @@ def start_tapview() -> Popen:
         raise exception
     return pipe_proc
 
-def close_tapview(pipe_proc) -> None:
+def close_tapview(pipe_proc) -> bool:
     """close tapview pipe and wait for child process to finish"""
-    pipe_proc.stdin.close()
     sys.stdout = orig_stdout
+    pipe_proc.stdin.close()
     retcode = pipe_proc.wait()
-    if retcode != 0:
-        raise Exception(f"tapview returned non-zero return code: {retcode}")
+    #print("tapview result: " + ("success" if retcode == 0 else "failed"), file=sys.stderr)
+    return retcode == 0  # true for success
 
 def process_file(file, loader, test_suite) -> None:
     """process tests for a single source file - use only files named test*.py"""
@@ -94,14 +94,15 @@ def main_tests(*files) -> None:
     # run the collected test suite from all the modules in the directory
     result = runner.run(test_suite)
     success = result.wasSuccessful()
-    sys.stdout.flush()
+    #print("test suite result: " + ("success" if success else "failed"), file=sys.stderr)
 
     # close taptest pipe
     if pipe_proc is not None:
-        close_tapview(pipe_proc)
+        success = close_tapview(pipe_proc) and success
+    sys.stdout.flush()
 
     # return standard Unix exitcode 0=success nonzero=error
-    print(f"result: success={success}")
+    print("result: " + ("success" if success else "failed"))
     sys.exit(0 if success else 1)
 
 if __name__ == '__main__':
