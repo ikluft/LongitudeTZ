@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """unit tests for tzsconst"""
 
-import os
 import re
 import unittest
 from datetime import timedelta
@@ -100,5 +99,5 @@ class TestConstants(unittest.TestCase):
         setattr(cls, f"test_{testnum:03}_getattr_{bad_name}_fails", check_getattr_func)
 
 if __name__ == '__main__':
-    from timezone_solar.test.run_tests import main_tests
-    main_tests(os.path.basename(__file__))
+    from timezone_solar.test.run_tests import main_tests_per_file
+    main_tests_per_file()

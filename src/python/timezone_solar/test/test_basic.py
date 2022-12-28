@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """unit tests for timezone_solar"""
 
-import os
 import unittest
 from timezone_solar.tzsconst import TZSConst
 from timezone_solar import TimeZoneSolar
@@ -104,7 +103,7 @@ class TestBasic(unittest.TestCase):
         testnum = 0
         for longitude in range(-180, 180):
             #print( f"generating test {testnum:03} lon {longitude:+04}..." )
-            for use_lon_tz in [0,1]:
+            for use_lon_tz in [False, True]:
                 check_short_name_func = cls.make_short_tzname_test(testnum, longitude, use_lon_tz)
                 setattr(cls, f"test_{testnum:03}_short_name_{longitude:+04}", check_short_name_func)
                 check_long_name_func = cls.make_long_tzname_test(testnum, longitude, use_lon_tz)
@@ -114,5 +113,5 @@ class TestBasic(unittest.TestCase):
             testnum += 1
 
 if __name__ == '__main__':
-    from timezone_solar.test.run_tests import main_tests
-    main_tests(os.path.basename(__file__))
+    from timezone_solar.test.run_tests import main_tests_per_file
+    main_tests_per_file()
