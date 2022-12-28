@@ -4,6 +4,7 @@ from datetime import tzinfo, timedelta
 import re
 from timezone_solar.tzsconst import TZSConst
 
+
 class TimeZoneSolar(tzinfo):
     """local solar timezone"""
 
@@ -18,10 +19,14 @@ class TimeZoneSolar(tzinfo):
     #   sign: +1 = positive/zero, -1 = negative
     @staticmethod
     def _tz_name(**params) -> str:
-        const = TZSConst()
-        prefix = "Lon" if params["use_lon_tz"] else ("East" if params["sign"] > 0 else "West" )
-        suffix = "" if not params["use_lon_tz"] else ("E" if params["sign"] > 0 else "W")
-        tz_degree_width = 1 if params["use_lon_tz"] else 15
+        prefix = (
+            "Lon"
+            if params["use_lon_tz"]
+            else ("East" if params["sign"] > 0 else "West")
+        )
+        suffix = (
+            "" if not params["use_lon_tz"] else ("E" if params["sign"] > 0 else "W")
+        )
         tz_digits = 3 if params["use_lon_tz"] else 2
         tz_num = str(params["tz_num"]).zfill(tz_digits)
         return prefix + tz_num + suffix
@@ -36,11 +41,11 @@ class TimeZoneSolar(tzinfo):
     def _tz_params_latitude(cls, tz_params):
         # safety check on latitude
         const = TZSConst()
-        if not re.fullmatch( r'^[-+]?\d+(\.\d+)?$', str(tz_params["latitude"])):
-            raise Exception( f"_tz_params: latitude {tz_params['latitude']}" )
+        if not re.fullmatch(r"^[-+]?\d+(\.\d+)?$", str(tz_params["latitude"])):
+            raise Exception(f"_tz_params: latitude {tz_params['latitude']}")
         latitude = float(tz_params["latitude"])
         if abs(latitude) > const.max_latitude_fp + const.precision_fp:
-            raise Exception( "_tz_params: latitude must be in the range -90 to +90" )
+            raise Exception("_tz_params: latitude must be in the range -90 to +90")
 
         # special case: use East00/Lon000E (equal to UTC) within 10° latitude of poles
         # use UTC at the poles because time zones are too narrow to make sense
@@ -58,11 +63,11 @@ class TimeZoneSolar(tzinfo):
     @classmethod
     def _tz_params(cls, tz_params) -> dict:
         if "longitude" not in tz_params:
-            raise Exception( "_tz_params: longitude parameter missing" )
+            raise Exception("_tz_params: longitude parameter missing")
 
         # set time zone from longitude and latitude
         if "latitude" in tz_params:
-            lat_params = cls._tz_params_latitude( tz_params )
+            lat_params = cls._tz_params_latitude(tz_params)
             if lat_params is not None:
                 return lat_params
 
@@ -72,11 +77,11 @@ class TimeZoneSolar(tzinfo):
 
         # safety check on longitude
         const = TZSConst()
-        if not re.fullmatch( r'^[-+]?\d+(\.\d+)?$', str(tz_params["longitude"])):
-            raise Exception( f"_tz_params: longitude {tz_params['longitude']}" )
+        if not re.fullmatch(r"^[-+]?\d+(\.\d+)?$", str(tz_params["longitude"])):
+            raise Exception(f"_tz_params: longitude {tz_params['longitude']}")
         longitude = float(tz_params["longitude"])
         if abs(longitude) > const.max_longitude_fp + const.precision_fp:
-            raise Exception( "_tz_params: longitude must be in the range -180 to +180" )
+            raise Exception("_tz_params: longitude must be in the range -180 to +180")
 
         # set flag for longitude time zones:
         # 0 = hourly 1-hour/15-degree zones, 1 = longitude 4-minute/1-degree zones
@@ -86,8 +91,10 @@ class TimeZoneSolar(tzinfo):
 
         # handle special case of half-wide tz at positive side of solar date line (180° longitude)
         max_longitude = const.max_longitude_int
-        if longitude >= max_longitude - tz_degree_width / 2.0 - const.precision_fp \
-            or longitude <= -max_longitude + const.precision_fp:
+        if (
+            longitude >= max_longitude - tz_degree_width / 2.0 - const.precision_fp
+            or longitude <= -max_longitude + const.precision_fp
+        ):
             tz_int = max_longitude / tz_degree_width
             tz_name = cls._tz_name(use_lon_tz=use_lon_tz, sign=1, tz_num=tz_int)
             tz_params["short_name"] = tz_name
@@ -101,9 +108,7 @@ class TimeZoneSolar(tzinfo):
 
         else:
             tz_int = int(abs(longitude) / tz_degree_width + 0.5 + const.precision_fp)
-            sign = 1 \
-                if longitude > -tz_degree_width / 2.0 + const.precision_fp \
-                else -1
+            sign = 1 if longitude > -tz_degree_width / 2.0 + const.precision_fp else -1
             offset_min = sign * tz_int * const.minutes_per_degree_lon * tz_degree_width
             tz_name = cls._tz_name(use_lon_tz=use_lon_tz, sign=sign, tz_num=tz_int)
             tz_params["short_name"] = tz_name
@@ -135,7 +140,7 @@ class TimeZoneSolar(tzinfo):
                 try:
                     delattr(self, key)
                 except AttributeError:
-                    pass # no problem if item to be deleted didn't exist
+                    pass  # no problem if item to be deleted didn't exist
 
     # get UTC offset
     # implementation of datetime.tzinfo interface
@@ -143,7 +148,7 @@ class TimeZoneSolar(tzinfo):
         """
         returns a timedelta of the offset from UTC
         """
-        return timedelta(minutes = self.offset_min)
+        return timedelta(minutes=self.offset_min)
 
     # get DST flag (always false for solar time zones)
     # implementation of datetime.tzinfo interface

@@ -3,16 +3,17 @@
 
 from timezone_solar.tzsconst import TZSConst
 
+
 class LongitudeUtils:
     """longitude computation utilities for timezone_solar tests"""
 
     @staticmethod
     def _tz_prefix(use_lon_tz, sign) -> str:
-        return "Lon" if use_lon_tz else ( "East" if sign > 0 else "West" )
+        return "Lon" if use_lon_tz else ("East" if sign > 0 else "West")
 
     @staticmethod
     def _tz_suffix(use_lon_tz, sign) -> str:
-        return ( "E" if sign > 0 else "W" ) if use_lon_tz else ""
+        return ("E" if sign > 0 else "W") if use_lon_tz else ""
 
     @classmethod
     def expect_lon2tz(cls, lon, use_lon_tz) -> dict:
@@ -25,18 +26,22 @@ class LongitudeUtils:
 
         # generate time zone name and offset
         expect = {}
-        if lon >= const.max_longitude_int - tz_degree_width / 2.0 - const.precision_fp \
-                or lon <= -const.max_longitude_int + const.precision_fp:
+        if (
+            lon >= const.max_longitude_int - tz_degree_width / 2.0 - const.precision_fp
+            or lon <= -const.max_longitude_int + const.precision_fp
+        ):
             # handle special case of half-wide tz at positive side of date line (180°)
             # special case of -180: expect results for +180
-            tz_num_str = str(const.max_longitude_int/tz_degree_width).zfill(tz_digits)
+            tz_num_str = str(const.max_longitude_int / tz_degree_width).zfill(tz_digits)
             prefix = cls._tz_prefix(use_lon_tz, 1)
             suffix = cls._tz_suffix(use_lon_tz, 1)
             expect["short_name"] = f"{prefix}{tz_num_str}{suffix}"
             expect["offset_min"] = 720
-        elif lon <= ( -const.max_longitude_int + tz_degree_width / 2.0 + const.precision_fp ):
+        elif lon <= (
+            -const.max_longitude_int + tz_degree_width / 2.0 + const.precision_fp
+        ):
             # handle special case of half-wide tz at negative side of date line (180°)
-            tz_num_str = str(const.max_longitude_int/tz_degree_width).zfill(tz_digits)
+            tz_num_str = str(const.max_longitude_int / tz_degree_width).zfill(tz_digits)
             prefix = cls._tz_prefix(use_lon_tz, -1)
             suffix = cls._tz_suffix(use_lon_tz, -1)
             expect["short_name"] = f"{prefix}{tz_num_str}{suffix}"
@@ -49,7 +54,9 @@ class LongitudeUtils:
             prefix = cls._tz_prefix(use_lon_tz, sign)
             suffix = cls._tz_suffix(use_lon_tz, sign)
             expect["short_name"] = f"{prefix}{tz_num_str}{suffix}"
-            expect["offset_min"] = sign * tz_int * (const.minutes_per_degree_lon * tz_degree_width)
+            expect["offset_min"] = (
+                sign * tz_int * (const.minutes_per_degree_lon * tz_degree_width)
+            )
 
         # return expected values for tests
         # expand this as needed when adding more tests
