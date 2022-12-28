@@ -58,9 +58,9 @@ def process_file(file, loader, test_suite) -> None:
         test_suite.addTest(loader.loadTestsFromModule(module))
 
 # wrapper function for main_tests()
-def main_tests_per_file() -> None:
+def main_tests_per_file(file) -> None:
     """wrapper function for main_tests() so files don't need "import os" dependency"""
-    main_tests(os.path.basename(__file__))
+    main_tests(os.path.basename(file))
 
 # main test runner
 def main_tests(*files) -> None:

@@ -100,4 +100,4 @@ class TestConstants(unittest.TestCase):
 
 if __name__ == '__main__':
     from timezone_solar.test.run_tests import main_tests_per_file
-    main_tests_per_file()
+    main_tests_per_file(__file__)
