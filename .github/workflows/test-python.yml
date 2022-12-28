@@ -1,0 +1,54 @@
+---
+name: Python
+# yamllint disable rule:line-length
+on:  # yamllint disable-line rule:truthy
+  push:
+    paths: ['src/python/**', '.github/workflows/test-python.yml']
+  pull_request:
+    paths: ['src/python/**', '.github/workflows/test-python.yml']
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        # runner: [ubuntu-latest, macos-latest, windows-latest]
+        runner: [ubuntu-latest]
+        python-version: ['3.11']
+    runs-on: ${{matrix.runner}}
+    name: OS ${{matrix.runner}} Python ${{matrix.python-version}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Get changed files
+        uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          list-files: shell
+          filters: |
+            py_modified:
+              - added|modified: "./**/*.py"
+      - name: Setup Python
+        if: ${{ steps.filter.outputs.py_modified == 'true' }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{matrix.python-version}}
+          architecture: x64
+          cache: 'pip'
+      - name: Install dependencies
+        if: ${{ steps.filter.outputs.py_modified == 'true' }}
+        run: |
+          export PYTHONPATH=$PWD/src/python
+          cd src/python/timezone_solar
+          pip install -r requirements.txt
+      - name: Run flake8
+        if: ${{ steps.filter.outputs.py_modified == 'true' }}
+        run: |
+          export PYTHONPATH=$PWD/src/python
+          cd src/python/timezone_solar
+          flake8 ${{ steps.filter.outputs.py_modified_files }}
+      - name: Run unit tests
+        if: ${{ steps.filter.outputs.py_modified == 'true' }}
+        run: |
+          export PYTHONPATH=$PWD/src/python
+          cd src/python/timezone_solar
+          python test --tapview
