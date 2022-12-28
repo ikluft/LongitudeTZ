@@ -30,6 +30,30 @@ class TimeZoneSolar(tzinfo):
     # TimeZoneSolar core class methods
     #
 
+    # check latitude data and initialize special case for polar regions
+    # internal method called by _tz_params()
+    @classmethod
+    def _tz_params_latitude(cls, tz_params):
+        # safety check on latitude
+        const = TZSConst()
+        if not re.fullmatch( r'^[-+]?\d+(\.\d+)?$', str(tz_params["latitude"])):
+            raise Exception( f"_tz_params: latitude {tz_params['latitude']}" )
+        latitude = float(tz_params["latitude"])
+        if abs(latitude) > const.max_latitude_fp + const.precision_fp:
+            raise Exception( "_tz_params: latitude must be in the range -90 to +90" )
+
+        # special case: use East00/Lon000E (equal to UTC) within 10° latitude of poles
+        # use UTC at the poles because time zones are too narrow to make sense
+        if abs(tz_params["latitude"]) >= const.limit_latitude - const.precision_fp:
+            use_lon_tz = bool(tz_params["use_lon_tz"])
+            tz_params["short_name"] = "Lon000E" if use_lon_tz else "East00"
+            tz_params["name"] = f"Solar/{tz_params['short_name']}"
+            tz_params["offset_min"] = 0
+            return tz_params
+
+        # no effects on results from latitude between 80° north & south
+        return None
+
     # get timezone parameters (name and minutes offset) - called by __new__()
     @classmethod
     def _tz_params(cls, tz_params) -> dict:
