@@ -23,6 +23,12 @@ jobs:
           python-version: ${{matrix.python-version}}
           architecture: x64
           cache: 'pip'
+      - name: Set Python path on Windows
+        if: ${{ startsWith( matrix.runner, 'windows-') }}
+        run: echo "PYTHONPATH=${{ env.GITHUB_WORKSPACE }}\src\python" >> ${{ env.GITHUB_ENV }}
+      - name: Set Python path on Linux & MacOS
+        if: ${{ startsWith( matrix.runner, 'ubuntu-') || startsWith( matrix.runner, 'macos-') }}
+        run: echo "PYTHONPATH=${{ env.GITHUB_WORKSPACE }}/src/python" >> ${{ env.GITHUB_ENV }}
       - name: Install dependencies
         working-directory: src/python
         run: |
@@ -33,7 +39,7 @@ jobs:
       - name: Run flake8
         working-directory: src/python
         run: |
-          flake8 timezone_solar/*.py timezone_solar/test/*.py
+          flake8 --config=timezone_solar/.flake8 timezone_solar/*.py timezone_solar/test/*.py
       - name: Run tests
         working-directory: src/python
         run: |
