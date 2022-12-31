@@ -1,4 +1,39 @@
-"""local solar timezone lookup and utilities including datetime compatibility"""
+"""
+local solar timezone lookup and utilities including datetime compatibility
+
+The timezone_solar package is the Python implementation of Longitude Time Zones.
+More information can be found at https://github.com/ikluft/LongitudeTZ .
+
+A general summary is Longitude Time Zones are an alternative based on a location's
+longitude which, by their definition, do not use Daylight Saving Time.
+
+There are two variants of the Longitude Time Zones. The ones of primary interest are
+hour-based time zones, each 1 hour wide. They are each centered on a meridian at
+15 degree intervals, like nautical time zones that ships at sea use.
+Besides not using Daylight Saving Time, these have local solar noon near clock noon
+on average.
+
+The hour-based time zones are named for the number of hours offset east or west from UTC.
+Positive offsets are east of the Prime Meridian, so East00 to East12.
+Negative offsets are west of the Prime Meridian, so West00 to West12.
+West00 is the same thing as East00, both zero hours offset from UTC.
+East12 and West12 are each half as wide as the other time zones,
+and are either side of the Date Line.
+The meridian at 180 degrees longitude is the definition of the Date Line for the
+Longitude Time Zones because the time zone boundaries in this system are only on
+lines of longitude, not legislated boundaries.
+
+The other variants are longitude-based time zones, each 1 degree of longitude wide.
+That makes 360 of these time zones at 4 minute intervals of clock time.
+These have a niche use for planning events around available daylight, centered on local
+solar noon, which can then be converted to more widely-used time zones for communications
+with the public.
+
+The longitude-based time zones are named for each meridian at 1 degree intervals.
+
+Once the timezone_solar package is loaded, the standard Python datetime package can
+process these time zones.
+"""
 
 from datetime import tzinfo, timedelta
 import re
