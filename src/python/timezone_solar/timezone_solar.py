@@ -13,7 +13,12 @@ hour-based time zones, each 1 hour wide. They are each centered on a meridian at
 Besides not using Daylight Saving Time, these have local solar noon near clock noon
 on average.
 
-The hour-based time zones are named for the number of hours offset east or west from UTC.
+As with Universal Coordinated Time (UTC), the Longitude Time Zones are centered at
+the "Prime Meridian", which is zero degrees longitude. It hash been used since 1884
+as the international basis of computation of latitude on Earth.
+
+In the Latitude Time Zones, the hour-based time zones are named for the number of hours
+offset east or west from UTC.
 Positive offsets are east of the Prime Meridian, so East00 to East12.
 Negative offsets are west of the Prime Meridian, so West00 to West12.
 West00 is the same thing as East00, both zero hours offset from UTC.
@@ -30,6 +35,10 @@ solar noon, which can then be converted to more widely-used time zones for commu
 with the public.
 
 The longitude-based time zones are named for each meridian at 1 degree intervals.
+Positive numbers of degrees are east of the Prime Meridian, so Lon180E to Lon000E.
+Negative numbers of degrees are west of the Prime Meridian, so Lon180W to Lon000W.
+Lon000E is the same thing as Lon000W, both in the 1-degree-wide time zone centered at
+the Prime Meridian.
 
 Once the timezone_solar package is loaded, the standard Python datetime package can
 process these time zones.
