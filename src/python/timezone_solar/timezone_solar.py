@@ -139,13 +139,13 @@ class TimeZoneSolar(tzinfo):
             longitude >= max_longitude - tz_degree_width / 2.0 - const.precision_fp
             or longitude <= -max_longitude + const.precision_fp
         ):
-            tz_int = max_longitude / tz_degree_width
+            tz_int = int(max_longitude / tz_degree_width)
             tz_name = cls._tz_name(use_lon_tz=use_lon_tz, sign=1, tz_num=tz_int)
             tz_params["short_name"] = tz_name
             tz_params["offset_min"] = 720
 
         elif longitude <= -max_longitude + tz_degree_width / 2.0 + const.precision_fp:
-            tz_int = max_longitude / tz_degree_width
+            tz_int = int(max_longitude / tz_degree_width)
             tz_name = cls._tz_name(use_lon_tz=use_lon_tz, sign=-1, tz_num=tz_int)
             tz_params["short_name"] = tz_name
             tz_params["offset_min"] = -720
@@ -194,13 +194,13 @@ class TimeZoneSolar(tzinfo):
         """
         return timedelta(minutes=self.offset_min)
 
-    # get DST flag (always false for solar time zones)
+    # get DST adjustment as a timedelta (always 0 for solar time zones)
     # implementation of datetime.tzinfo interface
-    def dst(self, dt) -> bool:
+    def dst(self, dt) -> timedelta:
         """
-        returns Daylight Saving Time flag, always false because solar time zones don't use DST
+        returns Daylight Saving Time adjustment as a timedelta, always 0 because we don't use DST
         """
-        return False
+        return timedelta(0)
 
     # get time zone name string
     # implementation of datetime.tzinfo interface
