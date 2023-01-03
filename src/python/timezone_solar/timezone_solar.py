@@ -206,6 +206,6 @@ class TimeZoneSolar(tzinfo):
     # implementation of datetime.tzinfo interface
     def tzname(self, dt) -> str:
         """
-        returns short name of time zone
+        returns long name of time zone
         """
         return self.name
