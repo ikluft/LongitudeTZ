@@ -1,11 +1,20 @@
 #!/usr/bin/env python
 """longitude computation utilities for timezone_solar tests"""
 
+import re
 from timezone_solar.tzsconst import TZSConst
 
 
 class LongitudeUtils:
     """longitude computation utilities for timezone_solar tests"""
+
+    @staticmethod
+    def coord2str(num) -> str:
+        """convert floating point lat or lon coordinate to string for test function name"""
+        numstr = str(num)
+        numstr = re.sub("-", "M", numstr)
+        numstr = re.sub("[^0-9M]+", "_", numstr)
+        return numstr
 
     @staticmethod
     def _tz_prefix(use_lon_tz, sign) -> str:
@@ -32,7 +41,7 @@ class LongitudeUtils:
         ):
             # handle special case of half-wide tz at positive side of date line (180°)
             # special case of -180: expect results for +180
-            tz_num_str = str(const.max_longitude_int / tz_degree_width).zfill(tz_digits)
+            tz_num_str = str(int(const.max_longitude_int / tz_degree_width)).zfill(tz_digits)
             prefix = cls._tz_prefix(use_lon_tz, 1)
             suffix = cls._tz_suffix(use_lon_tz, 1)
             expect["short_name"] = f"{prefix}{tz_num_str}{suffix}"
@@ -41,7 +50,7 @@ class LongitudeUtils:
             -const.max_longitude_int + tz_degree_width / 2.0 + const.precision_fp
         ):
             # handle special case of half-wide tz at negative side of date line (180°)
-            tz_num_str = str(const.max_longitude_int / tz_degree_width).zfill(tz_digits)
+            tz_num_str = str(int(const.max_longitude_int / tz_degree_width)).zfill(tz_digits)
             prefix = cls._tz_prefix(use_lon_tz, -1)
             suffix = cls._tz_suffix(use_lon_tz, -1)
             expect["short_name"] = f"{prefix}{tz_num_str}{suffix}"

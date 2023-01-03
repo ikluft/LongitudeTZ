@@ -2,7 +2,6 @@
 """unit tests of latitude-based computation in timezone_solar"""
 
 import unittest
-import re
 from timezone_solar.tzsconst import TZSConst
 from timezone_solar import TimeZoneSolar
 from timezone_solar.test.utils import LongitudeUtils
@@ -46,14 +45,6 @@ class TestLatitude(unittest.TestCase, LongitudeUtils):
                         }
                     )
         return polar_test_points
-
-    @staticmethod
-    def coord2str(num) -> str:
-        """convert floating point lat or lon coordinate to string for test function name"""
-        numstr = str(num)
-        numstr = re.sub("-", "M", numstr)
-        numstr = re.sub("[^0-9M]+", "_", numstr)
-        return numstr
 
     @classmethod
     def make_key_check(cls, testnum, key, expected) -> callable:
