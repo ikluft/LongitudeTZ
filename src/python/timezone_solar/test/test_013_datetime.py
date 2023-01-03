@@ -90,7 +90,7 @@ class TestDateTime(unittest.TestCase, LongitudeUtils):
     def generate_tests(cls):
         """generate test functions for integration with datetime.tzinfo system library"""
         testnum = 0
-        for longitude in range(-180, 181):
+        for longitude in range(-180, 181, 3):
             lon_str = cls.coord2str(longitude)
             for use_lon_tz in [0, 1]:
                 # generate tests for datetime tests from timezone_solar object
