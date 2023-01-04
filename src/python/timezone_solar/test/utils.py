@@ -9,12 +9,12 @@ class LongitudeUtils:
     """longitude computation utilities for timezone_solar tests"""
 
     @staticmethod
-    def coord2str(num) -> str:
+    def coord2str(num, digits=3) -> str:
         """convert floating point lat or lon coordinate to string for test function name"""
-        numstr = str(num)
-        numstr = re.sub("-", "M", numstr)
-        numstr = re.sub("[^0-9M]+", "_", numstr)
-        return numstr
+        sign = "P" if num >= 0 else "M"
+        numstr = str(abs(num)).zfill(digits)
+        numstr = re.sub("[^0-9]+", "_", numstr)
+        return sign + numstr
 
     @staticmethod
     def _tz_prefix(use_lon_tz, sign) -> str:

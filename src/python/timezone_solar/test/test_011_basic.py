@@ -4,6 +4,7 @@
 import unittest
 from timezone_solar import TimeZoneSolar
 from timezone_solar.test.utils import LongitudeUtils
+from timezone_solar.test.run_tests import Flags, main_tests_per_file
 
 # constants
 PROGNUM = 11
@@ -68,14 +69,17 @@ class TestBasic(unittest.TestCase, LongitudeUtils):
         """generate test functions for all degrees of longitude"""
         testnum = 0
         for longitude in range(-180, 180):
-            # print( f"generating test {PROGNUM:03}-{testnum:03} lon {longitude:+04}..." )
+            Flags.verbose_print(
+                f"generating test {PROGNUM:03}-{testnum:03} lon {longitude:+04}..."
+            )
+            lon_str = cls.coord2str(longitude)
             for use_lon_tz in [False, True]:
                 check_short_name_func = cls.make_short_tzname_test(
                     testnum, longitude, use_lon_tz
                 )
                 setattr(
                     cls,
-                    f"test_{PROGNUM:03}_{testnum:03}_short_name_{longitude:+04}",
+                    f"test_{PROGNUM:03}_{testnum:03}_short_name_{lon_str}",
                     check_short_name_func,
                 )
                 check_long_name_func = cls.make_long_tzname_test(
@@ -83,19 +87,17 @@ class TestBasic(unittest.TestCase, LongitudeUtils):
                 )
                 setattr(
                     cls,
-                    f"test_{PROGNUM:03}_{testnum:03}_long_name_{longitude:+04}",
+                    f"test_{PROGNUM:03}_{testnum:03}_long_name_{lon_str}",
                     check_long_name_func,
                 )
                 check_offset_func = cls.make_offset_test(testnum, longitude, use_lon_tz)
                 setattr(
                     cls,
-                    f"test_{PROGNUM:03}_{testnum:03}_offset_{longitude:+04}",
+                    f"test_{PROGNUM:03}_{testnum:03}_offset_{lon_str}",
                     check_offset_func,
                 )
             testnum += 1
 
 
 if __name__ == "__main__":
-    from timezone_solar.test.run_tests import main_tests_per_file
-
     main_tests_per_file(__file__)

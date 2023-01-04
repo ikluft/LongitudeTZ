@@ -5,6 +5,7 @@ import unittest
 from timezone_solar.tzsconst import TZSConst
 from timezone_solar import TimeZoneSolar
 from timezone_solar.test.utils import LongitudeUtils
+from timezone_solar.test.run_tests import Flags, main_tests_per_file
 
 # constants
 PROGNUM = 12
@@ -55,7 +56,7 @@ class TestLatitude(unittest.TestCase, LongitudeUtils):
             + f"lon={expected['longitude']},{tz_type} "
             + f"→ {key}={expected[key]}"
         )
-        print(f"make test: {description}")
+        Flags.verbose_print(f"make test: {description}")
 
         def check(self):
             obj = TimeZoneSolar(
@@ -76,7 +77,7 @@ class TestLatitude(unittest.TestCase, LongitudeUtils):
         testnum = 0
         for test_point in polar_test_points:
             # set up expected values for tests
-            print(f"generate_tests: {test_point}")
+            Flags.verbose_print(f"generate_tests: {test_point}")
             expect_lon = (
                 test_point["longitude"]
                 if abs(test_point["latitude"])
@@ -103,13 +104,13 @@ class TestLatitude(unittest.TestCase, LongitudeUtils):
                 "use_lon_tz",
             ]:
                 func_name = f"{func_name_base}_key_{key}"
-                print(f"generating test {PROGNUM:03}-{testnum:03} as {func_name}...")
+                Flags.verbose_print(
+                    f"generating test {PROGNUM:03}-{testnum:03} as {func_name}..."
+                )
                 check_func = cls.make_key_check(testnum, key, expected)
                 setattr(cls, func_name, check_func)
             testnum += 1
 
 
 if __name__ == "__main__":
-    from timezone_solar.test.run_tests import main_tests_per_file
-
     main_tests_per_file(__file__)

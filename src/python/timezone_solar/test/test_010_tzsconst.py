@@ -5,6 +5,7 @@ import re
 import unittest
 from datetime import timedelta
 from timezone_solar.tzsconst import TZSConst
+from timezone_solar.test.run_tests import Flags, main_tests_per_file
 
 # constants for comparison, same as in TZSConst for double-checking
 PROGNUM = 10
@@ -91,15 +92,20 @@ class TestConstants(unittest.TestCase):
         # test existing values
         testnum = 0
         for name, expect_value in CONSTANTS.items():
-            # print( f"generating {name} test..." )
             check_value_func = cls.make_value_test(name, expect_value)
-            setattr(
-                cls, f"test_{PROGNUM:03}_{testnum:03}_const_{name}", check_value_func
+            func_name_const = f"test_{PROGNUM:03}_{testnum:03}_const_{name}"
+            Flags.verbose_print(
+                f"generating test {PROGNUM:03}-{testnum:03} as {func_name_const}..."
             )
+            setattr(cls, func_name_const, check_value_func)
             check_getattr_func = cls.make_getattr_test(name, expect_value)
+            func_name_getattr = f"test_{PROGNUM:03}_{testnum:03}_getattr_{name}"
+            Flags.verbose_print(
+                f"generating test {PROGNUM:03}-{testnum:03} as {func_name_getattr}..."
+            )
             setattr(
                 cls,
-                f"test_{PROGNUM:03}_{testnum:03}_getattr_{name}",
+                func_name_getattr,
                 check_getattr_func,
             )
             testnum += 1
@@ -107,20 +113,20 @@ class TestConstants(unittest.TestCase):
         # test non-existent value
         bad_name = "NONEXISTENT"
         check_value_func = cls.make_value_test(bad_name, None)
+        func_name_const = f"test_{PROGNUM:03}_{testnum:03}_const_{bad_name}_none"
         setattr(
             cls,
-            f"test_{PROGNUM:03}_{testnum:03}_const_{bad_name}_none",
+            func_name_const,
             check_value_func,
         )
         check_getattr_func = cls.make_getattr_test(bad_name, None)
+        func_name_getattr = f"test_{PROGNUM:03}_{testnum:03}_getattr_{bad_name}_fails"
         setattr(
             cls,
-            f"test_{PROGNUM:03}_{testnum:03}_getattr_{bad_name}_fails",
+            func_name_getattr,
             check_getattr_func,
         )
 
 
 if __name__ == "__main__":
-    from timezone_solar.test.run_tests import main_tests_per_file
-
     main_tests_per_file(__file__)

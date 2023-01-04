@@ -5,6 +5,8 @@ import unittest
 from datetime import datetime, timedelta, timezone
 from timezone_solar import TimeZoneSolar
 from timezone_solar.test.utils import LongitudeUtils
+from timezone_solar.test.run_tests import Flags, main_tests_per_file
+
 
 # constants
 PROGNUM = 13
@@ -155,7 +157,7 @@ class TestDateTime(unittest.TestCase, LongitudeUtils):
                 )
 
                 # test getting UTC offset back from datetime
-                print(
+                Flags.verbose_print(
                     f"generating test {PROGNUM:03}-{testnum:03} as {base_func_name}_offset..."
                 )
                 check_offset_func = cls.make_offset_check(
@@ -164,21 +166,21 @@ class TestDateTime(unittest.TestCase, LongitudeUtils):
                 setattr(cls, base_func_name + "_offset", check_offset_func)
 
                 # test getting timezone name back from datetime
-                print(
+                Flags.verbose_print(
                     f"generating test {PROGNUM:03}-{testnum:03} as {base_func_name}_name..."
                 )
                 check_name_func = cls.make_name_check(testnum, longitude, use_lon_tz)
                 setattr(cls, base_func_name + "_name", check_name_func)
 
                 # test getting timezone dst delta back from datetime
-                print(
+                Flags.verbose_print(
                     f"generating test {PROGNUM:03}-{testnum:03} as {base_func_name}_dst..."
                 )
                 check_dst_func = cls.make_dst_check(testnum, longitude, use_lon_tz)
                 setattr(cls, base_func_name + "_dst", check_dst_func)
 
                 # test getting datetime astimezone() equality test between any time zone and UTC
-                print(
+                Flags.verbose_print(
                     f"generating test {PROGNUM:03}-{testnum:03} as "
                     + f"{base_func_name}_astimezone..."
                 )
@@ -191,6 +193,4 @@ class TestDateTime(unittest.TestCase, LongitudeUtils):
 
 
 if __name__ == "__main__":
-    from timezone_solar.test.run_tests import main_tests_per_file
-
     main_tests_per_file(__file__)

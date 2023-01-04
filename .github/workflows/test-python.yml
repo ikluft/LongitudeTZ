@@ -44,4 +44,11 @@ jobs:
       - name: Run tests
         working-directory: src/python
         run: |
-          python timezone_solar/test --tapview
+          result=0
+          for script in timezone_solar/test/test_*.py
+          do
+            echo running $script
+            python $script || result=1
+            echo
+          done
+          exit $result
