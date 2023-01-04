@@ -48,7 +48,7 @@ jobs:
           for script in timezone_solar/test/test_*.py
           do
             echo running $script
-            python $script || result=1
+            python $script 2>&1 || result=1
             echo
           done
           exit $result
