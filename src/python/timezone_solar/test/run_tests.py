@@ -74,15 +74,22 @@ def _ingest_argv() -> None:
         Flags.verbose_flag(args.verbose)
 
 
-def _process_file(file, loader, test_suite) -> None:
+def _process_file(file, tmpdirname) -> unittest.TestResult:
     """process tests for a single source file - use only files named test*.py"""
     if file.startswith("test") and file.endswith(".py"):
         modname = "timezone_solar.test." + file[:-3]
         try:
             __import__(modname)
         except unittest.SkipTest:
-            return
+            return None
         module = sys.modules[modname]
+
+        # initialize test runner
+        runner = TAPTestRunner()
+        runner.set_outdir(tmpdirname)
+        runner.set_format("{method_name}: {short_description}")
+        loader = unittest.defaultTestLoader
+        test_suite = unittest.TestSuite()
 
         # inspect contents of the newly-loaded module for a generate_tests() method
         mod_name = module.__name__
@@ -100,6 +107,13 @@ def _process_file(file, loader, test_suite) -> None:
         # let unittest load test functions it finds in the module
         Flags.verbose_print(f"testing in {mod_name}", file=sys.stderr)
         test_suite.addTest(loader.loadTestsFromModule(module))
+
+        # run tests from this file
+        print(f"running {file} tests...")
+        result = runner.run(test_suite)
+        print()
+        return result
+    return None
 
 
 # wrapper function for main_tests()
@@ -121,30 +135,28 @@ def main_tests(*files) -> None:
     # generate temporary directory for TAP test result files
     tmpdirname = tempfile.mkdtemp(prefix=TEMP_PREFIX)
 
-    # initialize test runner
-    runner = TAPTestRunner()
-    runner.set_outdir(tmpdirname)
-    runner.set_format("{method_name}: {short_description}")
-    loader = unittest.defaultTestLoader
-    test_suite = unittest.TestSuite()
-
     # generate test suite from classes, call generate_tests() in classes which have it
+    is_ok = True
+    totals = {'tests': 0, 'failures': 0}
     try:
         for file in sorted(files):
-            _process_file(file, loader, test_suite)
+            test_result = _process_file(file, tmpdirname)
+            if test_result is None:
+                continue  # skipped test(s) or no valid tests found
+            is_ok = is_ok and test_result.wasSuccessful()
+            totals['tests'] += test_result.testsRun
+            totals['failures'] += len(test_result.failures) + len(test_result.errors) \
+                + len(test_result.unexpectedSuccesses)
     except Exception as exception:
         exception.add_note(f"exception thrown during unit testing in {file}")
         raise exception
-
-    # run the collected test suite from all the modules in the directory
-    result = runner.run(test_suite)
-    is_ok = result.wasSuccessful()
 
     # remove TAP result temporary directory except in debug mode - then keep it for inspection
     if not Flags.debug_flag():
         shutil.rmtree(tmpdirname)
 
     # return standard Unix exitcode 0=success nonzero=error
+    print(f"total tests: {totals['tests']}, failures: {totals['failures']}")
     print("result: " + ("success" if is_ok else "failed"))
     sys.exit(0 if is_ok else 1)
 

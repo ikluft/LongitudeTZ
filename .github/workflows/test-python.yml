@@ -44,11 +44,4 @@ jobs:
       - name: Run tests
         working-directory: src/python
         run: |
-          result=0
-          for script in timezone_solar/test/test_*.py
-          do
-            echo running $script
-            python $script 2>&1 || result=1
-            echo
-          done
-          exit $result
+          python timezone_solar/test
