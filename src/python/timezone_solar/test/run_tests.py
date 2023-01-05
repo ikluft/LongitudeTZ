@@ -38,12 +38,14 @@ class Flags:
         """print message if in debug mode"""
         if cls.debug_mode:
             print(mesg, file=file)
+            file.flush()
 
     @classmethod
     def verbose_print(cls, mesg, file=sys.stdout) -> None:
         """print message if in verbose or debug modes"""
         if cls.verbose_mode or cls.debug_mode:
             print(mesg, file=file)
+            file.flush()
 
 
 # parse command line arguments
@@ -85,7 +87,7 @@ def _process_file(file, tmpdirname) -> unittest.TestResult:
         module = sys.modules[modname]
 
         # initialize test runner
-        runner = TAPTestRunner()
+        runner = TAPTestRunner(stream=sys.stdout)
         runner.set_outdir(tmpdirname)
         runner.set_format("{method_name}: {short_description}")
         loader = unittest.defaultTestLoader
