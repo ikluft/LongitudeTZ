@@ -34,13 +34,13 @@ class Flags:
         return cls.verbose_mode
 
     @classmethod
-    def debug_print(cls, mesg, file=sys.stderr) -> None:
+    def debug_print(cls, mesg, file=sys.stdout) -> None:
         """print message if in debug mode"""
         if cls.debug_mode:
             print(mesg, file=file)
 
     @classmethod
-    def verbose_print(cls, mesg, file=sys.stderr) -> None:
+    def verbose_print(cls, mesg, file=sys.stdout) -> None:
         """print message if in verbose or debug modes"""
         if cls.verbose_mode or cls.debug_mode:
             print(mesg, file=file)
@@ -105,7 +105,7 @@ def _process_file(file, tmpdirname) -> unittest.TestResult:
                 Flags.verbose_print(f"*** generated tests in {key}")
 
         # let unittest load test functions it finds in the module
-        Flags.verbose_print(f"testing in {mod_name}", file=sys.stderr)
+        Flags.verbose_print(f"testing in {mod_name}")
         test_suite.addTest(loader.loadTestsFromModule(module))
 
         # run tests from this file
