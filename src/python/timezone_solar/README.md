@@ -1,6 +1,18 @@
 timezone_solar: The Python implementation of Solar time zones
 -------------------------------------------------------------
 
+Source files:
+* tzsconst.py
+* timezone_solar.py
+* __init__.py
+* test (directory)
+  * __main__.py
+  * utils.py
+  * test_010_tzsconst.py
+  * test_011_basic.py
+  * test_012_latitude.py
+  * test_013_datetime.py
+
 More details TBD
 
 Online resources:
