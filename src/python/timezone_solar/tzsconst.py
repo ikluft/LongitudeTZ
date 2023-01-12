@@ -5,7 +5,7 @@ import re
 
 class TZSConst:
     """
-    class to contain contants for TimeZoneSolar so unit tests can access them
+    TZSConst is a class that contains contants for TimeZoneSolar so unit tests can access them.
     """
 
     # constants: time duration
@@ -38,6 +38,10 @@ class TZSConst:
     def keys(cls):
         """
         returns a list of names of available constants
+
+        input: none
+
+        output: list of names of constants, which can be read with the get method
         """
         keys = []
         for key in cls.__dict__:
@@ -49,6 +53,10 @@ class TZSConst:
     def get(cls, name):
         """
         returns value of constant by name
+
+        input: string with name of constant to read
+
+        output: value of constant, which may be an integer number, floating point number or string
         """
         if name is None or name.startswith("__"):
             return None
@@ -59,7 +67,13 @@ class TZSConst:
 
     def __getattr__(self, name):
         """
-        accessor for class constants
+        accessor for class constants - __getattr__ is the Python class method for when a get
+        operation on an object fails. This changes the name to upper case and tries again,
+        since the constants are all upper case.
+
+        input: string with name of constant to read
+
+        output: value of constant, which may be an integer number, floating point number or string
         """
         up_name = name.upper()
         value = self.__class__.get(up_name)
