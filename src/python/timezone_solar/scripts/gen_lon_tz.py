@@ -30,10 +30,11 @@ def gen_hour_tz(hour_in):
     offset_str = "{}{:d}:{:0>2d}".format(sign, offset_hr, offset_min)
 
     # output time zone data
-    print ("# Solar Time by hourly increment: {} {}".format(sign, offset_hr))
-    print ("# Zone\tNAME\t\tSTDOFF\tRULES\tFORMAT\t[UNTIL]")
-    print ("Zone\t{}\t{}\t{}\t{}".format(zone_name, offset_str, "-", zone_abbrev))
-    print ("")
+    print("# Solar Time by hourly increment: {} {}".format(sign, offset_hr))
+    print("# Zone\tNAME\t\tSTDOFF\tRULES\tFORMAT\t[UNTIL]")
+    print("Zone\t{}\t{}\t{}\t{}".format(zone_name, offset_str, "-", zone_abbrev))
+    print("")
+
 
 # generate longitude-based solar time zone info
 # input parameter: integer degrees of longitude in the range 180 to -180,
@@ -54,7 +55,7 @@ def gen_lon_tz(deg_in):
 
     # derive time zone parameters from 4 minutes of offset for each degree of longitude
     offset = 4 * abs(deg)
-    offset_hr = int(abs(offset)/60)
+    offset_hr = int(abs(offset) / 60)
     offset_min = abs(offset) % 60
 
     # generate strings from time zone parameters
@@ -63,10 +64,11 @@ def gen_lon_tz(deg_in):
     offset_str = "{}{:d}:{:0>2d}".format(sign, offset_hr, offset_min)
 
     # output time zone data
-    print ("# Solar Time by degree of longitude: {} {}".format(lon, e_w))
-    print ("# Zone\tNAME\t\tSTDOFF\tRULES\tFORMAT\t[UNTIL]")
-    print ("Zone\t{}\t{}\t{}\t{}".format(zone_name, offset_str, "-", zone_abbrev))
-    print ("")
+    print("# Solar Time by degree of longitude: {} {}".format(lon, e_w))
+    print("# Zone\tNAME\t\tSTDOFF\tRULES\tFORMAT\t[UNTIL]")
+    print("Zone\t{}\t{}\t{}\t{}".format(zone_name, offset_str, "-", zone_abbrev))
+    print("")
+
 
 #
 # main
@@ -74,10 +76,10 @@ def gen_lon_tz(deg_in):
 
 # generate solar time zones in increments of 15 degrees of longitude (STHxxE/STHxxW)
 # standard 1-hour-wide time zones
-for h_zone in range(-12,12+1):
+for h_zone in range(-12, 12 + 1):
     gen_hour_tz(h_zone)
 
 # generate solar time zones in incrememnts of 4 minutes / 1 degree of longitude (STLxxxE/STxxxW)
 # hyperlocal 4-minute-wide time zones for conversion to/from niche uses of local solar time
-for d_zone in range(-180,180+1):
+for d_zone in range(-180, 180 + 1):
     gen_lon_tz(d_zone)
