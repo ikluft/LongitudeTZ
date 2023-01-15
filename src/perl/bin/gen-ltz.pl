@@ -41,7 +41,7 @@ sub gen_hour_tz
     my $offset_str  = sprintf( "%s%d:%02d", $sign,   $offset_hr, $offset_min );
 
     # output time zone data
-    say "# Solar Time by hourly increment: $ew $offset_hr";
+    say "# Solar Time by hourly increment: $sign$offset_hr";
     say "# " . join( "\t", qw(Zone NAME ), "", qw(STDOFF RULES FORMAT [UNTIL]) );
     say join( "\t", "Zone", $zone_name, $offset_str, "-", $zone_abbrev );
     say "";
