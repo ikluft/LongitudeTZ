@@ -10,6 +10,7 @@
 
 import sys
 
+
 # generate standard 1-hour-wide (15 degrees longitude) time zones
 # input parameter: integer hours from GMT in the range
 # These correspond to the GMT+x/GMT-x time zones, except with boundaries defined by longitude lines.
@@ -21,18 +22,19 @@ def gen_hour_tz(hour_in):
 
     # Hours line up with time zones. So it's a equal to time zone offset.
     sign = "+" if hour >= 0 else "-"
+    e_w = "East" if hour >= 0 else "West"
     offset_hr = abs(hour)
     offset_min = 0
 
     # generate strings from time zone parameters
-    zone_abbrev = "{}{}{:0>2d}".format("Solar", sign, offset_hr)
-    zone_name = "{}/{}".format("Solar", zone_abbrev)
-    offset_str = "{}{:d}:{:0>2d}".format(sign, offset_hr, offset_min)
+    zone_abbrev = f"{e_w}{offset_hr:0>2d}"
+    zone_name = f"Solar/{zone_abbrev}"
+    offset_str = f"{sign}{offset_hr:d}:{offset_min:0>2d}"
 
     # output time zone data
-    print("# Solar Time by hourly increment: {} {}".format(sign, offset_hr))
+    print(f"# Solar Time by hourly increment: {sign}{offset_hr}")
     print("# Zone\tNAME\t\tSTDOFF\tRULES\tFORMAT\t[UNTIL]")
-    print("Zone\t{}\t{}\t{}\t{}".format(zone_name, offset_str, "-", zone_abbrev))
+    print(f"Zone\t{zone_name}\t{offset_str}\t-\t{zone_abbrev}")
     print("")
 
 
@@ -59,14 +61,14 @@ def gen_lon_tz(deg_in):
     offset_min = abs(offset) % 60
 
     # generate strings from time zone parameters
-    zone_abbrev = "{}{:0>3d}{}".format("Lon", lon, e_w)
-    zone_name = "{}/{}".format("Solar", zone_abbrev)
-    offset_str = "{}{:d}:{:0>2d}".format(sign, offset_hr, offset_min)
+    zone_abbrev = f"Lon{lon:0>3d}{e_w}"
+    zone_name = f"Solar/{zone_abbrev}"
+    offset_str = f"{sign}{offset_hr:d}:{offset_min:0>2d}"
 
     # output time zone data
-    print("# Solar Time by degree of longitude: {} {}".format(lon, e_w))
+    print(f"# Solar Time by degree of longitude: {lon} {e_w}")
     print("# Zone\tNAME\t\tSTDOFF\tRULES\tFORMAT\t[UNTIL]")
-    print("Zone\t{}\t{}\t{}\t{}".format(zone_name, offset_str, "-", zone_abbrev))
+    print(f"Zone\t{zone_name}\t{offset_str}\t-\t{zone_abbrev}")
     print("")
 
 
