@@ -1,5 +1,6 @@
 timezone_solar: The Python implementation of Solar time zones
 -------------------------------------------------------------
+See the [top-level project info](https://github.com/ikluft/LongitudeTZ) for more on solar time zones.
 
 Source files:
 * __init__.py - initialization for sources in timezone_solar module directory, loads the module
