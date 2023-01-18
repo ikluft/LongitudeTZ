@@ -48,6 +48,9 @@ from datetime import tzinfo, timedelta
 import re
 from timezone_solar.tzsconst import TZSConst
 
+# set package version
+__version__ = "0.0.1"
+
 
 class TimeZoneSolar(tzinfo):
     """local solar timezone"""
