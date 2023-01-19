@@ -36,12 +36,12 @@ jobs:
           echo "directory: $(pwd)"
           python -VV
           python -m site
-          pip install -r timezone_solar/requirements.txt
+          pip install -r requirements.txt
       - name: Run flake8
         working-directory: src/python
         run: |
-          flake8 --config=timezone_solar/.flake8 timezone_solar/*.py timezone_solar/test/*.py
+          flake8 --config=src/timezone_solar/.flake8 src/timezone_solar/*.py src/timezone_solar/test/*.py
       - name: Run tests
         working-directory: src/python
         run: |
-          python timezone_solar/test
+          python src/timezone_solar/test
