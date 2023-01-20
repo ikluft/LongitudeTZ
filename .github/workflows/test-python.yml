@@ -44,4 +44,5 @@ jobs:
       - name: Run tests
         working-directory: src/python
         run: |
+          pip install -e .
           python src/timezone_solar/tests
