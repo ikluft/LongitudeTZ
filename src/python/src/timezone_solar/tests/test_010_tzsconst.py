@@ -2,10 +2,11 @@
 """unit tests for tzsconst"""
 
 import re
+import sys
 import unittest
 from datetime import timedelta
 from timezone_solar.tzsconst import TZSConst
-from timezone_solar.test.run_tests import Flags, main_tests_per_file
+from timezone_solar.tests.run_tests import Flags, main_tests_per_file
 
 # constants for comparison, same as in TZSConst for double-checking
 PROGNUM = 10
@@ -128,5 +129,6 @@ class TestConstants(unittest.TestCase):
         )
 
 
+print(f"{__file__}: __name__ = {__name__}", file=sys.stderr)
 if __name__ == "__main__":
     main_tests_per_file(__file__)

@@ -4,8 +4,8 @@
 import unittest
 from timezone_solar.tzsconst import TZSConst
 from timezone_solar import TimeZoneSolar
-from timezone_solar.test.utils import LongitudeUtils
-from timezone_solar.test.run_tests import Flags, main_tests_per_file
+from timezone_solar.tests.utils import LongitudeUtils
+from timezone_solar.tests.run_tests import Flags, main_tests_per_file
 
 # constants
 PROGNUM = 12

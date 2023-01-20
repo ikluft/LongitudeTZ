@@ -79,7 +79,7 @@ def _ingest_argv() -> None:
 def _process_file(file, tmpdirname) -> unittest.TestResult:
     """process tests for a single source file - use only files named test*.py"""
     if file.startswith("test") and file.endswith(".py"):
-        modname = "timezone_solar.test." + file[:-3]
+        modname = "timezone_solar.tests." + file[:-3]
         try:
             __import__(modname)
         except unittest.SkipTest:
@@ -164,5 +164,5 @@ def main_tests(*files) -> None:
 
 
 if __name__ == "__main__":
-    # run tests for all the test*.py files in timezone_solar.test
+    # run tests for all the test*.py files in tests directory
     main_tests()
