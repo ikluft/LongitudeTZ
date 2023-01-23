@@ -4,12 +4,18 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "timezone_solar"
-authors = [{name = "Ian Kluft"}]
+authors = [
+    { name = "Ian Kluft", email="ko6yq.dev+python@gmail.com" }
+]
 license = {file = "LICENSE"}
-classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
 dynamic = ["version", "description"]
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.9"
 
 [project.urls]
 Home = "https://github.com/ikluft/LongitudeTZ"
