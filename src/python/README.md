@@ -7,6 +7,11 @@ See the [top-level project info](https://github.com/ikluft/LongitudeTZ) for more
 _timezone_solar_ provides lookup and conversion utilities for Solar time zones, which are based on
 the longitude of any location on Earth.
 
+The solar time zones are intended as an alternative to Daylight Saving Time.
+Instead of haphazard regulations in each country and region of the world, this uses meridians of longitude to set
+time zone boundaries, just like ships at sea use every day.
+For those who want an alternative to Daylight Saving Time, we have to build that alternative.
+
 It provides an interface compatible with datetime.tzinfo so that solar time zones based on increments
 of either an hour or each degree of longitude may be used in time stamps.
 There are 24 hour-based time zones and 360 time zones based on each degree of longitude.
