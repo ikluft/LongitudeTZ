@@ -40,9 +40,9 @@ jobs:
       - name: Run flake8
         working-directory: src/python
         run: |
-          flake8 --config=src/timezone_solar/.flake8 src/timezone_solar/*.py src/timezone_solar/tests/*.py
+          flake8 --config=timezone_solar/.flake8 timezone_solar/*.py timezone_solar/tests/*.py
       - name: Run tests
         working-directory: src/python
         run: |
           pip install -e .
-          python src/timezone_solar/tests
+          python timezone_solar/tests

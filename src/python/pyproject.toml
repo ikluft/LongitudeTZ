@@ -21,4 +21,5 @@ requires-python = ">=3.9"
 
 [project.urls]
 Home = "https://github.com/ikluft/LongitudeTZ"
+Source = "https://github.com/ikluft/LongitudeTZ/tree/main/src/python"
 Bug_Tracker = "https://github.com/ikluft/LongitudeTZ/labels/Python"
