@@ -1,5 +1,5 @@
-Project description
-===================
+timezone_solar
+==============
 
 timezone_solar is the Python implementation of Solar time zones.
 See the [top-level project info](https://github.com/ikluft/LongitudeTZ) for more on solar time zones.
@@ -35,6 +35,14 @@ The Solar Time Zones proposal is intended as a potential de-facto standard which
 There are normal variations of a matter of minutes between local solar noon and clock noon, depending on the latitude and time of year. That variation is always the same number of minutes as local solar noon differs from noon UTC at the same latitude on the Prime Meridian (0° longitude), due to seasonal effects of the tilt in Earth's axis relative to our orbit around the Sun.
 
 The Solaer time zones also have another set of overlay time zones the width of 1 degree of longitude, which puts them in 4-minute intervals of time. These are a hyper-local niche for potential use by outdoor events or activities which must be scheduled around daylight. They can also be used by anyone who wants the middle of the scheduling day to coincide closely with local solar noon.
+
+Usage of timezone_solar
+-----------------------
+
+The timezone_solar package implements the [https://docs.python.org/3.6/library/datetime.html#datetime.tzinfo](tzinfo)
+interface.
+To do that, it provides the functions _utcoffset_, _dst_ and _tzname_.
+It inherits the _fromutc_ function from tzinfo.
 
 Online resources
 ----------------
