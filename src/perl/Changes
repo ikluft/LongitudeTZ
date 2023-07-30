@@ -4,7 +4,6 @@ Revision history for TimeZone::Solar
  [API CHANGE]
 
  [BUG FIXES]
- - update version numbers in 'use' statements to v-notation due to incompatible change in 5.39.1 import()
 
  [DOCS]
 
@@ -17,6 +16,11 @@ Revision history for TimeZone::Solar
  [REVISION]
 
  [SECURITY]
+
+0.2.2 2023-07-30T06:57:39+00:00 UTC
+ [BUG FIXES]
+ - update version numbers in 'use' statements to v-notation due to
+   incompatible change in 5.39.1 import()
 
 0.2.1 2022-12-11T03:11:43+00:00 UTC
  [REVISION]
