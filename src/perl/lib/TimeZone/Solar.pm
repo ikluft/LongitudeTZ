@@ -22,7 +22,7 @@ use overload
     'eq' => "eq_string";
 use Carp qw(croak);
 use Readonly;
-use DateTime::TimeZone qw(0.80);
+use DateTime::TimeZone v0.80.0;
 use Try::Tiny;
 Readonly::Scalar my $debug_mode => ( exists $ENV{TZSOLAR_DEBUG} and $ENV{TZSOLAR_DEBUG} ) ? 1 : 0;
 
