@@ -1,13 +1,12 @@
----
-title: Longitude-based Time Zones
-...
+Longitude-based Time Zones
+==========================
 On this page:
-* Introduction
-* Implementations
-* The Solar Time Zones Definition
-* Obsoleting Daylight Saving Time
+* [Introduction](#introduction)
+* [Implementations](#implementations)
+* [The Solar Time Zones Definition](#the_solar_time_zones_definition)
+* [Obsoleting Daylight Saving Time](#obsoleting_daylight_saving_time)
 
-## Introduction
+## <a name="introduction">Introduction</a>
 Many people are tired of changing their clocks twice a year for daylight time. DST is an antiquated tradition [which we now know doesn't do any good](https://www.webmd.com/sleep-disorders/news/20211105/harmful-effects-of-daylight-savings). Anyone can look up sunrise and sunset times for events that need to be scheduled around daylight.
 
 The only way we'll have the choice to opt-out of Daylight Saving Time is if there's an alternative standard allowing us to stay on Standard Time. This is intended to make such an alternative. I'm running the idea up the flagpole. We'll see how many salutes it gets. Meanwhile this project is making softwarein various programming languages toward enabling the possibility.
@@ -25,7 +24,7 @@ The project also makes and accepts contributions of code in various programming 
 
 The project also makes another set of overlay time zones the width of 1 degree of longitude, which puts them in 4-minute intervals of time. These are a hyper-local niche for potential use by outdoor events. These may be used by those who would like to have the middle of the scheduling day coincide with local solar noon. 
 
-## Implementations
+## <a name="implementations">Implementations</a>
 Solar TimeZone libraries implementations in different programming languages:
 * [Perl](src/perl/) as _TimeZone::Solar_ module
   * [![Perl](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml)
@@ -36,7 +35,7 @@ Solar TimeZone libraries implementations in different programming languages:
 * Rust - TODO
 * others coming, code contributions accepted
 
-## The Solar Time Zones Definition
+## <a name="the_solar_time_zones_definition">The Solar Time Zones Definition</a>
 The Solar time zones definition includes the following rules.
 * There are 24 hour-based Solar Time Zones, named West12, West11, West10, West09 through East12. East00 is equivalent to UTC. West00 is an alias for East00.
   * Hour-based time zones are spaced in one-hour time increments, or 15 degrees of longitude.
@@ -50,7 +49,7 @@ The Solar time zones definition includes the following rules.
 * When converting coordinates to a time zone, each time zone includes its boundary meridian at the lower end of its absolute value, which is in the direction toward 0 (UTC). The exception is at exactly ±180.0 degrees, which would be excluded from both sides by this rule. That case is arbitrarily set as +180 just to pick one.
 * The category "Solar" is used for the longer names for these time zones. The names listed above are the short names. The full long name of each time zone is prefixed with "Solar/" such as "Solar/East00" or "Solar/Lon000E".
 
-## Obsoleting Daylight Saving Time
+## <a name="obsoleting_daylight_saving_time">Obsoleting Daylight Saving Time</a>
 The goal of this project is to aid existing and future efforts to end Daylight Saving Time with a feasible technical alternative. If it achieves that goal then it will continue to maintain the standard definition, reference libraries and data files for longitude-based time zones for cases where they are useful and desired.
 
 ![XKCD comic #2846: Daylight Saving Choice](docs/daylight_saving_choice.png)
