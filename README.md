@@ -1,4 +1,13 @@
-# Longitude-based Time Zones
+---
+title: Longitude-based Time Zones
+...
+On this page:
+* Introduction
+* Implementations
+* The Solar Time Zones Definition
+* Obsoleting Daylight Saving Time
+
+## Introduction
 Many people are tired of changing their clocks twice a year for daylight time. DST is an antiquated tradition [which we now know doesn't do any good](https://www.webmd.com/sleep-disorders/news/20211105/harmful-effects-of-daylight-savings). Anyone can look up sunrise and sunset times for events that need to be scheduled around daylight.
 
 The only way we'll have the choice to opt-out of Daylight Saving Time is if there's an alternative standard allowing us to stay on Standard Time. This is intended to make such an alternative. I'm running the idea up the flagpole. We'll see how many salutes it gets. Meanwhile this project is making softwarein various programming languages toward enabling the possibility.
@@ -40,3 +49,10 @@ The Solar time zones definition includes the following rules.
 * In both hourly and longitude-based time zones, there is a limit to their usefulness at the poles. Beyond 80 degrees north or south, the definition uses UTC (East00 or Lon000E). This boundary is the only reason to include latitude in the computation of the time zone.
 * When converting coordinates to a time zone, each time zone includes its boundary meridian at the lower end of its absolute value, which is in the direction toward 0 (UTC). The exception is at exactly ±180.0 degrees, which would be excluded from both sides by this rule. That case is arbitrarily set as +180 just to pick one.
 * The category "Solar" is used for the longer names for these time zones. The names listed above are the short names. The full long name of each time zone is prefixed with "Solar/" such as "Solar/East00" or "Solar/Lon000E".
+
+## Obsoleting Daylight Saving Time
+The goal of this project is to aid existing and future efforts to end Daylight Saving Time with a feasible technical alternative. If it achieves that goal then it will continue to maintain the standard definition, reference libraries and data files for longitude-based time zones for cases where they are useful and desired.
+
+![XKCD comic #2846: Daylight Saving Choice](docs/daylight_saving_choice.png)
+
+[*XKCD comic #2846: "Daylight Saving Choice" 2023-10-28*](https://xkcd.com/2846/) (with attribution for Creative Commons CC-BY-NC-2.5 compliance)
