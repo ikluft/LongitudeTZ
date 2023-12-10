@@ -8,7 +8,10 @@
 #include <sstream>
 #include <cmath>
 #include <regex>
+#include <boost/optional.hpp>
+#include "boost/date_time/local_time/local_time.hpp"
 
+// solar time zones class
 class TZSolar {
     public:
 
@@ -36,7 +39,7 @@ class TZSolar {
     //   tz_num: integer number for time zone - hourly or longitude based depending on use_lon_tz
     //   use_lon_tz: true=use longitude-based time zones, false=use hour-based time zones
     //   sign: +1 = positive/zero, -1 = negative
-    std::string tz_name ( int tz_num, bool use_lon_tz, short sign ) {
+    static std::string tz_name ( int tz_num, bool use_lon_tz, short sign ) {
         // generate time zone name prefix and suffix
         std::string prefix = use_lon_tz ? "Lon" : ( sign > 0 ? "East" : "West" );
         std::string suffix = use_lon_tz ? "" : ( sign > 0 ? "E" : "W" );
@@ -49,5 +52,14 @@ class TZSolar {
 
         // return time zone name
         return prefix + tz_numstr + suffix;
+    }
+
+    // TODO: more private methods
+
+    public:
+
+    // constructor
+    TZSolar( short longitude, bool use_lon_tz, boost::optional<short> latitude ) {
+        // TODO
     }
 };
