@@ -31,7 +31,7 @@ class TZSolar {
     const int limit_latitude = max_latitude_fp - polar_utc_area;  // max latitude for solar time zones
     const int minutes_per_degree_lon = 4;  // minutes per degree longitude
 
-    // private methods
+    // private methodslatitude
     private:
 
     // generate a solar time zone name
@@ -41,12 +41,16 @@ class TZSolar {
     //   sign: +1 = positive/zero, -1 = negative
     static std::string tz_name ( int tz_num, bool use_lon_tz, short sign );
 
+    // get timezone parameters (name and minutes offset) - called by constructor
+    void tz_params ( short longitude, bool use_lon_tz, boost::optional<short> latitude );
+
     // TODO: more private methods
 
     public:
 
     // constructor
     TZSolar( short longitude, bool use_lon_tz, boost::optional<short> latitude ) {
-        // TODO
+        this->tz_params( longitude, use_lon_tz, latitude );
     }
+
 };
