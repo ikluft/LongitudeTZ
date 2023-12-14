@@ -25,10 +25,15 @@ std::string TZSolar::tz_name ( int tz_num, bool use_lon_tz, short sign ) {
 }
 
 // get timezone parameters (name and minutes offset) - called by constructor
-void tz_params ( short longitude, bool use_lon_tz, boost::optional<short> latitude ) {
+void TZSolar::tz_params_latitude ( short longitude, bool use_lon_tz, boost::optional<short> latitude ) {
+}
+
+
+// get timezone parameters (name and minutes offset) - called by constructor
+void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<short> latitude ) {
     // if latitude is provided, use UTC within 10° latitude of poles
     if ( latitude != boost::none ) {
-        // TODO
+        this->tz_params_latitude( longitude, use_lon_tz, latitude );
     }
     // TODO
 }
