@@ -3,6 +3,7 @@
  */
 
 #include "libtzsolar.hpp"
+#include <cmath>
 
 // generate a solar time zone name
 // parameters:
@@ -24,16 +25,22 @@ std::string TZSolar::tz_name ( int tz_num, bool use_lon_tz, short sign ) {
     return prefix + tz_numstr + suffix;
 }
 
-// get timezone parameters (name and minutes offset) - called by constructor
-void TZSolar::tz_params_latitude ( short longitude, bool use_lon_tz, boost::optional<short> latitude ) {
+// check latitude data and initialize special case for polar regions - internal method called by tz_params()
+void TZSolar::tz_params_latitude ( short longitude, bool use_lon_tz, short latitude ) {
+    // special case: use East00/Lon000E (equal to UTC) within 10° latitude of poles
+    if ( abs( latitude ) >= limit_latitude - precision_fp ) {
+        // TODO
+    }
+
+    // TODO
 }
 
 
 // get timezone parameters (name and minutes offset) - called by constructor
-void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<short> latitude ) {
+void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<short> opt_latitude ) {
     // if latitude is provided, use UTC within 10° latitude of poles
-    if ( latitude != boost::none ) {
-        this->tz_params_latitude( longitude, use_lon_tz, latitude );
+    if ( opt_latitude != boost::none ) {
+        this->tz_params_latitude( longitude, use_lon_tz, opt_latitude.get() );
     }
     // TODO
 }
