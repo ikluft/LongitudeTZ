@@ -2,10 +2,7 @@
  * libtzsolar.hpp - solar time zone library contants and public interface
  */
 
-#include <unordered_map>
 #include <string>
-#include <iomanip>
-#include <sstream>
 #include <cmath>
 #include <regex>
 #include <boost/optional.hpp>
@@ -15,7 +12,7 @@
 class TZSolar {
     public:
 
-    // time zone name regular expressions
+    // time zone constants: names, regular expressions and numbers
     const std::string tzsolar_lon_zone_str = std::string ( "(Lon0[0-9][0-9][EW])|(Lon1[0-7][0-9][EW])|(Lon180[EW])" );
     const std::string tzsolar_hour_zone_str = std::string ( "(East|West)(0[0-9]|1[0-2])" );
     const std::regex tzsolar_lon_zone_re = std::regex ( tzsolar_lon_zone_str );

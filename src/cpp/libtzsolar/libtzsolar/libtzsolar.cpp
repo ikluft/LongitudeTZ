@@ -3,6 +3,8 @@
  */
 
 #include "libtzsolar.hpp"
+#include <iomanip>
+#include <sstream>
 #include <cmath>
 
 // generate a solar time zone name
