@@ -28,7 +28,12 @@ class TZSolar {
     const int limit_latitude = max_latitude_fp - polar_utc_area;  // max latitude for solar time zones
     const int minutes_per_degree_lon = 4;  // minutes per degree longitude
 
-    // private methodslatitude
+    // member data
+    protected:
+
+    // TODO
+
+    // private methods
     private:
 
     // generate a solar time zone name
