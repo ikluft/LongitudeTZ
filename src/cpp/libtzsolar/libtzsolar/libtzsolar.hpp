@@ -31,6 +31,11 @@ class TZSolar {
     // member data
     protected:
 
+    std::string short_name;  // time zone base name, i.e. Lon000E or East00
+    int offset_min;  // time zone offset in minutes
+    int longitude;   // longitude for time zone position
+    boost::optional<short> opt_latitude;  // optional latitude for computing polar exclusion
+
     // TODO
 
     // private methods
