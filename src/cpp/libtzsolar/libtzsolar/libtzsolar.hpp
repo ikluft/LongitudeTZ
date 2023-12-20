@@ -63,4 +63,21 @@ class TZSolar {
         this->tz_params( longitude, use_lon_tz, latitude );
     }
 
+    // accessors
+    inline std::string get_short_name() {
+        return short_name;
+    }
+    inline int get_offset_min() {
+        return offset_min;
+    }
+    inline int get_longitude() {
+        return longitude;
+    }
+    inline boost::optional<short> get_opt_latitude() {
+        return opt_latitude;
+    }
+    inline bool has_latitude() {
+        return opt_latitude != boost::none;
+    }
+
 };
