@@ -79,5 +79,9 @@ class TZSolar {
     inline bool has_latitude() {
         return opt_latitude != boost::none;
     }
+    inline std::string long_name() {
+        return "Solar/" + short_name;
+    }
+
 
 };
