@@ -39,8 +39,7 @@ class TZSolar {
 
     // TODO
 
-    // private methods
-    private:
+    // protected methods
 
     // generate a solar time zone name
     // parameters:
