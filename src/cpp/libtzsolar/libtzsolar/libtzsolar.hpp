@@ -49,7 +49,7 @@ class TZSolar {
     static std::string tz_name ( int tz_num, bool use_lon_tz, short sign );
 
     // get timezone parameters (name and minutes offset) - called by constructor
-    void tz_params_latitude ( short longitude, bool use_lon_tz, short latitude );
+    bool tz_params_latitude ( short longitude, bool use_lon_tz, short latitude );
 
     // get timezone parameters (name and minutes offset) - called by constructor
     void tz_params ( short longitude, bool use_lon_tz, boost::optional<short> opt_latitude );

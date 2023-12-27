@@ -28,13 +28,16 @@ std::string TZSolar::tz_name ( int tz_num, bool use_lon_tz, short sign ) {
 }
 
 // check latitude data and initialize special case for polar regions - internal method called by tz_params()
-void TZSolar::tz_params_latitude ( short longitude, bool use_lon_tz, short latitude ) {
+bool TZSolar::tz_params_latitude ( short longitude, bool use_lon_tz, short latitude ) {
     // special case: use East00/Lon000E (equal to UTC) within 10° latitude of poles
     if ( abs( latitude ) >= limit_latitude - precision_fp ) {
-        // TODO
+        // note: for polar latitudes, this must set all fields on behalf of the constructor
+        lon_tz = use_lon_tz;
+        short_name = lon_tz ? "Lon000E" : "East00";
+        return true;
     }
 
-    // TODO
+    return false;
 }
 
 
@@ -42,8 +45,12 @@ void TZSolar::tz_params_latitude ( short longitude, bool use_lon_tz, short latit
 void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<short> opt_latitude ) {
     // if latitude is provided, use UTC within 10° latitude of poles
     if ( opt_latitude != boost::none ) {
-        this->tz_params_latitude( longitude, use_lon_tz, opt_latitude.get() );
+        if ( this->tz_params_latitude( longitude, use_lon_tz, opt_latitude.get() )) {
+            return;
+        }
     }
+
+    // set time zone from longitude
     // TODO
 }
 
