@@ -3,6 +3,7 @@
  */
 
 #include "libtzsolar.hpp"
+#include <stdlib>
 #include <iomanip>
 #include <sstream>
 #include <cmath>
@@ -50,7 +51,15 @@ void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<shor
         }
     }
 
+    //
     // set time zone from longitude
+    //
+
+    // safety check on longitude
+    if ( std::abs( longitude ) > max_longitude_fp + precision_fp ) {
+        // TODO
+    }
+
     // TODO
 }
 
