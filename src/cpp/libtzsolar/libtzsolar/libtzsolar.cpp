@@ -3,7 +3,8 @@
  */
 
 #include "libtzsolar.hpp"
-#include <stdlib>
+#include <cstdlib>
+#include <exception>
 #include <iomanip>
 #include <sstream>
 #include <cmath>
@@ -57,7 +58,7 @@ void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<shor
 
     // safety check on longitude
     if ( std::abs( longitude ) > max_longitude_fp + precision_fp ) {
-        // TODO
+        throw std::out_of_range( "longitude out of range -180 to 180" );
     }
 
     // TODO
