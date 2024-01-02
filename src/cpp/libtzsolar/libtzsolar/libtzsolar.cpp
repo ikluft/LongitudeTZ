@@ -58,8 +58,12 @@ void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<shor
 
     // safety check on longitude
     if ( std::abs( longitude ) > max_longitude_fp + precision_fp ) {
-        throw std::out_of_range( "longitude out of range -180 to 180" );
+        throw std::out_of_range( "longitude out of range -180 to +180" );
     }
+
+    // set flag for longitude time zones: 0 = hourly 1-hour/15-degree zones, 1 = longitude 4-minute/1-degree zones
+    // defaults to hourly time zone ($use_lon_tz=0)
+    lon_tz = use_lon_tz;
 
     // TODO
 }

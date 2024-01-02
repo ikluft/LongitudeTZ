@@ -63,14 +63,14 @@ class TZSolar {
         this->tz_params( longitude, use_lon_tz, latitude );
     }
 
-    // accessors
+    // read accessors
     inline std::string get_short_name() {
         return short_name;
     }
-    inline int get_offset_min() {
+    constexpr int get_offset_min() {
         return offset_min;
     }
-    inline int get_longitude() {
+    constexpr int get_longitude() {
         return longitude;
     }
     inline boost::optional<short> get_opt_latitude() {
@@ -81,6 +81,14 @@ class TZSolar {
     }
     inline std::string long_name() {
         return "Solar/" + short_name;
+    }
+
+    // time zone computation & shortcuts
+    constexpr short tz_degreee_width() {
+        return lon_tz ? 1 : 15;  // 1 for longitude-based tz, 15 for hour-based tz
+    }
+    constexpr short tz_digits() {
+        return lon_tz ? 3 : 2;   // number of digits in time zone name
     }
 
 
