@@ -37,8 +37,7 @@ class TZSolar {
     int longitude;   // longitude for time zone position
     boost::optional<short> opt_latitude;  // optional latitude for computing polar exclusion
 
-    // TODO
-
+    //
     // protected methods
 
     // generate a solar time zone name
@@ -54,8 +53,6 @@ class TZSolar {
     // get timezone parameters (name and minutes offset) - called by constructor
     void tz_params ( short longitude, bool use_lon_tz, boost::optional<short> opt_latitude );
 
-    // TODO: more private methods
-
     public:
 
     // constructor
@@ -63,33 +60,63 @@ class TZSolar {
         this->tz_params( longitude, use_lon_tz, latitude );
     }
 
+    //
     // read accessors
+
+    // time zone short/base name (without Solar/)
     inline std::string get_short_name() {
         return short_name;
     }
+
+    // time zone offset from GMT in minutes
     constexpr int get_offset_min() {
         return offset_min;
     }
+
+    // longitude used to set time zone
     constexpr int get_longitude() {
         return longitude;
     }
+
+    // optional latitude used to detect if coordinates are too close to poles and use GMT instead
     inline boost::optional<short> get_opt_latitude() {
         return opt_latitude;
     }
+
+    // determine if latitude was used to define the time zone
     inline bool has_latitude() {
         return opt_latitude != boost::none;
     }
+
+    // time zone long name includes Solar/ prefix
     inline std::string long_name() {
         return "Solar/" + short_name;
     }
 
-    // time zone computation & shortcuts
-    constexpr short tz_degreee_width() {
+    private:
+
+    //
+    // private internal utility methods
+
+    // time zone width in degrees of longitude differs, 1 if by each degree, 15 if by each hour
+    constexpr short tz_degree_width() {
         return lon_tz ? 1 : 15;  // 1 for longitude-based tz, 15 for hour-based tz
     }
+
+    // number of numeric digits for formatting time zone name (3 digits if by degree, 2 digits if by hour)
     constexpr short tz_digits() {
         return lon_tz ? 3 : 2;   // number of digits in time zone name
     }
 
+    // formatting: time zone prefix string
+    inline std::string tz_prefix( short sign ) {
+        return std::string( lon_tz ? "Lon" : ( sign > 0 ? "East" : "West" ));
+    }
 
+    // formatting: time zone suffix string
+    inline std::string tz_suffix( short sign) {
+        return std::string( lon_tz ? ( sign > 0 ? "E" : "W" ) : "" );
+    }
+
+    // TODO
 };
