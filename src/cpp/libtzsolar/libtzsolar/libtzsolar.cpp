@@ -65,6 +65,15 @@ void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<shor
     // defaults to hourly time zone ($use_lon_tz=0)
     lon_tz = use_lon_tz;
 
+    // handle special case of half-wide tz at positive side of solar date line (180° longitude)
+    if (( longitude >= max_longitude_int - this->tz_degree_width() / 2.0 - precision_fp )
+        || ( longitude <= -max_longitude_int + precision_fp ))
+    {
+        std::string tz180_name = this->tz_prefix( 1 )
+            + "" // TODO: formatting
+            + this->tz_suffix( 1 );
+    }
+
     // TODO
 }
 
