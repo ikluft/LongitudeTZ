@@ -45,7 +45,7 @@ class TZSolar {
     //   tz_num: integer number for time zone - hourly or longitude based depending on use_lon_tz
     //   use_lon_tz: true=use longitude-based time zones, false=use hour-based time zones
     //   sign: +1 = positive/zero, -1 = negative
-    static std::string tz_name ( int tz_num, bool use_lon_tz, short sign );
+    static std::string tz_name ( unsigned short tz_num, bool use_lon_tz, short sign );
 
     // get timezone parameters (name and minutes offset) - called by constructor
     bool tz_params_latitude ( short longitude, bool use_lon_tz, short latitude );

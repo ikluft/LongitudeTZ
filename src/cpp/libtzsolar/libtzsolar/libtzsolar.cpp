@@ -14,15 +14,15 @@
 //   tz_num: integer number for time zone - hourly or longitude based depending on use_lon_tz
 //   use_lon_tz: true=use longitude-based time zones, false=use hour-based time zones
 //   sign: +1 = positive/zero, -1 = negative
-std::string TZSolar::tz_name ( int tz_num, bool use_lon_tz, short sign ) {
+std::string TZSolar::tz_name ( unsigned short tz_num, bool use_lon_tz, short sign ) {
     // generate time zone name prefix and suffix
     std::string prefix = use_lon_tz ? "Lon" : ( sign > 0 ? "East" : "West" );
     std::string suffix = use_lon_tz ? "" : ( sign > 0 ? "E" : "W" );
 
     // generate string for digits in time zone name
-    int tz_digits = use_lon_tz ? 3 : 2;
+    unsigned short num_digits = use_lon_tz ? 3 : 2;
     std::ostringstream ss;
-    ss << std::setw( tz_digits ) << std::setfill( '0' ) << tz_num;
+    ss << std::setw( num_digits ) << std::setfill( '0' ) << tz_num;
     std::string tz_numstr = ss.str();
 
     // return time zone name
@@ -69,9 +69,7 @@ void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<shor
     if (( longitude >= max_longitude_int - this->tz_degree_width() / 2.0 - precision_fp )
         || ( longitude <= -max_longitude_int + precision_fp ))
     {
-        std::string tz180_name = this->tz_prefix( 1 )
-            + "" // TODO: formatting
-            + this->tz_suffix( 1 );
+        short_name = tz_name(( unsigned short )( max_longitude_int / tz_degree_width()), use_lon_tz, 1 );
     }
 
     // TODO
