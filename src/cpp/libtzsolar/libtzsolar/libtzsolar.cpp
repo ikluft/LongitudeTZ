@@ -70,12 +70,14 @@ void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<shor
         || ( longitude <= -max_longitude_int + precision_fp ))
     {
         short_name = tz_name(( unsigned short )( max_longitude_int / tz_degree_width()), use_lon_tz, 1 );
+        offset_min = 720;
         return;
     }
 
     // handle special case of half-wide tz at negative side of solar date line (180° longitude)
     if ( longitude <= -max_longitude_int + this->tz_degree_width() / 2.0 + precision_fp ) {
         short_name = tz_name(( unsigned short)( max_longitude_int / tz_degree_width()), use_lon_tz, -1 );
+        offset_min = -720;
         return;
     }
 
