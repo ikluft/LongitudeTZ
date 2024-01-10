@@ -81,6 +81,11 @@ void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<shor
         return;
     }
 
-    // TODO
+    // handle other times zones
+    unsigned short tz_num = ( unsigned short )( std::abs (( double ) longitude / tz_degree_width() + 0.5
+        + precision_fp ));
+    short sign = ( longitude > -tz_degree_width() / 2.0 + precision_fp ) ? 1 : -1;
+    short_name = tz_name( tz_num, use_lon_tz, sign );
+    offset_min = sign * tz_num * minutes_per_degree_lon * tz_degree_width();
 }
 
