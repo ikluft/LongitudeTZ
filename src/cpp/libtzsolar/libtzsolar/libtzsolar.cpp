@@ -4,7 +4,6 @@
 
 #include "libtzsolar.hpp"
 #include <cstdlib>
-#include <exception>
 #include <iomanip>
 #include <sstream>
 #include <cmath>
