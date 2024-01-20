@@ -118,5 +118,4 @@ class TZSolar {
         return std::string( lon_tz ? ( sign > 0 ? "E" : "W" ) : "" );
     }
 
-    // TODO
 };
