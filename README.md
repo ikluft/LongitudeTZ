@@ -32,6 +32,7 @@ Solar TimeZone libraries implementations in different programming languages:
 * [Python](src/python/) - as _timezone_solar_ package
   * [![Python](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-python.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-python.yml)
   * available on PyPI: https://pypi.org/project/timezone_solar/
+* [C++](src/cpp/) - as _libtzsolar_ package
 * Rust - TODO
 * others coming, code contributions accepted
 
