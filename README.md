@@ -1,15 +1,18 @@
 Longitude-based Time Zones
 ==========================
 On this page:
+
 * [Introduction](#introduction)
 * [Implementations](#implementations)
 * [The Solar Time Zones Definition](#the_solar_time_zones_definition)
 * [Obsoleting Daylight Saving Time](#obsoleting_daylight_saving_time)
+* [Web Resources](#web_resources)
 
 ## <a name="introduction">Introduction</a>
-Many people are tired of changing their clocks twice a year for daylight time. DST is an antiquated tradition [which we now know doesn't do any good](https://www.webmd.com/sleep-disorders/news/20211105/harmful-effects-of-daylight-savings). Anyone can look up sunrise and sunset times for events that need to be scheduled around daylight.
 
-The only way we'll have the choice to opt-out of Daylight Saving Time is if there's an alternative standard allowing us to stay on Standard Time. This is intended to make such an alternative. I'm running the idea up the flagpole. We'll see how many salutes it gets. Meanwhile this project is making softwarein various programming languages toward enabling the possibility.
+Many people are tired of changing their clocks twice a year for daylight time. DST is an antiquated tradition which we now know doesn't do any good. ([see below](#web_resources)) Anyone can look up sunrise and sunset times for events that need to be scheduled around daylight.
+
+The only way we'll have the choice to opt-out of Daylight Saving Time is if there's an alternative standard allowing us to stay on Standard Time. This is intended to make such an alternative. I'm running the idea up the flagpole. We'll see how many salutes it gets. Meanwhile this project is making software in various programming languages toward enabling the possibility.
 
 National and regional governments continue to cling to daylight saving time partly because almost everyone else has such a standard. In this age where our computers and cell phones are integral to scheduling, we really only need a de-facto standard. _It is possible to just stop using DST_, and let our computers convert the times to and from others who continue to use DST. Fortunately, there are standards we can build upon.
 * Lines of longitude are a well-established standard.
@@ -25,7 +28,9 @@ The project also makes and accepts contributions of code in various programming 
 The project also makes another set of overlay time zones the width of 1 degree of longitude, which puts them in 4-minute intervals of time. These are a hyper-local niche for potential use by outdoor events. These may be used by those who would like to have the middle of the scheduling day coincide with local solar noon. 
 
 ## <a name="implementations">Implementations</a>
+
 Solar TimeZone libraries implementations in different programming languages:
+
 * [Perl](src/perl/) as _TimeZone::Solar_ module
   * [![Perl](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml)
   * available on MetaCPAN: https://metacpan.org/pod/TimeZone::Solar
@@ -37,7 +42,9 @@ Solar TimeZone libraries implementations in different programming languages:
 * others coming, code contributions accepted
 
 ## <a name="the_solar_time_zones_definition">The Solar Time Zones Definition</a>
+
 The Solar time zones definition includes the following rules.
+
 * There are 24 hour-based Solar Time Zones, named West12, West11, West10, West09 through East12. East00 is equivalent to UTC. West00 is an alias for East00.
   * Hour-based time zones are spaced in one-hour time increments, or 15 degrees of longitude.
   * Each hour-based time zone is centered on a meridian at a multiple of 15 degrees. In positive and negative integers, these are 0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165 and 180.
@@ -51,8 +58,24 @@ The Solar time zones definition includes the following rules.
 * The category "Solar" is used for the longer names for these time zones. The names listed above are the short names. The full long name of each time zone is prefixed with "Solar/" such as "Solar/East00" or "Solar/Lon000E".
 
 ## <a name="obsoleting_daylight_saving_time">Obsoleting Daylight Saving Time</a>
+
 The goal of this project is to aid existing and future efforts to end Daylight Saving Time with a feasible technical alternative. If it achieves that goal then it will continue to maintain the standard definition, reference libraries and data files for longitude-based time zones for cases where they are useful and desired.
 
 ![XKCD comic #2846: Daylight Saving Choice](docs/daylight_saving_choice.png)
 
 [*XKCD comic #2846: "Daylight Saving Choice" 2023-10-28*](https://xkcd.com/2846/) (with attribution for Creative Commons CC-BY-NC-2.5 compliance)
+
+## <a name="web_resources">Web Resources</a>
+
+Nautical and longitude-based time:
+
+* ["Nautical time"](https://en.wikipedia.org/wiki/Nautical_time), Wikipedia
+
+Related: in favor of Standard Time:
+
+* [Save Standard Time](https://savestandardtime.com/) - nonprofit organization promoting legislation for permanent standard time, opposing legislation for permanent daylight time
+
+Related: harmful effects of daylight saving time (DST):
+
+* [Daylight Saving Time does not save energy](https://phys.org/news/2014-03-daylight-energy.html), Phys[.]Org 2014
+* [Daylight saving time is doing far more harm than good, according to sleep scientists](https://medicalxpress.com/news/2021-11-daylight-good-scientists.html) - Medical Xpress, 2022
