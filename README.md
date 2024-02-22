@@ -74,6 +74,7 @@ Nautical and longitude-based time:
 Related: in favor of Standard Time:
 
 * [Save Standard Time](https://savestandardtime.com/) - nonprofit organization promoting legislation for permanent standard time, opposing legislation for permanent daylight time
+* [International Alliance for Natural Time](https://naturaltimealliance.org/en/) - group of organizations and projects promoting timekeeping based on natural solar time
 
 Related: harmful effects of daylight saving time (DST):
 
