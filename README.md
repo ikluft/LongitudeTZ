@@ -10,7 +10,12 @@ On this page:
 
 ## <a name="introduction">Introduction</a>
 
-Many people are tired of changing their clocks twice a year for daylight time. DST is an antiquated tradition which we now know doesn't do any good. ([see below](#web_resources)) Anyone can look up sunrise and sunset times for events that need to be scheduled around daylight.
+Many people are tired of changing their clocks twice a year for daylight saving time. DST is an antiquated tradition which we now know doesn't do any good. ([see below](#web_resources)) There are many problems where DST has failed to deliver on its promises or is no longer useful the way it was originally intended.
+
+* Standard time is based on setting the local clock at average solar noon, and so follows nature. Daylight saving time artificially offsets it an hour to favor late-day activities. But there is not actually more daylight - it steals that hour from early-day activities.
+* Daylight saving time does not actually save energy.
+* Anyone can look up local sunrise and sunset times for planning events that actually need to be scheduled around daylight.
+* Studies have established there are health and safety hazards from disrupting circadian rhythyms (daily sleep cycles). 
 
 The only way we'll have the choice to opt-out of Daylight Saving Time is if there's an alternative standard allowing us to stay on Standard Time. This is intended to make such an alternative. I'm running the idea up the flagpole. We'll see how many salutes it gets. Meanwhile this project is making software in various programming languages toward enabling the possibility.
 
