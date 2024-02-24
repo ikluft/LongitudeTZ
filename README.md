@@ -17,7 +17,9 @@ Many people are tired of changing their clocks twice a year for daylight saving 
 * Anyone can look up local sunrise and sunset times for planning events that actually need to be scheduled around daylight.
 * Studies have established there are health and safety hazards from disrupting circadian rhythyms (daily sleep cycles). 
 
-The only way we'll have the choice to opt-out of Daylight Saving Time is if there's an alternative standard allowing us to stay on Standard Time. This is intended to make such an alternative. I'm running the idea up the flagpole. We'll see how many salutes it gets. Meanwhile this project is making software in various programming languages toward enabling the possibility.
+The only way we'll have the choice to opt-out of Daylight Saving Time is if there's an alternative standard allowing us to stay on Standard Time. This is intended to make such an alternative. The project is to make software libraries to set local time zone based on longitude, and time zone files compatible with the *tzinfo* standard which allow any device or server to use them. The *tzinfo* files also allow systems to convert between traditional and longitude-based time zones automatically.
+
+I'm running the idea up the flagpole. We'll see how many salutes it gets. Meanwhile this project is making software in various programming languages toward enabling the possibility.
 
 National and regional governments continue to cling to daylight saving time partly because almost everyone else has such a standard. In this age where our computers and cell phones are integral to scheduling, we really only need a de-facto standard. _It is possible to just stop using DST_, and let our computers convert the times to and from others who continue to use DST. Fortunately, there are standards we can build upon.
 * Lines of longitude are a well-established standard.
