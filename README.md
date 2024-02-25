@@ -50,6 +50,10 @@ Solar TimeZone libraries implementations in different programming languages:
 
 ## <a name="the_solar_time_zones_definition">The Solar Time Zones Definition</a>
 
+Though not part of the LongitudeTZ project, this graphic by [Save Standard Time](https://savestandardtime.com/) exactly depicts the natural time zones we're also trying to implement.
+
+![Ideal Standard Time Zones graphic by Save Standard Time](docs/info-map-time-zones-world-ideal-map-ideal.jpg)
+
 The Solar time zones definition includes the following rules.
 
 * There are 24 hour-based Solar Time Zones, named West12, West11, West10, West09 through East12. East00 is equivalent to UTC. West00 is an alias for East00.
