@@ -81,6 +81,7 @@ The goal of this project is to aid existing and future efforts to end Daylight S
 Nautical and longitude-based time:
 
 * ["Nautical time"](https://en.wikipedia.org/wiki/Nautical_time), Wikipedia
+* ["Military time zone"](https://en.wikipedia.org/wiki/Military_time_zone), Wikipedia
 
 Related: time zone technical standards:
 
