@@ -87,6 +87,7 @@ Related: time zone technical standards:
 
 * ["tz database"](https://en.wikipedia.org/wiki/Tz_database), Wikipedia
 * [Time Zone Database](https://www.iana.org/time-zones), Internet Assigned Numbers Authority (IANA)
+* [RFC8536: The Time Zone Information Format (TZif)](https://www.rfc-editor.org/info/rfc8536), Internet Engineering Task Force (IETF)
 
 Related: in favor of Standard Time:
 
