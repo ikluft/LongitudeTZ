@@ -21,6 +21,7 @@ use autodie;
 use Carp qw(croak);
 use Getopt::Long::Subcommand;
 use Try::Tiny;
+use TimeZone::Solar;
 
 # CLI-parsing mainline called from exception-catching wrapper
 sub main
@@ -28,6 +29,13 @@ sub main
     my %opts;
     my $res = GetOptions (
         options => {
+            'version|v' => {
+                summary => 'Display program version',
+                handler => sub {
+                    say "version ".TimeZone::Solar->version();
+                    exit 0;
+                },
+            },
             # TODO
         },
         subcommands => {
