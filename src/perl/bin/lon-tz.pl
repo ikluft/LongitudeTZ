@@ -19,7 +19,7 @@ use warnings;
 use utf8;
 use autodie;
 use Carp qw(croak);
-use Getopt::Long::Subcommand;
+use Getopt::Long;
 use Try::Tiny;
 use TimeZone::Solar;
 
@@ -28,20 +28,10 @@ sub main
 {
     my %opts;
     my $res = GetOptions (
-        options => {
-            'version|v' => {
-                summary => 'Display program version',
-                handler => sub {
-                    say "version ".TimeZone::Solar->version();
-                    exit 0;
-                },
-            },
-            # TODO
+        'version|v' => sub {
+            say "version ".TimeZone::Solar->version();
+            exit 0;
         },
-        subcommands => {
-            # TODO
-        },
-        # TODO
     );
     if ( not $res->{success}) {
         croak "CLI option processing failed";
