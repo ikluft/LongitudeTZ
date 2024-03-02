@@ -22,6 +22,11 @@ use Carp qw(croak);
 use Getopt::Long;
 use Try::Tiny;
 use TimeZone::Solar;
+use Readonly;
+use File::Basename;
+
+# constants
+Readonly::Scalar my $progname => basename( $0 );
 
 # CLI-parsing mainline called from exception-catching wrapper
 sub main
@@ -33,7 +38,7 @@ sub main
             exit 0;
         },
     );
-    if ( not $res->{success}) {
+    if ( not $res ) {
         croak "CLI option processing failed";
     }
     # TODO
@@ -47,27 +52,27 @@ try {
     my $ex = $_;
 
     # determine if there's an error message available to display
-    my $pkg = __PACKAGE__;
     if ( ref $ex ) {
         if ( my $ex_cap = Exception::Class->caught("WebFetch::Exception") ) {
             if ( $ex_cap->isa("WebFetch::TracedException") ) {
                 warn $ex_cap->trace->as_string, "\n";
             }
 
-            croak "$pkg: " . $ex_cap->error . "\n";
+            croak "$progname: " . $ex_cap->error . "\n";
         }
         if ( $ex->can("stringify") ) {
 
             # Error.pm, possibly others
-            croak "$pkg: " . $ex->stringify . "\n";
+            croak "$progname: " . $ex->stringify . "\n";
         } elsif ( $ex->can("as_string") ) {
 
             # generic - should work for many classes
-            croak "$pkg: " . $ex->as_string . "\n";
+            croak "$progname: " . $ex->as_string . "\n";
         } else {
-            croak "$pkg: unknown exception of type " . ( ref $ex ) . "\n";
+            croak "$progname: unknown exception of type " . ( ref $ex ) . "\n";
         }
     } else {
         croak "pkg: $_\n";
     }
 }
+1;
