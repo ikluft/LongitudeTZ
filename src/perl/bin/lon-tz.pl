@@ -75,4 +75,4 @@ try {
         croak "pkg: $_\n";
     }
 }
-1;
+exit 0;
