@@ -10,14 +10,22 @@ On this page:
 
 ## <a name="introduction">Introduction</a>
 
-Lots of people are tired of changing their clocks twice a year for daylight saving time. DST is an antiquated tradition which we now know doesn't do any good. ([see below](#web_resources)) There are many problems where DST has failed to deliver on its promises or is no longer useful the way it was originally intended.
+This project is intended to develop software and time zone data files so timekeeping devices can be set to natural longitude-based time zones for their locality. These are based on Standard Time for the longitude, without peculiarities set by local or national governments. These time zone files and the software to look up which one applies to the current location allow users' devices to automatically convert to or from conventional time zones used by government entities.
+
+There are lots of reasons to do this...
+
+People are tired of changing their clocks twice a year for daylight saving time. DST is an antiquated tradition which we now know doesn't do any good. ([see below](#web_resources)) There are many problems where DST has failed to deliver on its promises and/or is no longer useful the way it was originally intended.
 
 * Standard time is based on setting the local clock at average solar noon, and so follows nature. Daylight saving time artificially offsets it an hour to favor late-day activities. But there is not actually more daylight - it stakes that hour from early-day activities.
 * Daylight saving time does not actually save energy.
 * Anyone can look up local sunrise and sunset times for planning events that actually need to be scheduled around daylight.
 * Studies have established there are health and safety hazards from disrupting circadian rhythms (daily sleep cycles).
 
-In places where regional government mandates use of Daylight Saving Time, the only way we'll have the choice to opt-out of DST is if there's an alternative standard allowing us to stay on Standard Time. This is intended to make such an alternative. The project is to make software libraries to set local solar/natural time zone based on longitude, and time zone files compatible with the *tz database* standard which allow any device or server to use them. The *tzfile* data files also allow systems to convert between traditional and longitude-based time zones automatically.
+The real solution is to schedule activities around available sunlight at one's local latitude.
+
+In places where regional government mandates use of Daylight Saving Time, the only way we'll have the choice to opt-out of DST is if there's an alternative standard allowing us to stay on Standard Time.
+
+This project is intended to make such an alternative. The project is to make software libraries to set local solar/natural time zone based on longitude, and time zone files compatible with the *tz database* standard which allow any device or server to use them. The *tzfile* data files also allow systems to convert between traditional and longitude-based time zones automatically.
 
 An example of the tzfile data for the proposed Longitude Time Zones is provided at [docs/longitude-timezones.tzfile](docs/longitude-timezones.tzfile) in this repository.
 
