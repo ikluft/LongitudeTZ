@@ -11,6 +11,18 @@ Command-line options listed below must be implemented by all language implementa
 ### --version
 
     lon-tz --version
-    
-prints the program version. Processing ends as soon as this is parsed. That makes this mutually exclusive of all other options, ignoring any other options provided.
+
+prints the program version.
+
+Processing ends as soon as this is parsed. That makes this mutually exclusive of all other options, ignoring any other options provided.
+
+A shorthand alias '-v' may be used for '--version'.
+
+### --tzfile
+
+    lon-tz --tzfile
+
+generates a timezone database file (see the tzfile(5) Unix manual page for the format) of the LongitudeTZ time zones. The text must be sent to the program's standard output.
+
+This option causes all other options to be ignored, except --version which is higher precedence.
 
