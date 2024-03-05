@@ -52,7 +52,7 @@ Solar TimeZone libraries implementations in different programming languages:
 
 ## <a name="the_solar_time_zones_definition">The Solar Time Zones Definition</a>
 
-Though not part of the LongitudeTZ project, this graphic by [Save Standard Time](https://savestandardtime.com/) exactly depicts the natural time zones we also want to implement.
+Though not part of the LongitudeTZ project, this graphic by [Save Standard Time](https://savestandardtime.com/) exactly depicts the natural time zones this project also wants to implement.
 
 ![Ideal Standard Time Zones graphic by Save Standard Time](docs/info-map-time-zones-world-ideal-map-ideal.jpg)
 
