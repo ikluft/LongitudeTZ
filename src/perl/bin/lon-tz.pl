@@ -32,7 +32,7 @@ Readonly::Scalar my $progname => basename( $0 );
 sub main
 {
     my %opts;
-    my $res = GetOptions (
+    my $res = GetOptions ( \%opts,
         'version|v' => sub {
             say "version ".TimeZone::Solar->version();
             exit 0;
