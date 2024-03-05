@@ -75,4 +75,31 @@ try {
         croak "pkg: $_\n";
     }
 }
+
 exit 0;
+
+__END__
+
+=encoding utf8
+
+=head1 USAGE
+
+    lon-tz.pl --version
+    lon-tz.pl --tzfile > output-file
+    lon-tz.pl [--longitude=nnn.nn] [--latitude=nnn.nn] fieldname [...]
+
+=head1 OPTIONS
+
+
+=head1 EXIT STATUS
+
+The program returns the standard Unix exit codes of 0 for success and non-zero for errors.
+
+=head1 LICENSE
+
+TimeZone::Solar is Open Source software licensed under the GNU General Public License Version 3.
+See L<https://www.gnu.org/licenses/gpl-3.0-standalone.html>.
+
+=head1 BUGS AND LIMITATIONS
+
+=cut
