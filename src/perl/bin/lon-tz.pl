@@ -112,6 +112,7 @@ sub gen_tzfile
     foreach my $deg ( -180 .. 180 ) {
         gen_lon_tz($deg);
     }
+    return;
 }
 
 #
