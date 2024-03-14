@@ -7,12 +7,10 @@ OPENSSF_CPPFLAGS=-O2 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrou
 	-fstack-clash-protection -fstack-protector-strong \
 	-Wl,-z,nodlopen -Wl,-z,noexecstack \
 	-Wl,-z,relro -Wl,-z,now
-OPENSSF_LDFLAGS=-O2 -z nodlopen -z noexecstack -z relro -z now
 
 # compiler & linker flags
 CPPFLAGS = $(OPENSSF_CPPFLAGS)
 CXXFLAGS = -std=c++17
-LDFLAGS = $(OPENSSF_LDFLAGS)
 
 libtzsolar.o: libtzsolar.cpp libtzsolar.hpp
 
