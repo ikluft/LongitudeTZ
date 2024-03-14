@@ -25,7 +25,7 @@ class TZSolar {
     const double max_longitude_fp = max_degrees / 2.0;  // min/max longitude in fp = 180.0
     const double max_latitude_fp = max_degrees / 4.0;  // min/max latitude in fp = 90.0
     const int polar_utc_area = 10;  // latitude near poles to use UTC
-    const int limit_latitude = max_latitude_fp - polar_utc_area;  // max latitude for solar time zones
+    const int limit_latitude = int ( max_latitude_fp - polar_utc_area );  // max latitude for solar time zones
     const int minutes_per_degree_lon = 4;  // minutes per degree longitude
 
     // member data
