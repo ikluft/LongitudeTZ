@@ -19,6 +19,7 @@ use warnings;
 use utf8;
 use autodie;
 use feature qw(say);
+use Config;
 use Carp qw(croak);
 use Getopt::Long;
 use Try::Tiny;
@@ -151,7 +152,7 @@ sub main
 
     # display version
     if ( $opts{version} // 0 ) {
-        say "version ".TimeZone::Solar->version();
+        say "version " . TimeZone::Solar->version() . " / Perl " . $Config{api_versionstring};
         exit 0;
     }
     
