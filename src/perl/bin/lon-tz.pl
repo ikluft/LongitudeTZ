@@ -29,6 +29,9 @@ use File::Basename;
 # constants
 Readonly::Scalar my $progname => basename( $0 );
 
+# debug flag
+my $debug = 0;
+
 #
 # tzdata file generation functions
 #
@@ -124,6 +127,7 @@ sub main
 {
     my %opts;
     my $res = GetOptions ( \%opts,
+        'debug',
         'version|v',
         'tzfile|tzdata',
     );
@@ -133,7 +137,13 @@ sub main
         croak "CLI option processing failed";
     }
 
-    say "opts: ".join( %opts );
+    # set debug flag if provided
+    if ( $opts{debug} // 0 ) {
+        $debug = 1;
+    }
+    if ( $debug ) {
+        say "opts: ".join( " ", %opts );
+    }
 
     # display version
     if ( $opts{version} // 0 ) {
@@ -148,6 +158,7 @@ sub main
     }
 
     # TODO
+    croak "fall through";
 }
 
 # exception-catching wrapper
@@ -180,7 +191,7 @@ try {
     } else {
         croak "pkg: $_\n";
     }
-}
+};
 
 exit 0;
 
