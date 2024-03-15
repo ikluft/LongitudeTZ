@@ -142,7 +142,11 @@ sub main
         $debug = 1;
     }
     if ( $debug ) {
-        say "opts: ".join( " ", %opts );
+        my @out_opts;
+        foreach my $key (sort keys %opts) {
+            push @out_opts, "$key=".$opts{$key};
+        }
+        say "opts: ".join( " ", @out_opts );
     }
 
     # display version
