@@ -12,7 +12,7 @@ Command-line options listed below must be implemented by all language implementa
 
     lon-tz --version
 
-prints the program version.
+prints the program version, the programming language of the implementation, and the version of the language interpreter or compiler.
 
 Processing ends as soon as this is parsed. That makes this mutually exclusive of all other options, ignoring any other options provided.
 
@@ -26,3 +26,27 @@ generates a timezone database file (see the tzfile(5) Unix manual page for the f
 
 This option causes all other options to be ignored, except --version which is higher precedence.
 
+### --tzname
+
+    lon-tz --tzname=Westxx
+    lon-tz --tzname=Eastxx
+    lon-tz --tzname=LonxxxW
+    lon-tz --tzname=LonxxxE
+
+sets the time zone by name. West00 to West12 are 1-hour wide time zones in west longitude. East00 to East12 are 1-hour wide time zones in east longitude.
+
+### --longitude
+
+    lon-tz --longitude=xxx.xxx
+
+sets the time zone from the longitude provided in the parameter. For example, a longitude setting of -122 (122 degrees west longitude) would correspond to San Francisco, Portland or Seattle.
+
+This option is mutually exclusive with the --tzname option.
+
+### --latitude
+
+    lon-tz --longitude=xxx.xxx --latitude=yy.yyy
+
+sets the latitude from the parameter, which may be used to override the time zone in polar regions.
+Outside of polar regions it has no effect.
+The latitude is optional.
