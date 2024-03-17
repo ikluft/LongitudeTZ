@@ -162,6 +162,11 @@ sub main
         exit 0;
     }
 
+    # check mutually exclusive options
+    if (( $opts{tzname} // 0 ) and ( $opts{longitude} // 0 )) {
+        croak "mutually exclusive options tzname and longitude cannot be used at the same time";
+    }
+
     # TODO
     croak "fall through";
 }
