@@ -16,6 +16,7 @@ nytprof.out
 
 # Dizt::Zilla
 /.build/
+/TimeZone-Solar-[0-9]*/
 /TimeZone-Solar-*-[0-9]*.tar.gz
 /TimeZone-Solar-*-[0-9]*/
 
