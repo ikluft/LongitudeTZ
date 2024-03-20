@@ -163,8 +163,13 @@ sub main
     }
 
     # check mutually exclusive options
-    if (( $opts{tzname} // 0 ) and ( $opts{longitude} // 0 )) {
+    if (( exists $opts{tzname}) and ( exists $opts{longitude})) {
         croak "mutually exclusive options tzname and longitude cannot be used at the same time";
+    }
+
+    # if tzname was provided, get parameters from it
+    if ( exists $opts{tzname}) {
+        # TODO use class prefix to check if class is defined, making time zone string valid
     }
 
     # TODO
