@@ -119,6 +119,12 @@ sub gen_tzfile
     return;
 }
 
+# do timezone operations requested from command line arguments
+sub do_tz_op
+{
+    # TODO
+}
+
 #
 # CLI mainline
 #
@@ -168,8 +174,17 @@ sub main
     }
 
     # if tzname was provided, get parameters from it
+    my $result;
     if ( exists $opts{tzname}) {
-        # TODO use class prefix to check if class is defined, making time zone string valid
+
+        # verify class is defined, making time zone string valid
+        my $classname = TimeZone::Solar::valid_tz_class( $opts{tzname});
+        if ( not defined $classname ) {
+            croak "$opts{tzname} is not a valid solar/natural time zone name";
+        }
+
+        # run with the class name
+        $result = do_tz_op(\%opts, $classname->new());
     }
 
     # TODO

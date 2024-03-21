@@ -381,6 +381,35 @@ sub _tz_instance
     return $obj;
 }
 
+# check for valid solar time zone class name
+# it prepends the class prefix if necessary
+# returns the class name if valid, undef if invalid
+# this also provides verification for external callers such as the CLI
+sub valid_tz_class
+{
+    my ( $classname ) = @_;
+
+    # if a short name was provided, prepend the class prefix
+    my $tzsolar_class_prefix = _const("TZSOLAR_CLASS_PREFIX");
+    if ( $classname !~ qr( :: )x ) {
+        $classname = $tzsolar_class_prefix . $classname;
+    }
+
+    # valid tz class must be a sublass of TimeZone::Solar
+    if ( not $classname->isa(__PACKAGE__)) {
+        return;
+    }
+
+    # valid tz class must match the regular expression
+    my $tzsolar_zone_re      = _const("TZSOLAR_ZONE_RE");
+    if ( $classname !~ qr( $tzsolar_class_prefix $tzsolar_zone_re )x ) {
+        return;
+    }
+
+    # success
+    return $classname;
+}
+
 # instantiate a new TimeZone::Solar object
 sub new
 {
