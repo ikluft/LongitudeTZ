@@ -24,7 +24,7 @@ use Carp qw(croak);
 use Readonly;
 use DateTime::TimeZone v0.80.0;
 use Try::Tiny;
-Readonly::Scalar my $debug_mode => ( exists $ENV{TZSOLAR_DEBUG} and $ENV{TZSOLAR_DEBUG} ) ? 1 : 0;
+Readonly::Scalar my $debug_mode => ( $ENV{TZSOLAR_DEBUG} // 0 ) ? 1 : 0;
 
 # constants
 ## no critic ( Modules::ProhibitMultiplePackages )
@@ -103,8 +103,7 @@ sub _tz_subclass
 
     # for test coverage: if $opts{test_break_eval} is set, break the eval below
     # under normal circumstances, %opts parameters should be omitted
-    my $result_cmd = (
-        ( exists $opts{test_break_eval} and $opts{test_break_eval} )
+    my $result_cmd = (( $opts{test_break_eval} // 0 )
         ? "croak 'break due to test_break_eval'"    # for testing we can force the eval to break
         : "1"                                       # normally the class definition returns 1
     );
@@ -228,7 +227,7 @@ sub _tz_params_latitude
 
     # special case: use East00/Lon000E (equal to UTC) within 10° latitude of poles
     if ( abs( $param_ref->{latitude} ) >= _const("LIMIT_LATITUDE") - _const("PRECISION_FP") ) {
-        my $use_lon_tz = ( exists $param_ref->{use_lon_tz} and $param_ref->{use_lon_tz} );
+        my $use_lon_tz = $param_ref->{use_lon_tz} // 0;
         $param_ref->{short_name} = $use_lon_tz ? "Lon000E" : "East00";
         $param_ref->{name}       = "Solar/" . $param_ref->{short_name};
         $param_ref->{offset_min} = 0;
@@ -284,7 +283,7 @@ sub _tz_params
 
     # set flag for longitude time zones: 0 = hourly 1-hour/15-degree zones, 1 = longitude 4-minute/1-degree zones
     # defaults to hourly time zone ($use_lon_tz=0)
-    my $use_lon_tz      = ( exists $params{use_lon_tz} and $params{use_lon_tz} );
+    my $use_lon_tz      = $params{use_lon_tz} // 0;
     my $tz_degree_width = $use_lon_tz ? 1 : 15;    # 1 for longitude-based tz, 15 for hour-based tz
     my $tz_digits       = $use_lon_tz ? 3 : 2;
 
