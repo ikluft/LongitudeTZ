@@ -393,7 +393,7 @@ sub new
         croak __PACKAGE__ . "->new() prohibited for unrelated class $class";
     }
 
-    # if we got here via DataTime::TimeZone::Solar::*->new(), override longitude/use_lon_tz parameters from class name
+    # if we got here via DateTime::TimeZone::Solar::*->new(), override longitude/use_lon_tz parameters from class name
     my $tzsolar_class_prefix = _const("TZSOLAR_CLASS_PREFIX");
     my $tzsolar_zone_re      = _const("TZSOLAR_ZONE_RE");
     if ( $in_class =~ qr( $tzsolar_class_prefix ( $tzsolar_zone_re ))x ) {
