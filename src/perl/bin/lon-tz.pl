@@ -122,6 +122,8 @@ sub gen_tzfile
 # do timezone operations requested from command line arguments
 sub do_tz_op
 {
+    my ( $opts_ref, $obj ) = @_;
+
     # TODO
 }
 
@@ -185,6 +187,15 @@ sub main
 
         # run with the class name
         $result = do_tz_op(\%opts, $classname->new());
+    }
+
+    # if longitude was provided (latitude optional), generate time zone parameters
+    if ( exists $opts{longitude}) {
+        if ( exists $opts{latitude}) {
+            $result = do_tz_op(\%opts, $classname->new( longitude => $opts{longitude}, latitude => $opts{latitude}));
+        } else {
+            $result = do_tz_op(\%opts, $classname->new( longitude => $opts{longitude}));
+        }
     }
 
     # TODO
