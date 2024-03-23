@@ -125,6 +125,7 @@ sub do_tz_op
     my ( $opts_ref, $obj ) = @_;
 
     # TODO
+    return;
 }
 
 #
