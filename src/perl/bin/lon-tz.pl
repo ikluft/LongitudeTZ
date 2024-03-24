@@ -139,7 +139,11 @@ sub main
     my $res = GetOptions ( \%opts,
         'debug',
         'version|v',
-        'tzfile|tzdata',
+        'tzfile|tzdata:s',
+        'tzname:s',
+        'longitude:s',
+        'latitude:s',
+        'get:s',
     );
 
     # check validity of arguments
@@ -193,9 +197,9 @@ sub main
     # if longitude was provided (latitude optional), generate time zone parameters
     if ( exists $opts{longitude}) {
         if ( exists $opts{latitude}) {
-            $result = do_tz_op(\%opts, $classname->new( longitude => $opts{longitude}, latitude => $opts{latitude}));
+            $result = do_tz_op(\%opts, TimeZone::Solar->new( longitude => $opts{longitude}, latitude => $opts{latitude}));
         } else {
-            $result = do_tz_op(\%opts, $classname->new( longitude => $opts{longitude}));
+            $result = do_tz_op(\%opts, TimeZone::Solar->new( longitude => $opts{longitude}));
         }
     }
 
