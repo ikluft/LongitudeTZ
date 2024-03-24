@@ -53,3 +53,22 @@ sets the latitude from the parameter, which may be used to override the time zon
 Outside of polar regions (beyond 80 degrees north or south latitude), it has no effect.
 The latitude is optional. If provided and set to a value in the polar region, it will override the time zone to UTC
 as East00 in hour-based time zones or Lon000E in degree-based time zones.
+
+### --get
+
+    lon-tz --longitude=xxx.xxx --get=fieldname
+
+determines a field of data to output from the specified time zone.
+
+The allowed field names are
+
+* longitude: report the longitude parameter which was used to make the time zone, or the centerline of the time zone if it was created by name
+* latitude: return the latitude parameter which was used to make the time zone, or blank if none was provided
+* name: full time zone name including the prefix. For example: Solar/West08
+* short_name: short time zone name, without the prefix. For example: West08
+* long_name: same as "name" field
+* offset: offset from UTC in ±hh:mm (+/- hours minutes) string format
+* offset_min: offset from UTC in integer minutes
+* offset_sec: offset from UTC in integer seconds (for compatibility only - no Solar time zones use resolution smaller than minutes)
+* is_utc: 1 (true) if the time zone is equal to UTC, 0 (false) otherwise
+
