@@ -124,6 +124,17 @@ sub do_tz_op
 {
     my ( $opts_ref, $obj ) = @_;
 
+    my @fields;
+    if ( exists $opts_ref->{get}) {
+        if ( ref $opts_ref->{get} eq "ARRAY" ) {
+            @fields = @{$opts_ref->{get}};
+        } else {
+            croak "incorrect data type from --get parameter"
+        }
+    } else {
+        @fields = qw(long_name);
+    }
+
     # TODO
     return;
 }
@@ -143,7 +154,7 @@ sub main
         'tzname:s',
         'longitude:s',
         'latitude:s',
-        'get:s',
+        'get:s@',
     );
 
     # check validity of arguments
