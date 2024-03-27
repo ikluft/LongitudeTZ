@@ -231,9 +231,7 @@ sub main
             $result = do_tz_op(\%opts, TimeZone::Solar->new( longitude => $opts{longitude}));
         }
     }
-
-    # TODO
-    croak "fall through";
+    return;
 }
 
 # exception-catching wrapper
