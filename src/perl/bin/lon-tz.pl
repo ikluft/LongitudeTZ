@@ -29,6 +29,17 @@ use File::Basename;
 
 # constants
 Readonly::Scalar my $progname => basename( $0 );
+Readonly::Hash my %field_code => (
+    longitude => sub { return $_[0]->longitude(); },
+    latitude => sub { return $_[0]->latitude(); },
+    name => sub { return $_[0]->name(); },
+    short_name => sub { return $_[0]->short_name(); },
+    last_name => sub { return $_[0]->last_name(); },
+    offset => sub { return $_[0]->offset(); },
+    offset_min => sub { return $_[0]->offset_min(); },
+    offset_sec => sub { return $_[0]->offset_sec(); },
+    is_utc => sub { return $_[0]->is_utc(); },
+);
 
 # debug flag
 my $debug = 0;
@@ -135,7 +146,14 @@ sub do_tz_op
         @fields = qw(long_name);
     }
 
-    # TODO
+    # process requested fields
+    foreach my $field ( @fields ) {
+        if ( exists $field_code{$field}) {
+            say $field_code{$field}->( $obj );
+        } else {
+            say ">>> undefined field $field";
+        }
+    }
     return;
 }
 
