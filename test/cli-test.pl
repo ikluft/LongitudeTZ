@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use utf8;
-use Carp;
+use Carp qw(croak);
 use Readonly;
 use Test::More;
 
@@ -29,9 +29,10 @@ sub is_valid_name
 # run a single validity test
 sub run_validity_test_lon
 {
-    my $lon = shift;
+    my ( $progpath, $lon ) = @_;
+
     foreach my $use_lon_tz ( 0 .. 1 ) {
-        my @params = ( longitude => $lon, use_lon_tz => $use_lon_tz );
+        my @params = ( progpath => $progpath, longitude => $lon, use_lon_tz => $use_lon_tz );
         my @tznames = cli_tz_names( @params );
         foreach my $name ( @tznames ) {
             ok( is_valid_name({ @params }, $name), "verified $name" );
@@ -43,18 +44,34 @@ sub run_validity_test_lon
 # check the DateTime::TimeZone recognizes the Solar times zones as valid
 sub run_validity_tests
 {
+    my $progpath = shift;
+
     foreach my $lon1 (qw( -180 -179.75 )) {
-        run_validity_test_lon($lon1);
+        run_validity_test_lon($progpath, $lon1);
     }
     for ( my $lon2 = -179 ; $lon2 <= 180 ; $lon2 += 30 ) {
-        run_validity_test_lon($lon2);
+        run_validity_test_lon($progpath, $lon2);
     }
     return;
 }
 
+#
 # main
+#
+
+# read CLI parameters to locate program to test
+if ( scalar @ARGV == 0 ){
+    say STDERR "usage: $0 program-name";
+    exit 1;
+}
+my $progpath = $ARGV[1];
+if ( not -f $progpath ) {
+    croak "file does not exist: $progpath"
+}
+
+# run tests
 plan tests => $total_tests;
 autoflush STDOUT 1;
-run_validity_tests();
+run_validity_tests( $progpath );
 
 
