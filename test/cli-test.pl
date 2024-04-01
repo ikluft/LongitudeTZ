@@ -17,12 +17,14 @@ Readonly::Scalar my $total_tests => 14 * 4;
 # use CLI to get timezone names from longitude tz parameters
 sub cli_tz_names
 {
+    my $params_ref = shift;
     # TODO
 }
 
 # check for valid timezone name for test to pass
 sub is_valid_name
 {
+    my ( $params_ref, $name ) = @_;
     # TODO
 }
 
@@ -32,10 +34,10 @@ sub run_validity_test_lon
     my ( $progpath, $lon ) = @_;
 
     foreach my $use_lon_tz ( 0 .. 1 ) {
-        my @params = ( progpath => $progpath, longitude => $lon, use_lon_tz => $use_lon_tz );
-        my @tznames = cli_tz_names( @params );
+        my %params = ( progpath => $progpath, longitude => $lon, use_lon_tz => $use_lon_tz );
+        my @tznames = cli_tz_names( \%params );
         foreach my $name ( @tznames ) {
-            ok( is_valid_name({ @params }, $name), "verified $name" );
+            ok( is_valid_name( \%params, $name), "verified $name" );
         }
     }
     return;
