@@ -14,18 +14,29 @@ Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE => qr((East|West)(0[0-9] | 1[0-2]))x;
 Readonly::Scalar my $TZSOLAR_ZONE_RE      => qr( $TZSOLAR_LON_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE )x;
 Readonly::Scalar my $total_tests => 14 * 4;
 
-# use CLI to get timezone names from longitude tz parameters
-sub cli_tz_names
+# use CLI to get timezone name from longitude tz parameters
+sub cli_tz_name
 {
     my $params_ref = shift;
-    # TODO
+    my $use_lon_tz = $params_ref->{use_lon_tz} // 0;
+    my $longitude = $params_ref->{longitude};
+
+    if ( $use_lon_tz ) {
+        # generate longitude-based tz name
+        return sprintf( "Lon%03d%1s", abs(int($longitude)), $longitude < 0 ? "W" : "E",);
+    } else {
+        # generate hour-based tz name
+        return sprintf( "%4s%02d",  $longitude < 0 ? "West" : "East", abs(int($longitude)));
+    }
 }
 
 # check for valid timezone name for test to pass
 sub is_valid_name
 {
     my ( $params_ref, $name ) = @_;
+    say STDERR "debug: testing for valid name: $name";
     # TODO
+    return 1;
 }
 
 # run a single validity test
@@ -35,7 +46,7 @@ sub run_validity_test_lon
 
     foreach my $use_lon_tz ( 0 .. 1 ) {
         my %params = ( progpath => $progpath, longitude => $lon, use_lon_tz => $use_lon_tz );
-        my @tznames = cli_tz_names( \%params );
+        my @tznames = cli_tz_name( \%params );
         foreach my $name ( @tznames ) {
             ok( is_valid_name( \%params, $name), "verified $name" );
         }
@@ -66,7 +77,7 @@ if ( scalar @ARGV == 0 ){
     say STDERR "usage: $0 program-name";
     exit 1;
 }
-my $progpath = $ARGV[1];
+my $progpath = $ARGV[0];
 if ( not -f $progpath ) {
     croak "file does not exist: $progpath"
 }
