@@ -35,8 +35,15 @@ sub is_valid_name
 {
     my ( $params_ref, $name ) = @_;
     say STDERR "debug: testing for valid name: $name";
-    # TODO
-    return 1;
+
+    # run CLI command to generate name and verify against expected valid name
+    my $progpath = $params_ref{progpath};
+    my $longitude = $params_ref$longitude};
+    my $use_lon_tz = $params_ref$use_lon_tz} // 0;
+    my $type_str = $use_lon_tz ? "longitude" : "hour";
+    my $output = qx($progpath --longitude=$longitude --type=$type_str);
+    chomp $output;
+    return $output eq $name;
 }
 
 # run a single validity test
