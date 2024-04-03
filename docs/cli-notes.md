@@ -54,6 +54,17 @@ Outside of polar regions (beyond 80 degrees north or south latitude), it has no 
 The latitude is optional. If provided and set to a value in the polar region, it will override the time zone to UTC
 as East00 in hour-based time zones or Lon000E in degree-based time zones.
 
+### --type
+
+    lon-tz --longitude=xxx.xxx --type=hour
+    lon-tz --longitude=xxx.xxx --type=longitude
+
+optionally sets the type of time zone to longitude or hour. The default is hour-wide time zones. --longitude may be abbreviated --lon.
+
+With --type=hour, time zones are East00 to East12 and West00 to West12.
+
+With --type=longitude, time zones are Lon000E to Lon180E and Lon000W to Lon180W.
+
 ### --get
 
     lon-tz --longitude=xxx.xxx --get=fieldname
