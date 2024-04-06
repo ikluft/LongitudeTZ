@@ -172,6 +172,7 @@ sub main
         'tzname:s',
         'longitude:s',
         'latitude:s',
+        'type:s',
         'get:s@',
     );
 
@@ -224,11 +225,26 @@ sub main
     }
 
     # if longitude was provided (latitude optional), generate time zone parameters
+    my $use_lon_tz = 0; # default to more common hour-based time zones rather than nice longitude-based tz
+    if ( exists $opts{type}) {
+        if ( $opts{type} eq "hour" ) {
+            $use_lon_tz = 0;
+        } elsif ( $opts{type} eq "longitude" ) {
+            $use_lon_tz = 1;
+        } else {
+            croak "unrecognized time zone type '".$opts{type}."'";
+        }
+    }
     if ( exists $opts{longitude}) {
         if ( exists $opts{latitude}) {
-            $result = do_tz_op(\%opts, TimeZone::Solar->new( longitude => $opts{longitude}, latitude => $opts{latitude}));
+            $result = do_tz_op(\%opts, TimeZone::Solar->new( longitude => $opts{longitude},
+                    latitude => $opts{latitude},
+                    use_lon_tz => $use_lon_tz
+                ));
         } else {
-            $result = do_tz_op(\%opts, TimeZone::Solar->new( longitude => $opts{longitude}));
+            $result = do_tz_op(\%opts, TimeZone::Solar->new( longitude => $opts{longitude},
+                    use_lon_tz => $use_lon_tz
+                ));
         }
     }
     return;
