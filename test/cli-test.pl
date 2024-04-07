@@ -12,7 +12,7 @@ Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
 Readonly::Scalar my $TZSOLAR_LON_ZONE_RE  => qr((Lon0[0-9][0-9][EW]) | (Lon1[0-7][0-9][EW]) | (Lon180[EW]))x;
 Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE => qr((East|West)(0[0-9] | 1[0-2]))x;
 Readonly::Scalar my $TZSOLAR_ZONE_RE      => qr( $TZSOLAR_LON_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE )x;
-Readonly::Scalar my $total_tests => 14 * 4;
+Readonly::Scalar my $total_tests => 14 * 2;
 
 # use CLI to get timezone name from longitude tz parameters
 sub cli_tz_name
@@ -43,7 +43,11 @@ sub is_valid_name
     my $type_str = $use_lon_tz ? "longitude" : "hour";
     my $output = qx($progpath --longitude=$longitude --type=$type_str);
     chomp $output;
-    return $output eq $name;
+    my $result = ( $output eq $name );
+    if ( not $result ) {
+        say STDERR "debug: failed to match $output vs $name";
+    }
+    return $result;
 }
 
 # run a single validity test
