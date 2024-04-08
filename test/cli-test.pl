@@ -41,7 +41,7 @@ sub is_valid_name
     my $longitude = $params_ref->{longitude};
     my $use_lon_tz = $params_ref->{use_lon_tz} // 0;
     my $type_str = $use_lon_tz ? "longitude" : "hour";
-    my $output = qx($progpath --longitude=$longitude --type=$type_str);
+    my $output = qx($progpath --longitude=$longitude --type=$type_str --get=short_name);
     chomp $output;
     my $result = ( $output eq $name );
     if ( not $result ) {
