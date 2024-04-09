@@ -26,7 +26,7 @@ sub cli_tz_name
         return sprintf( "Lon%03d%1s", abs(int($longitude)), $longitude < 0 ? "W" : "E",);
     } else {
         # generate hour-based tz name
-        return sprintf( "%4s%02d",  $longitude < 0 ? "West" : "East", abs(int($longitude)));
+        return sprintf( "%4s%02d",  $longitude < 0 ? "West" : "East", abs(int(($longitude + 0.5) / 15)));
     }
 }
 
