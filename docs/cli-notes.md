@@ -71,6 +71,8 @@ With --type=longitude, time zones are Lon000E to Lon180E and Lon000W to Lon180W.
 
 determines a field of data to output from the specified time zone.
 
+The --get parameter may be combined with other time zone parameters in order to extract data from any of those settings.
+
 The allowed field names are
 
 * longitude: report the longitude parameter which was used to make the time zone, or the centerline of the time zone if it was created by name
