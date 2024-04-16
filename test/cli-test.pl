@@ -12,23 +12,44 @@ Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
 Readonly::Scalar my $TZSOLAR_LON_ZONE_RE  => qr((Lon0[0-9][0-9][EW]) | (Lon1[0-7][0-9][EW]) | (Lon180[EW]))x;
 Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE => qr((East|West)(0[0-9] | 1[0-2]))x;
 Readonly::Scalar my $TZSOLAR_ZONE_RE      => qr( $TZSOLAR_LON_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE )x;
+Readonly::Scalar my $PRECISION_DIGITS     => 6;                                # max decimal digits of precision
+Readonly::Scalar my $PRECISION_FP         => ( 10**-$PRECISION_DIGITS ) / 2.0; # 1/2 width of floating point equality
 Readonly::Scalar my $total_tests          => 14 * 2;
+
+# generate longitude-based tz name
+sub cli_tz_name_lon
+{
+    my $params_ref = shift;
+    my $longitude  = $params_ref->{longitude};
+
+    # TODO
+    return sprintf( "Lon%03d%1s", abs( int($longitude) ), $longitude < 0 ? "W" : "E", );
+}
+
+# generate hour-based tz name
+sub cli_tz_name_hour
+{
+    my $params_ref = shift;
+    my $longitude  = $params_ref->{longitude};
+
+    # TODO
+    return sprintf( "%4s%02d", $longitude < 0 ? "West" : "East", abs( int( ( $longitude + 0.5 ) / 15 ) ) );
+}
 
 # use CLI to get timezone name from longitude tz parameters
 sub cli_tz_name
 {
     my $params_ref = shift;
     my $use_lon_tz = $params_ref->{use_lon_tz} // 0;
-    my $longitude  = $params_ref->{longitude};
 
     if ($use_lon_tz) {
 
         # generate longitude-based tz name
-        return sprintf( "Lon%03d%1s", abs( int($longitude) ), $longitude < 0 ? "W" : "E", );
+        return cli_tz_name_lon( $params_ref );
     } else {
 
         # generate hour-based tz name
-        return sprintf( "%4s%02d", $longitude < 0 ? "West" : "East", abs( int( ( $longitude + 0.5 ) / 15 ) ) );
+        return cli_tz_name_hour( $params_ref );
     }
 }
 
