@@ -12,9 +12,16 @@ Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
 Readonly::Scalar my $TZSOLAR_LON_ZONE_RE  => qr((Lon0[0-9][0-9][EW]) | (Lon1[0-7][0-9][EW]) | (Lon180[EW]))x;
 Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE => qr((East|West)(0[0-9] | 1[0-2]))x;
 Readonly::Scalar my $TZSOLAR_ZONE_RE      => qr( $TZSOLAR_LON_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE )x;
-Readonly::Scalar my $PRECISION_DIGITS     => 6;                                # max decimal digits of precision
-Readonly::Scalar my $PRECISION_FP         => ( 10**-$PRECISION_DIGITS ) / 2.0; # 1/2 width of floating point equality
-Readonly::Scalar my $total_tests          => 14 * 2;
+Readonly::Scalar my $PRECISION_DIGITS     => 6;                                   # max decimal digits of precision
+Readonly::Scalar my $PRECISION_FP         => ( 10**-$PRECISION_DIGITS ) / 2.0;    # 1/2 width of floating point equality
+Readonly::Scalar my $MAX_DEGREES          => 360;                                 # maximum degrees = 360
+Readonly::Scalar my $MAX_LONGITUDE_INT    => $MAX_DEGREES / 2;                    # min/max longitude in integer = 180
+Readonly::Scalar my $MAX_LONGITUDE_FP     => $MAX_DEGREES / 2.0;                  # min/max longitude in float = 180.0
+Readonly::Scalar my $MAX_LATITUDE_FP      => $MAX_DEGREES / 4.0;                  # min/max latitude in float = 90.0
+Readonly::Scalar my $POLAR_UTC_AREA       => 10;                                  # latitude near poles to use UTC
+Readonly::Scalar my $LIMIT_LATITUDE       => $MAX_LATITUDE_FP - $POLAR_UTC_AREA;  # max latitude for solar time zones
+Readonly::Scalar my $MINUTES_PER_DEGREE_LON => 4;                                 # minutes per degree longitude
+Readonly::Scalar my $total_tests            => 14 * 2;
 
 # generate longitude-based tz name
 sub cli_tz_name_lon
@@ -42,14 +49,21 @@ sub cli_tz_name
     my $params_ref = shift;
     my $use_lon_tz = $params_ref->{use_lon_tz} // 0;
 
+    # process high latitudes
+    if ( exists $params_ref->{latitude} ) {
+        if ( abs( $param_ref->{latitude} ) >= $LIMIT_LATITUDE - $PRECISION_FP ) {
+            return $use_lon_tz ? "Lon000E" : "East00";
+        }
+    }
+
     if ($use_lon_tz) {
 
         # generate longitude-based tz name
-        return cli_tz_name_lon( $params_ref );
+        return cli_tz_name_lon($params_ref);
     } else {
 
         # generate hour-based tz name
-        return cli_tz_name_hour( $params_ref );
+        return cli_tz_name_hour($params_ref);
     }
 }
 
