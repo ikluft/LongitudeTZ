@@ -51,7 +51,7 @@ sub cli_tz_name
 
     # process high latitudes
     if ( exists $params_ref->{latitude} ) {
-        if ( abs( $param_ref->{latitude} ) >= $LIMIT_LATITUDE - $PRECISION_FP ) {
+        if ( abs( $params_ref->{latitude} ) >= $LIMIT_LATITUDE - $PRECISION_FP ) {
             return $use_lon_tz ? "Lon000E" : "East00";
         }
     }
