@@ -1,9 +1,12 @@
 # Longitude-based Time Zones
 Many people are tired of changing their clocks twice a year for daylight time. DST is an antiquated tradition [which we now know doesn't do any good](https://www.webmd.com/sleep-disorders/news/20211105/harmful-effects-of-daylight-savings). Anyone can look up sunrise and sunset times for events that need to be scheduled around daylight.
 
-The only way we'll have the choice to opt-out of Daylight Saving Time is if there's an alternative standard allowing us to stay on Standard Time. This is intended to make such an alternative. I'm running the idea up the flagpole. We'll see how many salutes it gets. Meanwhile this project is making softwarein various programming languages toward enabling the possibility.
+While there have been proposals for regional and national governments to repeal Daylight Saving Time, it hasn't made progress. One way to have the choice to opt-out of Daylight Saving Time is if there's an alternative standard allowing us to stay on Standard Time.
 
-National and regional governments continue to cling to daylight saving time partly because almost everyone else has such a standard. In this age where our computers and cell phones are integral to scheduling, we really only need a de-facto standard. _It is possible to just stop using DST_, and let our computers convert the times to and from others who continue to use DST. Fortunately, there are standards we can build upon.
+This is intended to make such an alternative. I'm running the idea up the flagpole. Meanwhile this project is making software in various programming languages toward enabling the possibility.
+
+National and regional governments continue to cling to Daylight Saving Time mainly out of habit - this is how things have been done. In this age where our computers and cell phones are integral to scheduling, we really only need a de-facto standard. _It is possible to just stop using DST_, and let our computers convert the times to and from others who continue to use DST. Fortunately, there are standards we can build upon.
+
 * Lines of longitude are a well-established standard.
 * Ships at sea use "nautical time" based on time zones 15 degrees of longitude wide.
 * Time zones (without daylight saving offsets) are based on average solar noon at the Prime Meridian. Standard Time in each time zone lines up with average solar noon on the meridian at the center of each time zone, at 15-degree of longitude increments.
@@ -18,6 +21,7 @@ The project also makes another set of overlay time zones the width of 1 degree o
 
 ## Implementations
 Solar TimeZone libraries implementations in different programming languages:
+
 * [Perl](https://github.com/ikluft/LongitudeTZ/tree/main/src/perl/) as _TimeZone::Solar_ module
   * [![Perl](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml)
   * available on MetaCPAN: https://metacpan.org/pod/TimeZone::Solar
@@ -28,6 +32,7 @@ Solar TimeZone libraries implementations in different programming languages:
 
 ## The Solar Time Zones Definition
 The Solar time zones definition includes the following rules.
+
 * There are 24 hour-based Solar Time Zones, named West12, West11, West10, West09 through East12. East00 is equivalent to UTC. West00 is an alias for East00.
   * Hour-based time zones are spaced in one-hour time increments, or 15 degrees of longitude.
   * Each hour-based time zone is centered on a meridian at a multiple of 15 degrees. In positive and negative integers, these are 0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165 and 180.
