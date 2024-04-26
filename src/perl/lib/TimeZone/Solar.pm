@@ -2,7 +2,7 @@
 # ABSTRACT: local solar timezone lookup and utilities including DateTime compatibility
 # part of Perl implementation of solar timezones library
 #
-# Copyright © 2020-2022 Ian Kluft. This program is free software; you can
+# Copyright © 2020-2024 Ian Kluft. This program is free software; you can
 # redistribute it and/or modify it under the terms of the GNU General Public
 # License Version 3. See  https://www.gnu.org/licenses/gpl-3.0-standalone.html
 
