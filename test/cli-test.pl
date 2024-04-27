@@ -23,6 +23,17 @@ Readonly::Scalar my $LIMIT_LATITUDE       => $MAX_LATITUDE_FP - $POLAR_UTC_AREA;
 Readonly::Scalar my $MINUTES_PER_DEGREE_LON => 4;                                 # minutes per degree longitude
 Readonly::Scalar my $total_tests            => 14 * 2;
 
+# build string of parameter keys & values for debugging
+sub params_str
+{
+    my $params_ref = shift;
+    my @result;
+    foreach my $key ( sort keys %$params_ref ) {
+        push @result, "$key=" . $params_ref->{$key};
+    }
+    return join ", ", @result;
+}
+
 # generate longitude-based tz name
 sub cli_tz_name_lon
 {
@@ -71,7 +82,8 @@ sub cli_tz_name
 sub is_valid_name
 {
     my ( $params_ref, $name ) = @_;
-    say STDERR "debug: testing for valid name: $name";
+    say STDERR "debug: testing for valid name: $name ("
+        . params_str( $params_ref ) . ")";
 
     # run CLI command to generate name and verify against expected valid name
     my $progpath   = $params_ref->{progpath};
