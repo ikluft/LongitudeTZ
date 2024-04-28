@@ -5,6 +5,7 @@ use warnings;
 use utf8;
 use Carp qw(croak);
 use Readonly;
+use Getopt::Long;
 use Test::More;
 
 # constants
@@ -22,6 +23,19 @@ Readonly::Scalar my $POLAR_UTC_AREA       => 10;                                
 Readonly::Scalar my $LIMIT_LATITUDE       => $MAX_LATITUDE_FP - $POLAR_UTC_AREA;  # max latitude for solar time zones
 Readonly::Scalar my $MINUTES_PER_DEGREE_LON => 4;                                 # minutes per degree longitude
 Readonly::Scalar my $total_tests            => 14 * 2;
+
+# globals
+my $debug = 0;
+
+# print debugging statements if debugging is enabled
+sub debug
+{
+    my @values = @_;
+    if ( $debug ) {
+        say STDERR "debug: ".join( "", @values );
+    }
+    return;
+}
 
 # build string of parameter keys & values for debugging
 sub params_str
@@ -82,7 +96,7 @@ sub cli_tz_name
 sub is_valid_name
 {
     my ( $params_ref, $name ) = @_;
-    say STDERR "debug: testing for valid name: $name ("
+    debug "testing for valid name: $name ("
         . params_str( $params_ref ) . ")";
 
     # run CLI command to generate name and verify against expected valid name
@@ -95,7 +109,7 @@ sub is_valid_name
     my $result = ( $output eq $name );
 
     if ( not $result ) {
-        say STDERR "debug: failed to match $output vs $name";
+        debug "failed to match $output vs $name";
     }
     return $result;
 }
@@ -134,6 +148,7 @@ sub run_validity_tests
 #
 
 # read CLI parameters to locate program to test
+GetOptions ( "debug" => \$debug );
 if ( scalar @ARGV == 0 ) {
     say STDERR "usage: $0 program-name";
     exit 1;
