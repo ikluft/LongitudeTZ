@@ -53,6 +53,14 @@ sub cli_tz_name_lon
 {
     my $params_ref = shift;
     my $longitude  = $params_ref->{longitude};
+    my $tz_degree_width = 1;
+
+    # special case: half-wide tz at positive side of solar date line (180° longitude)
+    if (( $longitude >= $MAX_LONGITUDE_INT - $tz_degree_width / 2.0 - $PRECISION_FP )
+        or ( $longitude <= -$MAX_LONGITUDE_INT + $PRECISION_FP ))
+    {
+        return "Lon180E";
+    }
 
     # TODO
     return sprintf( "Lon%03d%1s", abs( int($longitude) ), $longitude < 0 ? "W" : "E", );
@@ -63,6 +71,7 @@ sub cli_tz_name_hour
 {
     my $params_ref = shift;
     my $longitude  = $params_ref->{longitude};
+    my $tz_degree_width = 15;
 
     # TODO
     return sprintf( "%4s%02d", $longitude < 0 ? "West" : "East", abs( int( ( $longitude + 0.5 ) / 15 ) ) );
