@@ -302,7 +302,7 @@ sub _tz_params
         return \%params;
     }
 
-    # handle special case of half-wide tz at negativ< side of solar date line (180° longitude)
+    # handle special case of half-wide tz at negative side of solar date line (180° longitude)
     if ( $params{longitude} <= -_const("MAX_LONGITUDE_INT") + $tz_degree_width / 2.0 + _const("PRECISION_FP") ) {
         my $tz_name = sprintf "%s%0*d%s",
             _tz_prefix( $use_lon_tz, -1 ),
