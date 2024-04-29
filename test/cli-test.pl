@@ -62,6 +62,11 @@ sub cli_tz_name_lon
         return "Lon180E";
     }
 
+    # special case: half-wide tz at negative side of solar date line (180° longitude)
+    if ( $longitude <= -$MAX_LONGITUDE_INT + $tz_degree_width / 2.0 + $PRECISION_FP ) {
+        return "Lon180W";
+    }
+
     # TODO
     return sprintf( "Lon%03d%1s", abs( int($longitude) ), $longitude < 0 ? "W" : "E", );
 }
