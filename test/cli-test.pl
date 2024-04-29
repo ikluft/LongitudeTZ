@@ -78,6 +78,18 @@ sub cli_tz_name_hour
     my $longitude  = $params_ref->{longitude};
     my $tz_degree_width = 15;
 
+    # special case: half-wide tz at positive side of solar date line (180° longitude)
+    if (( $longitude >= $MAX_LONGITUDE_INT - $tz_degree_width / 2.0 - $PRECISION_FP )
+        or ( $longitude <= -$MAX_LONGITUDE_INT + $PRECISION_FP ))
+    {
+        return "East12";
+    }
+
+    # special case: half-wide tz at negative side of solar date line (180° longitude)
+    if ( $longitude <= -$MAX_LONGITUDE_INT + $tz_degree_width / 2.0 + $PRECISION_FP ) {
+        return "West12";
+    }
+
     # TODO
     return sprintf( "%4s%02d", $longitude < 0 ? "West" : "East", abs( int( ( $longitude + 0.5 ) / 15 ) ) );
 }
