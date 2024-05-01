@@ -109,6 +109,28 @@ The Solar time zones definition includes the following rules.
 - When converting coordinates to a time zone, each time zone includes its boundary meridian at the lower end of its absolute value, which is in the direction toward 0 (UTC). The exception is at exactly ±180.0 degrees, which would be excluded from both sides by this rule. That case is arbitrarily set as +180 just to pick one.
 - The category "Solar" is used for the longer names for these time zones. The names listed above are the short names. The full long name of each time zone is prefixed with "Solar/" such as "Solar/East00" or "Solar/Lon000E".
 
+# INSTALLATION
+
+TimeZone::Solar can be installed from CPAN. See https://metacpan.org/pod/TimeZone::Solar for the source code.
+
+For a development environment, install Dist::Zilla. Additionally, installing Perl::Critic is optional but recommended for building and testing.
+
+On Debian-based systems they can be installed with this command:
+
+	sudo apt install libdist-zilla-perl libperl-critic-perl
+
+On RPM-based systems (Fedora, Red Hat and CentOS derivatives):
+
+	sudo dnf install perl-Dist-Zilla perl-Perl-Critic
+
+Then run:
+
+	dzil authordeps --missing | cpanm
+	dzil listdeps --missing | cpanm
+	dzil build
+	dzil test
+	dzil install
+
 # FUNCTIONS AND METHODS
 
 ## Class methods
