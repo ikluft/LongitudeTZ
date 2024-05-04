@@ -64,4 +64,4 @@ jobs:
           dzil install
       - name: Run black box tests
         run: |
-          prove test/cli-test-perl.t
+          LONGITUDE_TZ_TEST_DEBUG=1 prove test/cli-test-perl.t
