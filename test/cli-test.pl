@@ -188,3 +188,4 @@ if ( not -f $progpath ) {
 plan tests => $total_tests;
 autoflush STDOUT 1;
 run_validity_tests($progpath);
+exit 0;
