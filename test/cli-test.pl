@@ -7,6 +7,7 @@ use Carp qw(croak);
 use Readonly;
 use Getopt::Long;
 use Test::More;
+use IPC::Run;
 
 # constants
 Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
@@ -118,6 +119,25 @@ sub cli_tz_name
     }
 }
 
+# run external test program and capture output
+sub run_prog
+{
+    my $params_ref = shift;
+    my $progpath   = $params_ref->{progpath};
+    my $longitude  = $params_ref->{longitude};
+    my $use_lon_tz = $params_ref->{use_lon_tz} // 0;
+    my $type_str   = $use_lon_tz ? "longitude" : "hour";
+
+    # build command to run the program
+    my @prog_cmd = ( $progpath, "--longitude=$longitude", "--type=$type_str", "--get=short_name" );
+
+    # run the program, capture stdout and stderr
+    my ( $out, $err );
+    my $res = IPC::Run::run \@prog_cmd, \undef, \$out, \$err, IPC::Run::timeout( 10 );
+    chomp $out;
+    return { res => $res, out => $out, err => $err };
+}
+
 # check for valid timezone name for test to pass
 sub is_valid_name
 {
@@ -126,16 +146,20 @@ sub is_valid_name
         . params_str( $params_ref ) . ")";
 
     # run CLI command to generate name and verify against expected valid name
-    my $progpath   = $params_ref->{progpath};
-    my $longitude  = $params_ref->{longitude};
-    my $use_lon_tz = $params_ref->{use_lon_tz} // 0;
-    my $type_str   = $use_lon_tz ? "longitude" : "hour";
-    my $output     = qx($progpath --longitude=$longitude --type=$type_str --get=short_name);
-    chomp $output;
-    my $result = ( $output eq $name );
+    my $prog_result = run_prog( $params_ref );
+    my $res_code    = $prog_result->{res};
+    my $output      = $prog_result->{out};
+    my $stderr      = $prog_result->{err};
+    my $result      = ( $output eq $name );
 
+    if ( length ( $stderr // "" ) > 0 ) {
+        say STDERR "error from $name command: $stderr";
+    }
+    if ( not $res_code ) {
+        debug "command run failed for $name test";
+    }
     if ( not $result ) {
-        debug "failed to match $output vs $name";
+        debug "failed test - got $output, expected $name";
     }
     return $result;
 }
