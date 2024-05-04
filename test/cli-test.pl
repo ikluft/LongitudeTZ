@@ -68,7 +68,7 @@ sub cli_tz_name_lon
     }
 
     # TODO
-    return sprintf( "Lon%03d%1s", abs( int($longitude) ), $longitude < 0 ? "W" : "E", );
+    return sprintf( "Lon%03d%1s", int( abs( $longitude ) + 0.5 + $PRECISION_FP ), $longitude < 0 ? "W" : "E" );
 }
 
 # generate hour-based tz name
@@ -91,7 +91,7 @@ sub cli_tz_name_hour
     }
 
     # TODO
-    return sprintf( "%4s%02d", $longitude < 0 ? "West" : "East", abs( int( ( $longitude + 0.5 ) / 15 ) ) );
+    return sprintf( "%4s%02d", $longitude < 0 ? "West" : "East", int( abs( $longitude ) / 15 + 0.5 + $PRECISION_FP ) );
 }
 
 # use CLI to get timezone name from longitude tz parameters
