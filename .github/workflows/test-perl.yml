@@ -57,7 +57,10 @@ jobs:
         if: ${{ failure() && startsWith( matrix.runner, 'macos-')}}
         run: |
            cat  /Users/runner/.cpanm/work/*/build.log
-      - name: Run tests
+      - name: Run Perl tests
         run: |
           cd src/perl
           dzil test --release
+      - name: Run black box tests
+        run: |
+          perl test/cli-test.pl src/perl/bin/lon-tz.pl
