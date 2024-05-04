@@ -61,6 +61,7 @@ jobs:
         run: |
           cd src/perl
           dzil test --release
+          dzil install
       - name: Run black box tests
         run: |
           prove test/cli-test-perl.t
