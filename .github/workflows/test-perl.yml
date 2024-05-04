@@ -63,4 +63,4 @@ jobs:
           dzil test --release
       - name: Run black box tests
         run: |
-          perl test/cli-test.pl src/perl/bin/lon-tz.pl
+          prove test/cli-test-perl.t
