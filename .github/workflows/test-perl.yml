@@ -63,7 +63,5 @@ jobs:
           dzil test --release
           dzil install
       - name: Run black box tests
-        env:
-          LONGITUDE_TZ_TEST_DEBUG: 1
         run: |
           prove test/cli-test-perl.t
