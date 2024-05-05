@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use utf8;
 use Carp qw(croak);
+use English;
 use Readonly;
 use Getopt::Long;
 use Test::More;
@@ -130,6 +131,9 @@ sub run_prog
 
     # build command to run the program
     my @prog_cmd = ( $progpath, "--longitude=$longitude", "--type=$type_str", "--get=short_name" );
+    if ( $OSNAME eq "MSWin32" ) {
+        unshift @prog_cmd, "perl";  # Windows can't use shebang hints, needs help finding interpreter
+    }
 
     # run the program, capture stdout and stderr
     my ( $out, $err );
