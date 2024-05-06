@@ -10,12 +10,49 @@ usage:
     lon_tz.py [--longitude=nnn.nn] [--latitude=nnn.nn] fieldname [...]
 """
 
+import sys
 import argparse
+from importlib.metadata import version, PackageNotFoundError
+from pathlib import Path
+import lib_programname
+from timezone_solar import __version__
+
+# type alias for error strings
+ErrStr = str
+
+# package and program name
+PKG_NAME = "timezone_solar"
+PROG_NAME = (
+    Path(sys.modules["__main__"].__file__).name
+    if hasattr(sys.modules["__main__"], "__file__")
+    else lib_programname.get_path_executed_script().name
+)
+
+
+def _get_version():
+    """display version"""
+    if __version__ is not None:
+        ver = __version__
+    else:
+        try:
+            ver = f"{PKG_NAME} " + str(version(PKG_NAME))
+        except PackageNotFoundError:
+            ver = f"{PKG_NAME} version not available in development environment"
+    return ver
 
 
 def _gen_arg_parser() -> argparse.ArgumentParser:
     """generate argparse parser hierarchy"""
+
+    # define global parser
+    top_parser = argparse.ArgumentParser(
+        prog=PROG_NAME,
+        description="command-line interface for LongitudeTZ tzdata and black box testing",
+    )
+    top_parser.add_argument("--version", action="version", version=_get_version())
+
     # TODO
+    return top_parser
 
 
 def main():
@@ -41,6 +78,7 @@ def main():
     if err is not None:
         top_parser.exit(status=1, message=err + "\n")
     top_parser.exit()
+
 
 if __name__ == "__main__":
     sys.exit(main())
