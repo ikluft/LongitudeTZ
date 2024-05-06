@@ -17,7 +17,6 @@ my $perl_path = $Config{perlpath};
 
 # run black box test command
 exec $perl_path $perl_path,
-    "-I".$tree_root."/src/perl",
     "$bin_dir/cli-test.pl",
     ( $debug ? "--debug" : ()),
     "$tree_root/src/perl/bin/lon-tz.pl";
