@@ -28,15 +28,12 @@ jobs:
         with:
           perl-version: ${{ matrix.perl }}
           distribution: ${{ ( startsWith( matrix.runner, 'windows-' ) && 'strawberry' ) || 'default' }}
+          install-modules-with: cpanm
+          install-modules: Dist::Zilla Test::Pod Pod::Markdown IPC::Run
       - name: Show Perl Version
         run: |
           perl -v
-      - name: Install Dist::Zilla
-        run: |
-          cd src/perl
           cpanm -v
-          cpanm --dev --notest ExtUtils::MakeMaker~'>= 7.65_02'  # use dev release with fix for spurious errors
-          cpanm --notest Dist::Zilla Test::Pod Pod::Markdown IPC::Run
           dzil --version
       - name: Install Modules
         run: |

@@ -29,6 +29,7 @@ Readonly::Scalar my $debug_mode => ( $ENV{TZSOLAR_DEBUG} // 0 ) ? 1 : 0;
 # constants
 ## no critic ( Modules::ProhibitMultiplePackages )
 package TimeZone::Solar::Constant {
+
     use Carp qw(croak);
     Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
     Readonly::Scalar my $TZSOLAR_LON_ZONE_RE  => qr((Lon0[0-9][0-9][EW]) | (Lon1[0-7][0-9][EW]) | (Lon180[EW]))x;
