@@ -168,7 +168,7 @@ sub main
     my $res = GetOptions ( \%opts,
         'debug',
         'version|v',
-        'tzfile|tzdata:s',
+        'tzfile|tzdata',
         'tzname:s',
         'longitude:s',
         'latitude:s',
