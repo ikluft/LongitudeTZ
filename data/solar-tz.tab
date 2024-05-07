@@ -1,102 +1,102 @@
-# Solar Time by hourly increment: - 12
+# Solar Time by hourly increment: -12
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar-12	-12:00	-	Solar-12
+Zone	Solar/West12	-12:00	-	West12
 
-# Solar Time by hourly increment: - 11
+# Solar Time by hourly increment: -11
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar-11	-11:00	-	Solar-11
+Zone	Solar/West11	-11:00	-	West11
 
-# Solar Time by hourly increment: - 10
+# Solar Time by hourly increment: -10
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar-10	-10:00	-	Solar-10
+Zone	Solar/West10	-10:00	-	West10
 
-# Solar Time by hourly increment: - 9
+# Solar Time by hourly increment: -9
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar-09	-9:00	-	Solar-09
+Zone	Solar/West09	-9:00	-	West09
 
-# Solar Time by hourly increment: - 8
+# Solar Time by hourly increment: -8
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar-08	-8:00	-	Solar-08
+Zone	Solar/West08	-8:00	-	West08
 
-# Solar Time by hourly increment: - 7
+# Solar Time by hourly increment: -7
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar-07	-7:00	-	Solar-07
+Zone	Solar/West07	-7:00	-	West07
 
-# Solar Time by hourly increment: - 6
+# Solar Time by hourly increment: -6
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar-06	-6:00	-	Solar-06
+Zone	Solar/West06	-6:00	-	West06
 
-# Solar Time by hourly increment: - 5
+# Solar Time by hourly increment: -5
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar-05	-5:00	-	Solar-05
+Zone	Solar/West05	-5:00	-	West05
 
-# Solar Time by hourly increment: - 4
+# Solar Time by hourly increment: -4
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar-04	-4:00	-	Solar-04
+Zone	Solar/West04	-4:00	-	West04
 
-# Solar Time by hourly increment: - 3
+# Solar Time by hourly increment: -3
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar-03	-3:00	-	Solar-03
+Zone	Solar/West03	-3:00	-	West03
 
-# Solar Time by hourly increment: - 2
+# Solar Time by hourly increment: -2
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar-02	-2:00	-	Solar-02
+Zone	Solar/West02	-2:00	-	West02
 
-# Solar Time by hourly increment: - 1
+# Solar Time by hourly increment: -1
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar-01	-1:00	-	Solar-01
+Zone	Solar/West01	-1:00	-	West01
 
-# Solar Time by hourly increment: + 0
+# Solar Time by hourly increment: +0
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+00	+0:00	-	Solar+00
+Zone	Solar/East00	+0:00	-	East00
 
-# Solar Time by hourly increment: + 1
+# Solar Time by hourly increment: +1
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+01	+1:00	-	Solar+01
+Zone	Solar/East01	+1:00	-	East01
 
-# Solar Time by hourly increment: + 2
+# Solar Time by hourly increment: +2
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+02	+2:00	-	Solar+02
+Zone	Solar/East02	+2:00	-	East02
 
-# Solar Time by hourly increment: + 3
+# Solar Time by hourly increment: +3
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+03	+3:00	-	Solar+03
+Zone	Solar/East03	+3:00	-	East03
 
-# Solar Time by hourly increment: + 4
+# Solar Time by hourly increment: +4
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+04	+4:00	-	Solar+04
+Zone	Solar/East04	+4:00	-	East04
 
-# Solar Time by hourly increment: + 5
+# Solar Time by hourly increment: +5
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+05	+5:00	-	Solar+05
+Zone	Solar/East05	+5:00	-	East05
 
-# Solar Time by hourly increment: + 6
+# Solar Time by hourly increment: +6
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+06	+6:00	-	Solar+06
+Zone	Solar/East06	+6:00	-	East06
 
-# Solar Time by hourly increment: + 7
+# Solar Time by hourly increment: +7
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+07	+7:00	-	Solar+07
+Zone	Solar/East07	+7:00	-	East07
 
-# Solar Time by hourly increment: + 8
+# Solar Time by hourly increment: +8
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+08	+8:00	-	Solar+08
+Zone	Solar/East08	+8:00	-	East08
 
-# Solar Time by hourly increment: + 9
+# Solar Time by hourly increment: +9
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+09	+9:00	-	Solar+09
+Zone	Solar/East09	+9:00	-	East09
 
-# Solar Time by hourly increment: + 10
+# Solar Time by hourly increment: +10
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+10	+10:00	-	Solar+10
+Zone	Solar/East10	+10:00	-	East10
 
-# Solar Time by hourly increment: + 11
+# Solar Time by hourly increment: +11
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+11	+11:00	-	Solar+11
+Zone	Solar/East11	+11:00	-	East11
 
-# Solar Time by hourly increment: + 12
+# Solar Time by hourly increment: +12
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
-Zone	Solar/Solar+12	+12:00	-	Solar+12
+Zone	Solar/East12	+12:00	-	East12
 
 # Solar Time by degree of longitude: 180 W
 # Zone	NAME		STDOFF	RULES	FORMAT	[UNTIL]
