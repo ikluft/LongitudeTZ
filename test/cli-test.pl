@@ -9,6 +9,8 @@ use Readonly;
 use Getopt::Long;
 use Test::More;
 use IPC::Run;
+use FindBin qw($Bin);
+use File::Slurp;
 
 # constants
 Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
@@ -24,7 +26,10 @@ Readonly::Scalar my $MAX_LATITUDE_FP      => $MAX_DEGREES / 4.0;                
 Readonly::Scalar my $POLAR_UTC_AREA       => 10;                                  # latitude near poles to use UTC
 Readonly::Scalar my $LIMIT_LATITUDE       => $MAX_LATITUDE_FP - $POLAR_UTC_AREA;  # max latitude for solar time zones
 Readonly::Scalar my $MINUTES_PER_DEGREE_LON => 4;                                 # minutes per degree longitude
-Readonly::Scalar my $total_tests            => 14 * 2;
+Readonly::Scalar my $TZDATA_REF_FILE        => $Bin . "/solar-tz.tab";            # tzdata reference file
+Readonly::Scalar my $SOLAR_TZ_TEST_PAIRS    => 14;
+Readonly::Scalar my $TZDATA_TESTS           => 3;
+Readonly::Scalar my $TOTAL_TESTS            => $SOLAR_TZ_TEST_PAIRS * 2 + $TZDATA_TESTS;
 
 # globals
 my $debug = 0;
@@ -142,6 +147,24 @@ sub run_prog
     return { res => $res, out => $out, err => $err };
 }
 
+# run external test program and capture tzdata output
+sub run_prog_tzdata
+{
+    my $params_ref = shift;
+    my $progpath   = $params_ref->{progpath};
+
+    # build command to run the program
+    my @prog_cmd = ( $progpath, "--tzdata" );
+    if ( $OSNAME eq "MSWin32" ) {
+        unshift @prog_cmd, "perl";  # Windows can't use shebang hints, needs help finding interpreter
+    }
+
+    # run the program, capture stdout and stderr
+    my ( $out, $err );
+    my $res = IPC::Run::run \@prog_cmd, \undef, \$out, \$err, IPC::Run::timeout( 10 );
+    return { res => $res, out => $out, err => $err };
+}
+
 # check for valid timezone name for test to pass
 sub is_valid_name
 {
@@ -197,6 +220,24 @@ sub run_validity_tests
     return;
 }
 
+# check tzdata output against reference file
+sub run_tzdata_test
+{
+    my $progpath = shift;
+    my $ref_tzdata_text = File::Slurp::read_file( $TZDATA_REF_FILE );
+
+    # run CLI command to generate name and verify against expected valid name
+    my %params  = ( progpath => $progpath );
+    my $prog_result = run_prog_tzdata( \%params );
+    my $res_code    = $prog_result->{res};
+    my $output      = $prog_result->{out};
+    my $stderr      = $prog_result->{err};
+
+    is( $res_code, 1, "tzdata command error code: expect success" );
+    is( $output, $ref_tzdata_text, "tzdata output: expect reference file content" );
+    is( $stderr, "", "tzdata stderr: expect empty" );
+}
+
 #
 # main
 #
@@ -213,7 +254,8 @@ if ( not -f $progpath ) {
 }
 
 # run tests
-plan tests => $total_tests;
+plan tests => $TOTAL_TESTS;
 autoflush STDOUT 1;
 run_validity_tests($progpath);
+run_tzdata_test($progpath);
 exit 0;
