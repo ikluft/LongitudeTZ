@@ -182,6 +182,7 @@ def _gen_arg_parser() -> argparse.ArgumentParser:
     excl_group.add_argument(
         "--tzfile",
         "--tzdata",
+        action=argparse.BooleanOptionalAction,
         help="generate solar time zones tzdata text",
     )
 
@@ -189,6 +190,19 @@ def _gen_arg_parser() -> argparse.ArgumentParser:
     excl_group.add_argument(
         "--longitude",
         type=float,
+        help="longitude for solar time zone (required when not using --tzfile)",
+    )
+
+    # parameters for timezone_solar
+    top_parser.add_argument(
+        "--latitude",
+        type=float,
+        help="latitude for solar time zone (optional)",
+    )
+    top_parser.add_argument(
+        "--type",
+        choices=['hour', 'longitude'],
+        help="solar time zone type: 'hour' or 'longitude' (default: hour)",
     )
 
     return top_parser
