@@ -15,7 +15,7 @@ import argparse
 from importlib.metadata import version, PackageNotFoundError
 from pathlib import Path
 import lib_programname
-from timezone_solar import __version__
+from timezone_solar import __version__, TimeZoneSolar
 
 # type alias for error strings
 ErrStr = str
@@ -110,7 +110,7 @@ def _gen_lon_tz(deg_in):
     print("")
 
 
-def _do_tzfile(_) -> None:
+def _do_tzfile() -> None:
     """generate tzdata file"""
 
     # generate solar time zones in increments of 15 degrees of longitude (STHxxE/STHxxW)
@@ -122,6 +122,31 @@ def _do_tzfile(_) -> None:
     # hyperlocal 4-minute-wide time zones for conversion to/from niche uses of local solar time
     for d_zone in range(-180, 180 + 1):
         _gen_lon_tz(d_zone)
+
+
+def _do_lon_tz(args: dict) -> ErrStr | None:
+    """call timezone_solar to generate time zone from parmeters on command line"""
+    err = None
+
+    # collect parameters
+    if "longitude" not in args:
+        raise ValueError("longitude parameter missing")
+    tzs_params = {}
+    tzs_params["longitude"] = args["longitude"]
+    tzs_params["latitude"] = args["latitude"] if "latitude" in args else None
+    tzs_params["use_lon_tz"] = False
+    if "type" in args:
+        match args["type"]:
+            case "hour":
+                tzs_params["use_lon_tz"] = False
+            case "longitude":
+                tzs_params["use_lon_tz"] = True
+
+    # instantiate timezone_solar object
+    tzs = TimeZoneSolar(**tzs_params)
+
+    # TODO
+    return err
 
 #
 # command-line parsing functions
@@ -150,15 +175,20 @@ def _gen_arg_parser() -> argparse.ArgumentParser:
         help="turn on debugging mode",
     )
 
+    # mutually-exclusive arguments: --tzfile and --longitude
+    excl_group = top_parser.add_mutually_exclusive_group(required=True)
+
     # --tzfile/tzdata flag triggers output of tzdata file and ends program
-    top_parser.add_argument(
+    excl_group.add_argument(
         "--tzfile",
         "--tzdata",
-        # action=TZFileAction,
-        action='store_const',
-        dest="func",
-        const=_do_tzfile,
         help="generate solar time zones tzdata text",
+    )
+
+    # --longitude sets degrees of longitude for a specified time zone
+    excl_group.add_argument(
+        "--longitude",
+        type=float,
     )
 
     return top_parser
@@ -182,7 +212,10 @@ def main():
         top_parser.exit()
     try:
         # call function named in argument parser settings with a dictionary of the CLI arguments
-        err = args["func"](args)
+        if "tzfile" in args:
+            _do_tzfile()
+        else:
+            err = _do_lon_tz(args)
     except Exception as exc:
         exc_class = exc.__class__
         if "verbose" in args and args["verbose"]:
