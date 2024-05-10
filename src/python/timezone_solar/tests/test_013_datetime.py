@@ -57,8 +57,9 @@ class TestDateTime(unittest.TestCase, LongitudeUtils):
         )
         expected_offset = timedelta(minutes=obj_expected.get("offset_min"))
         description = (
-            f"test {PROGNUM:03}-{testnum:03}: longitude={longitude} use_lon_tz={use_lon_tz} "
-            + f"→ offset={obj_expected.get("offset_min")}"
+            f"test {PROGNUM:03}-{testnum:03}: longitude={longitude} use_lon_tz={use_lon_tz}"
+            + " → offset="
+            + obj_expected.get("offset_min")
         )
 
         def check(self):
