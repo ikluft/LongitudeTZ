@@ -58,4 +58,5 @@ jobs:
           install-modules: Readonly File::Basename File::Slurp IPC::Run
       - name: Run black box tests
         run: |
+          pip --quiet install lib_programname
           prove test/cli-test-python.t
