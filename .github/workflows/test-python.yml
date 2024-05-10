@@ -50,6 +50,10 @@ jobs:
         run: |
           pip install -e .
           python timezone_solar/tests
+      - name: Set up for black box tests
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: "5.38"
       - name: Run black box tests
         run: |
           prove test/cli-test-python.t
