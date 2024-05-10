@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """longitude computation utilities for timezone_solar tests"""
 
 import re

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """unit tests of timezone_solar package integration with datetime.tzinfo system library"""
 
 import unittest
@@ -23,7 +23,7 @@ class TestDateTime(unittest.TestCase, LongitudeUtils):
             longitude=longitude,
             use_lon_tz=use_lon_tz,
         )
-        expected_name = obj_expected.name
+        expected_name = obj_expected.get("name")
         description = (
             f"test {PROGNUM:03}-{testnum:03}: longitude={longitude} use_lon_tz={use_lon_tz} "
             + f"→ name={expected_name}"
@@ -55,10 +55,10 @@ class TestDateTime(unittest.TestCase, LongitudeUtils):
             longitude=longitude,
             use_lon_tz=use_lon_tz,
         )
-        expected_offset = timedelta(minutes=obj_expected.offset_min)
+        expected_offset = timedelta(minutes=obj_expected.get("offset_min"))
         description = (
             f"test {PROGNUM:03}-{testnum:03}: longitude={longitude} use_lon_tz={use_lon_tz} "
-            + f"→ offset={obj_expected.offset_min}"
+            + f"→ offset={obj_expected.get("offset_min")}"
         )
 
         def check(self):

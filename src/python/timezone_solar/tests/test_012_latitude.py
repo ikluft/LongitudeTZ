@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """unit tests of latitude-based computation in timezone_solar"""
 
 import unittest

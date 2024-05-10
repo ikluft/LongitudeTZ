@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """unit tests for timezone_solar"""
 
 import unittest
@@ -25,7 +25,7 @@ class TestBasic(unittest.TestCase, LongitudeUtils):
 
         def check(self):
             obj = TimeZoneSolar(longitude=longitude, use_lon_tz=use_lon_tz)
-            self.assertEqual(obj.short_name, expected["short_name"])
+            self.assertEqual(obj.get("short_name"), expected["short_name"])
 
         check.__doc__ = description
         return check
@@ -42,7 +42,7 @@ class TestBasic(unittest.TestCase, LongitudeUtils):
 
         def check(self):
             obj = TimeZoneSolar(longitude=longitude, use_lon_tz=use_lon_tz)
-            self.assertEqual(obj.name, expected["name"])
+            self.assertEqual(obj.get("name"), expected["name"])
 
         check.__doc__ = description
         return check
@@ -59,7 +59,7 @@ class TestBasic(unittest.TestCase, LongitudeUtils):
 
         def check(self):
             obj = TimeZoneSolar(longitude=longitude, use_lon_tz=use_lon_tz)
-            self.assertEqual(obj.offset_min, expected["offset_min"])
+            self.assertEqual(obj.get("offset_min"), expected["offset_min"])
 
         check.__doc__ = description
         return check
