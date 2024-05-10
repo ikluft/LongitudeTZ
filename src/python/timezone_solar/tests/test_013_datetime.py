@@ -59,7 +59,7 @@ class TestDateTime(unittest.TestCase, LongitudeUtils):
         description = (
             f"test {PROGNUM:03}-{testnum:03}: longitude={longitude} use_lon_tz={use_lon_tz}"
             + " → offset="
-            + obj_expected.get("offset_min")
+            + str(obj_expected.get("offset_min"))
         )
 
         def check(self):
