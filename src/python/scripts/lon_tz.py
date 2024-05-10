@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """
 lon_tz.py - command-line interface for LongitudeTZ Python implementation
 including tzdata file generation and black box testing
