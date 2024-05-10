@@ -44,7 +44,7 @@ Once the timezone_solar package is loaded, the standard Python datetime package 
 process these time zones.
 """
 
-from datetime import tzinfo, timedelta
+from datetime import datetime, tzinfo, timedelta
 import re
 from timezone_solar.tzsconst import TZSConst
 
@@ -86,10 +86,10 @@ class TimeZoneSolar(tzinfo):
         # safety check on latitude
         const = TZSConst()
         if not re.fullmatch(r"^[-+]?\d+(\.\d+)?$", str(tz_params["latitude"])):
-            raise Exception(f"_tz_params: latitude {tz_params['latitude']}")
+            raise ValueError(f"_tz_params: latitude {tz_params['latitude']}")
         latitude = float(tz_params["latitude"])
         if abs(latitude) > const.max_latitude_fp + const.precision_fp:
-            raise Exception("_tz_params: latitude must be in the range -90 to +90")
+            raise ValueError("_tz_params: latitude must be in the range -90 to +90")
 
         # special case: use East00/Lon000E (equal to UTC) within 10° latitude of poles
         # use UTC at the poles because time zones are too narrow to make sense
@@ -107,10 +107,10 @@ class TimeZoneSolar(tzinfo):
     @classmethod
     def _tz_params(cls, tz_params) -> dict:
         if "longitude" not in tz_params:
-            raise Exception("_tz_params: longitude parameter missing")
+            raise ValueError("_tz_params: longitude parameter missing")
 
         # set time zone from longitude and latitude
-        if "latitude" in tz_params:
+        if "latitude" in tz_params and tz_params["latitude"] is not None:
             lat_params = cls._tz_params_latitude(tz_params)
             if lat_params is not None:
                 return lat_params
@@ -122,10 +122,10 @@ class TimeZoneSolar(tzinfo):
         # safety check on longitude
         const = TZSConst()
         if not re.fullmatch(r"^[-+]?\d+(\.\d+)?$", str(tz_params["longitude"])):
-            raise Exception(f"_tz_params: longitude {tz_params['longitude']}")
+            raise ValueError(f"_tz_params: longitude {tz_params['longitude']}")
         longitude = float(tz_params["longitude"])
         if abs(longitude) > const.max_longitude_fp + const.precision_fp:
-            raise Exception("_tz_params: longitude must be in the range -180 to +180")
+            raise ValueError("_tz_params: longitude must be in the range -180 to +180")
 
         # set flag for longitude time zones:
         # 0 = hourly 1-hour/15-degree zones, 1 = longitude 4-minute/1-degree zones
@@ -172,6 +172,33 @@ class TimeZoneSolar(tzinfo):
     # attribute access methods
     #
 
+    # get timezone values
+    # read-accessor for object values, including for LongitudeTZ CLI implementation
+    def get(self, key: str) -> str:
+        """
+        accessor for solar time zone object fields
+        """
+        match key:
+            case "longitude" | "latitude" | "name" | "short_name" | "offset_min":
+                return getattr(self, key, None)
+            case "long_name":
+                return getattr(self, "name")
+            case "offset":
+                offset_min = getattr(self, "offset_min")
+                hours = str(int(offset_min / 60))
+                minutes = str(offset_min % 60).zfill(2)
+                return f"{hours}:{minutes}"
+            case "offset_sec":
+                offset_min = getattr(self, "offset_min")
+                return str(offset_min * 60)
+            case "is_utc":
+                offset_min = getattr(self, "offset_min")
+                if offset_min == 0:
+                    return 1
+                return 0
+            case _:
+                raise ValueError(f"unknown field {key}")
+
     # update lat/lon to record source data
     def update_lon_lat(self, params):
         """
@@ -188,15 +215,15 @@ class TimeZoneSolar(tzinfo):
 
     # get UTC offset
     # implementation of datetime.tzinfo interface
-    def utcoffset(self, dt) -> timedelta:
+    def utcoffset(self, dt: datetime) -> timedelta:
         """
         returns a timedelta of the offset from UTC
         """
-        return timedelta(minutes=self.offset_min)
+        return timedelta(minutes=self.get("offset_min"))
 
     # get DST adjustment as a timedelta (always 0 for solar time zones)
     # implementation of datetime.tzinfo interface
-    def dst(self, dt) -> timedelta:
+    def dst(self, dt: datetime) -> timedelta:
         """
         returns Daylight Saving Time adjustment as a timedelta, always 0 because we don't use DST
         """
@@ -204,8 +231,8 @@ class TimeZoneSolar(tzinfo):
 
     # get time zone name string
     # implementation of datetime.tzinfo interface
-    def tzname(self, dt) -> str:
+    def tzname(self, dt: datetime) -> str:
         """
         returns long name of time zone
         """
-        return self.name
+        return self.get("name")

@@ -142,10 +142,14 @@ def _do_lon_tz(args: dict) -> ErrStr | None:
             case "longitude":
                 tzs_params["use_lon_tz"] = True
 
-    # instantiate timezone_solar object
+    # instantiate timezone_solar object and print requested field
     tzs = TimeZoneSolar(**tzs_params)
+    try:
+        get_key = args["get"]
+        print(tzs.get(get_key))
+    except ValueError as tz_exc:
+        err = str(tz_exc)
 
-    # TODO
     return err
 
 #
@@ -182,7 +186,7 @@ def _gen_arg_parser() -> argparse.ArgumentParser:
     excl_group.add_argument(
         "--tzfile",
         "--tzdata",
-        action=argparse.BooleanOptionalAction,
+        action='store_true',
         help="generate solar time zones tzdata text",
     )
 
@@ -205,6 +209,13 @@ def _gen_arg_parser() -> argparse.ArgumentParser:
         help="solar time zone type: 'hour' or 'longitude' (default: hour)",
     )
 
+    # specify time zone field to display
+    top_parser.add_argument(
+        "--get",
+        action='store',
+        help="specify solar time zone field to output",
+    )
+
     return top_parser
 
 #
@@ -221,12 +232,17 @@ def main():
     # parse arguments and run subcommand functions
     args = vars(top_parser.parse_args())
     err = None
-    if "func" not in args or args["func"] is None:
+    debug = False
+    if "debug" in args and args["debug"] is not None:
+        debug = args["debug"]
+    if debug:
+        print(f"debug: args => {args}", file=sys.stderr)
+    if "longitude" in args and args["longitude"] is not None and "get" not in args:
         top_parser.print_help()
         top_parser.exit()
     try:
         # call function named in argument parser settings with a dictionary of the CLI arguments
-        if "tzfile" in args:
+        if "tzfile" in args and args["tzfile"] is True:
             _do_tzfile()
         else:
             err = _do_lon_tz(args)
