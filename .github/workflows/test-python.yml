@@ -54,6 +54,8 @@ jobs:
         uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: "5.38"
+          install-modules-with: cpanm
+          install-modules: Readonly File::Basename File::Slurp IPC::Run
       - name: Run black box tests
         run: |
           prove test/cli-test-python.t
