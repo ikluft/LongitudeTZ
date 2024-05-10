@@ -44,7 +44,7 @@ jobs:
       - name: Run flake8
         working-directory: src/python
         run: |
-          flake8 timezone_solar/*.py timezone_solar/tests/*.py
+          flake8 timezone_solar/*.py timezone_solar/tests/*.py scripts/*.py
       - name: Run tests
         working-directory: src/python
         run: |
@@ -58,5 +58,4 @@ jobs:
           install-modules: Readonly File::Basename File::Slurp IPC::Run
       - name: Run black box tests
         run: |
-          pip --quiet install lib_programname
           prove test/cli-test-python.t
