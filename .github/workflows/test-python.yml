@@ -50,3 +50,6 @@ jobs:
         run: |
           pip install -e .
           python timezone_solar/tests
+      - name: Run black box tests
+        run: |
+          prove test/cli-test-python.t
