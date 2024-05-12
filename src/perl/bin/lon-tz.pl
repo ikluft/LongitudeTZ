@@ -138,7 +138,7 @@ sub do_tz_op
     my @fields;
     if ( exists $opts_ref->{get}) {
         if ( ref $opts_ref->{get} eq "ARRAY" ) {
-            @fields = @{$opts_ref->{get}};
+            @fields = split( /,/, join( ',', @{$opts_ref->{get}}));
         } else {
             croak "incorrect data type from --get parameter"
         }
