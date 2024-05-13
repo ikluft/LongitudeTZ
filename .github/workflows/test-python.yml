@@ -55,7 +55,7 @@ jobs:
         with:
           perl-version: "5.38"
           install-modules-with: cpanm
-          install-modules: Readonly File::Basename File::Slurp IPC::Run
+          install-modules: Readonly File::Basename File::Slurp IPC::Run File::Slurp
       - name: Run black box tests
         run: |
           prove test/cli-test-python.t
