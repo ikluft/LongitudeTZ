@@ -27,9 +27,11 @@ Readonly::Scalar my $POLAR_UTC_AREA       => 10;                                
 Readonly::Scalar my $LIMIT_LATITUDE       => $MAX_LATITUDE_FP - $POLAR_UTC_AREA;  # max latitude for solar time zones
 Readonly::Scalar my $MINUTES_PER_DEGREE_LON => 4;                                 # minutes per degree longitude
 Readonly::Scalar my $TZDATA_REF_FILE        => $Bin . "/solar-tz.tab";            # tzdata reference file
-Readonly::Scalar my $SOLAR_TZ_TEST_PAIRS    => 14;
+Readonly::Array  my @SOLAR_TZ_ADHOC_TESTS   => ( qw( -180 -179.75 0 179.75 180 ) );
+Readonly::Scalar my $SOLAR_TZ_TEST_SETS     => 12 + scalar( @SOLAR_TZ_ADHOC_TESTS );
+Readonly::Scalar my $SOLAR_TZ_TESTS_PER_SET => 2;
 Readonly::Scalar my $TZDATA_TESTS           => 3;
-Readonly::Scalar my $TOTAL_TESTS            => $SOLAR_TZ_TEST_PAIRS * 2 + $TZDATA_TESTS;
+Readonly::Scalar my $TOTAL_TESTS            => $SOLAR_TZ_TEST_SETS * $SOLAR_TZ_TESTS_PER_SET + $TZDATA_TESTS;
 
 # globals
 my $debug = 0;
@@ -200,7 +202,7 @@ sub run_validity_test_lon
         my %params  = ( progpath => $progpath, longitude => $lon, use_lon_tz => $use_lon_tz );
         my @tznames = cli_tz_name( \%params );
         foreach my $name (@tznames) {
-            ok( is_valid_name( \%params, $name ), "verified $name" );
+            ok( is_valid_name( \%params, $name ), "verified $name from $lon" );
         }
     }
     return;
@@ -211,7 +213,7 @@ sub run_validity_tests
 {
     my $progpath = shift;
 
-    foreach my $lon1 (qw( -180 -179.75 )) {
+    foreach my $lon1 ( @SOLAR_TZ_ADHOC_TESTS ) {
         run_validity_test_lon( $progpath, $lon1 );
     }
     for ( my $lon2 = -179 ; $lon2 <= 180 ; $lon2 += 30 ) {
