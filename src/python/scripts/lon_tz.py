@@ -145,8 +145,13 @@ def _do_lon_tz(args: dict) -> ErrStr | None:
     # instantiate timezone_solar object and print requested field
     tzs = TimeZoneSolar(**tzs_params)
     try:
-        get_key = args["get"]
-        print(tzs.get(get_key))
+        get_keys = (','.join(args["get"])).split(sep=',')
+        for get_key in get_keys:
+            value = tzs.get(get_key)
+            if value is None:
+                print("")
+            else:
+                print(value)
     except ValueError as tz_exc:
         err = str(tz_exc)
 
@@ -212,7 +217,7 @@ def _gen_arg_parser() -> argparse.ArgumentParser:
     # specify time zone field to display
     top_parser.add_argument(
         "--get",
-        action='store',
+        action='append',
         help="specify solar time zone field to output",
     )
 
