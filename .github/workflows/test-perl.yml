@@ -29,7 +29,7 @@ jobs:
           perl-version: ${{ matrix.perl }}
           distribution: ${{ ( startsWith( matrix.runner, 'windows-' ) && 'strawberry' ) || 'default' }}
           install-modules-with: cpanm
-          install-modules: Dist::Zilla Test::Pod Pod::Markdown IPC::Run
+          install-modules: Dist::Zilla Test::Pod Pod::Markdown IPC::Run File::Slurp
       - name: Show Perl Version
         run: |
           perl -v
