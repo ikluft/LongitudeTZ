@@ -49,6 +49,14 @@ import re
 from timezone_solar.tzsconst import TZSConst
 
 
+def float_cleanup(num: float) -> str:
+    """format a float as a string, looking like an int if it would be x.0"""
+    num_int = round(num)
+    if abs(num - num_int) < TZSConst.PRECISION_FP:
+        return str(num_int)
+    return str(num)
+
+
 class TimeZoneSolar(tzinfo):
     """local solar timezone"""
 
@@ -172,32 +180,54 @@ class TimeZoneSolar(tzinfo):
     # attribute access methods
     #
 
+    # string-formatted accessors to provide values required for CLI
+    def _str_longitude(self) -> str:
+        """read accessor for longitude field"""
+        return float_cleanup(getattr(self, "longitude"))
+
+    def _str_latitude(self) -> str:
+        """read accessor for latitude field"""
+        if not hasattr(self, "latitude"):
+            return ""
+        lat = getattr(self, "latitude")
+        if lat is None:
+            return ""
+        return float_cleanup(lat)
+
+    def _str_long_name(self) -> str:
+        """read accessor for long_name field"""
+        return self.get("name")
+
+    def _str_offset(self) -> str:
+        """read accessor for offset field"""
+        offset_min = getattr(self, "offset_min")
+        hours = str(int(offset_min / 60))
+        minutes = str(offset_min % 60).zfill(2)
+        return f"{hours}:{minutes}"
+
+    def _str_offset_sec(self) -> str:
+        """read accessor for offset_sec field"""
+        offset_min = getattr(self, "offset_min")
+        return str(offset_min * 60)
+
+    def _str_is_utc(self) -> str:
+        """read accessor for is_utc field"""
+        offset_min = getattr(self, "offset_min")
+        if offset_min == 0:
+            return 1
+        return 0
+
     # get timezone values
     # read-accessor for object values, including for LongitudeTZ CLI implementation
     def get(self, key: str) -> str:
         """
         accessor for solar time zone object fields
         """
-        match key:
-            case "longitude" | "latitude" | "name" | "short_name" | "offset_min":
-                return getattr(self, key, None)
-            case "long_name":
-                return getattr(self, "name")
-            case "offset":
-                offset_min = getattr(self, "offset_min")
-                hours = str(int(offset_min / 60))
-                minutes = str(offset_min % 60).zfill(2)
-                return f"{hours}:{minutes}"
-            case "offset_sec":
-                offset_min = getattr(self, "offset_min")
-                return str(offset_min * 60)
-            case "is_utc":
-                offset_min = getattr(self, "offset_min")
-                if offset_min == 0:
-                    return 1
-                return 0
-            case _:
-                raise ValueError(f"unknown field {key}")
+        if hasattr(self, "_str_" + key):
+            return getattr(self, "_str_" + key)()
+        if hasattr(self, key):
+            return getattr(self, key, "")
+        raise ValueError(f"unknown field {key}")
 
     # update lat/lon to record source data
     def update_lon_lat(self, params):
