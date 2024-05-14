@@ -201,9 +201,10 @@ class TimeZoneSolar(tzinfo):
     def _str_offset(self) -> str:
         """read accessor for offset field"""
         offset_min = getattr(self, "offset_min")
-        hours = str(int(offset_min / 60))
-        minutes = str(offset_min % 60).zfill(2)
-        return f"{hours}:{minutes}"
+        sign = "+" if offset_min >= 0 else "-"
+        hours = str(int(abs(offset_min) / 60)).zfill(2)
+        minutes = str(abs(offset_min) % 60).zfill(2)
+        return f"{sign}{hours}:{minutes}"
 
     def _str_offset_sec(self) -> str:
         """read accessor for offset_sec field"""
