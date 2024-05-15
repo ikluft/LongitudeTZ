@@ -1,5 +1,5 @@
 # Black Box Testing
-The [command line interface (CLI) definition](../docs/cli-notes.md) in common among all the programming language implementations is used for black box testing. It runs the same set of tests on each of the implementations to make sure they perform correctly.
+The [LongitudeTZ Command Line Interface (CLI) Specification](../docs/cli-spec.md) in common among all the programming language implementations is used for black box testing. It runs the same set of tests on each of the implementations to make sure they perform correctly.
 
 The tests performed are
 

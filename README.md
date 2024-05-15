@@ -58,7 +58,7 @@ Solar TimeZone libraries implementations in different programming languages:
 * Rust - TODO
 * others coming, code contributions accepted
 
-Each programming language implementation must follow the [command line interface specification](docs/cli-notes.md) so that [generalized black box testing](test/) can be performed across all the implementations.
+Each programming language implementation must follow the [LongitudeTZ Command Line Interface Specification](docs/cli-spec.md) so that [generalized black box testing](test/) can be performed across all the implementations.
 
 ## <a name="the_solar_time_zones_definition">The Solar Time Zones Definition</a>
 
