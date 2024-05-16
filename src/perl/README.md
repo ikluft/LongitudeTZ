@@ -57,7 +57,7 @@ convert either direction between standard (Olson Database) timezones and Solar t
 
 ## Overview of Solar time zones
 
-Solar time zones are based on the longitude of a location. Each time zone is defined around having
+Solar time zones are based on the longitude of a location.  Each time zone is defined around having
 local solar noon, on average, the same as noon on the clock.
 
 Solar time zones are always in Standard Time. There are no Daylight Time changes, by definition. The main point
@@ -69,7 +69,7 @@ The Solar time zones build upon existing standards.
 - Ships at sea use "nautical time" based on time zones 15 degrees of longitude wide.
 - Time zones (without daylight saving offsets) are based on average solar noon at the Prime Meridian. Standard Time in
 each time zone lines up with average solar noon on the meridian at the center of each time zone, at 15-degree of
-longitud e increments.
+longitude increments.
 
 15 degrees of longitude appears more than once above. That isn't a coincidence. It's derived from 360 degrees
 of rotation in a day, divided by 24 hours in a day. The result is 15 degrees of longitude representing 1 hour
@@ -117,19 +117,19 @@ For a development environment, install Dist::Zilla. Additionally, installing Per
 
 On Debian-based systems they can be installed with this command:
 
-	sudo apt install libdist-zilla-perl libperl-critic-perl
+    sudo apt install libdist-zilla-perl libperl-critic-perl
 
 On RPM-based systems (Fedora, Red Hat and CentOS derivatives):
 
-	sudo dnf install perl-Dist-Zilla perl-Perl-Critic
+    sudo dnf install perl-Dist-Zilla perl-Perl-Critic
 
 Then run:
 
-	dzil authordeps --missing | cpanm
-	dzil listdeps --missing | cpanm
-	dzil build
-	dzil test
-	dzil install
+    dzil authordeps --missing | cpanm
+    dzil listdeps --missing | cpanm
+    dzil build
+    dzil test
+    dzil install
 
 # FUNCTIONS AND METHODS
 
@@ -267,10 +267,31 @@ See [https://www.gnu.org/licenses/gpl-3.0-standalone.html](https://www.gnu.org/l
 
 # SEE ALSO
 
-LongitudeTZ on Github: https://github.com/ikluft/LongitudeTZ
+- LongitudeTZ project on Github
+
+    https://github.com/ikluft/LongitudeTZ
+
+- Perl source
+
+    https://github.com/ikluft/LongitudeTZ/tree/main/src/perl
+
+- "Time zone and daylight saving time data" at Internet Assigned Numbers Authority (IANA)
+
+    https://data.iana.org/time-zones/tz-link.html
 
 # BUGS AND LIMITATIONS
 
 Please report bugs via GitHub at [https://github.com/ikluft/LongitudeTZ/issues](https://github.com/ikluft/LongitudeTZ/issues)
 
 Patches and enhancements may be submitted via a pull request at [https://github.com/ikluft/LongitudeTZ/pulls](https://github.com/ikluft/LongitudeTZ/pulls)
+
+# AUTHOR
+
+Ian Kluft &lt;ian.kluft+github@gmail.com>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2024 by Ian Kluft.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.

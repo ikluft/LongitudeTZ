@@ -729,6 +729,28 @@ The category "Solar" is used for the longer names for these time zones. The name
 
 =back
 
+=head1 INSTALLATION
+
+TimeZone::Solar can be installed from CPAN. See https://metacpan.org/pod/TimeZone::Solar for the source code.
+
+For a development environment, install Dist::Zilla. Additionally, installing Perl::Critic is optional but recommended for building and testing.
+
+On Debian-based systems they can be installed with this command:
+
+    sudo apt install libdist-zilla-perl libperl-critic-perl
+
+On RPM-based systems (Fedora, Red Hat and CentOS derivatives):
+
+    sudo dnf install perl-Dist-Zilla perl-Perl-Critic
+
+Then run:
+
+    dzil authordeps --missing | cpanm
+    dzil listdeps --missing | cpanm
+    dzil build
+    dzil test
+    dzil install
+
 =head1 FUNCTIONS AND METHODS
 
 =head2 Class methods
