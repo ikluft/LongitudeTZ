@@ -49,20 +49,20 @@ import re
 from timezone_solar.tzsconst import TZSConst
 
 
-def float_cleanup(num: float) -> str:
-    """format a float as a string, looking like an int if it would be x.0"""
-    num_int = round(num)
-    if abs(num - num_int) < TZSConst.PRECISION_FP:
-        return str(num_int)
-    return str(num)
-
-
 class TimeZoneSolar(tzinfo):
     """local solar timezone"""
 
     #
     # utility methods
     #
+
+    @staticmethod
+    def _float_cleanup(num: float) -> str:
+        """format a float as a string, looking like an int if it would be x.0"""
+        num_int = round(num)
+        if abs(num - num_int) < TZSConst.PRECISION_FP:
+            return str(num_int)
+        return str(num)
 
     # generate a solar time zone name
     # required parameters:
@@ -183,7 +183,7 @@ class TimeZoneSolar(tzinfo):
     # string-formatted accessors to provide values required for CLI
     def _str_longitude(self) -> str:
         """read accessor for longitude field"""
-        return float_cleanup(getattr(self, "longitude"))
+        return TimeZoneSolar._float_cleanup(getattr(self, "longitude"))
 
     def _str_latitude(self) -> str:
         """read accessor for latitude field"""
@@ -192,7 +192,7 @@ class TimeZoneSolar(tzinfo):
         lat = getattr(self, "latitude")
         if lat is None:
             return ""
-        return float_cleanup(lat)
+        return TimeZoneSolar._float_cleanup(lat)
 
     def _str_long_name(self) -> str:
         """read accessor for long_name field"""
