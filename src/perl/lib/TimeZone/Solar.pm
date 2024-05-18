@@ -28,15 +28,15 @@ Readonly::Scalar my $debug_mode => ( $ENV{TZSOLAR_DEBUG} // 0 ) ? 1 : 0;
 
 # accessor fields for implementation of CLI spec
 Readonly::Hash my %field_code => (
-    longitude => sub { return $_[0]->longitude(); },
-    latitude => sub { return $_[0]->latitude(); },
-    name => sub { return $_[0]->name(); },
+    longitude  => sub { return $_[0]->longitude(); },
+    latitude   => sub { return $_[0]->latitude(); },
+    name       => sub { return $_[0]->name(); },
     short_name => sub { return $_[0]->short_name(); },
-    long_name => sub { return $_[0]->long_name(); },
-    offset => sub { return $_[0]->offset(); },
+    long_name  => sub { return $_[0]->long_name(); },
+    offset     => sub { return $_[0]->offset(); },
     offset_min => sub { return $_[0]->offset_min(); },
     offset_sec => sub { return $_[0]->offset_sec(); },
-    is_utc => sub { return $_[0]->is_utc(); },
+    is_utc     => sub { return $_[0]->is_utc(); },
 );
 
 # constants
@@ -118,7 +118,8 @@ sub _tz_subclass
 
     # for test coverage: if $opts{test_break_eval} is set, break the eval below
     # under normal circumstances, %opts parameters should be omitted
-    my $result_cmd = (( $opts{test_break_eval} // 0 )
+    my $result_cmd = (
+        ( $opts{test_break_eval} // 0 )
         ? "croak 'break due to test_break_eval'"    # for testing we can force the eval to break
         : "1"                                       # normally the class definition returns 1
     );
@@ -402,7 +403,7 @@ sub _tz_instance
 # this also provides verification for external callers such as the CLI
 sub valid_tz_class
 {
-    my ( $classname ) = @_;
+    my ($classname) = @_;
 
     # if a short name was provided, prepend the class prefix
     my $tzsolar_class_prefix = _const("TZSOLAR_CLASS_PREFIX");
@@ -411,12 +412,12 @@ sub valid_tz_class
     }
 
     # valid tz class must be a sublass of TimeZone::Solar
-    if ( not $classname->isa(__PACKAGE__)) {
+    if ( not $classname->isa(__PACKAGE__) ) {
         return;
     }
 
     # valid tz class must match the regular expression
-    my $tzsolar_zone_re      = _const("TZSOLAR_ZONE_RE");
+    my $tzsolar_zone_re = _const("TZSOLAR_ZONE_RE");
     if ( $classname !~ qr( $tzsolar_class_prefix $tzsolar_zone_re )x ) {
         return;
     }
@@ -521,14 +522,14 @@ sub offset_min
 # throws exception if requested field name doesn't exist
 sub get
 {
-    my $self = shift;
+    my $self  = shift;
     my $field = shift;
 
     # require valid field name
     if ( not exists $field_code{$field} ) {
         croak( __PACKAGE__ . ": non-existent field requested: $field" );
     }
-    return $field_code{$field}->( $self );
+    return $field_code{$field}->($self);
 }
 
 #

@@ -28,7 +28,7 @@ use Readonly;
 use File::Basename;
 
 # constants
-Readonly::Scalar my $progname => basename( $0 );
+Readonly::Scalar my $progname => basename($0);
 
 # debug flag
 my $debug = 0;
@@ -125,18 +125,18 @@ sub do_tz_op
     my ( $opts_ref, $obj ) = @_;
 
     my @fields;
-    if ( exists $opts_ref->{get}) {
+    if ( exists $opts_ref->{get} ) {
         if ( ref $opts_ref->{get} eq "ARRAY" ) {
-            @fields = split( /,/x, join( ',', @{$opts_ref->{get}}));
+            @fields = split( /,/x, join( ',', @{ $opts_ref->{get} } ) );
         } else {
-            croak "incorrect data type from --get parameter"
+            croak "incorrect data type from --get parameter";
         }
     } else {
         @fields = qw(long_name);
     }
 
     # process requested fields
-    foreach my $field ( @fields ) {
+    foreach my $field (@fields) {
         try {
             say $obj->get($field);
         } catch {
@@ -154,16 +154,9 @@ sub do_tz_op
 sub main
 {
     my %opts;
-    my $res = GetOptions ( \%opts,
-        'debug',
-        'version|v',
-        'tzfile|tzdata',
-        'tzname:s',
-        'longitude:s',
-        'latitude:s',
-        'type:s',
-        'get:s@',
-    );
+    my $res =
+        GetOptions( \%opts, 'debug', 'version|v', 'tzfile|tzdata', 'tzname:s', 'longitude:s', 'latitude:s', 'type:s',
+        'get:s@', );
 
     # check validity of arguments
     if ( not $res ) {
@@ -174,12 +167,12 @@ sub main
     if ( $opts{debug} // 0 ) {
         $debug = 1;
     }
-    if ( $debug ) {
+    if ($debug) {
         my @out_opts;
-        foreach my $key (sort keys %opts) {
-            push @out_opts, "$key=".$opts{$key};
+        foreach my $key ( sort keys %opts ) {
+            push @out_opts, "$key=" . $opts{$key};
         }
-        say "opts: ".join( " ", @out_opts );
+        say "opts: " . join( " ", @out_opts );
     }
 
     # display version
@@ -187,7 +180,7 @@ sub main
         say "version " . TimeZone::Solar->version() . " / Perl " . $Config{api_versionstring};
         exit 0;
     }
-    
+
     # generate tzfile
     if ( $opts{tzfile} // 0 ) {
         gen_tzfile();
@@ -195,45 +188,53 @@ sub main
     }
 
     # check mutually exclusive options
-    if (( exists $opts{tzname}) and ( exists $opts{longitude})) {
+    if ( ( exists $opts{tzname} ) and ( exists $opts{longitude} ) ) {
         croak "mutually exclusive options tzname and longitude cannot be used at the same time";
     }
 
     # if tzname was provided, get parameters from it
     my $result;
-    if ( exists $opts{tzname}) {
+    if ( exists $opts{tzname} ) {
 
         # verify class is defined, making time zone string valid
-        my $classname = TimeZone::Solar::valid_tz_class( $opts{tzname});
+        my $classname = TimeZone::Solar::valid_tz_class( $opts{tzname} );
         if ( not defined $classname ) {
             croak "$opts{tzname} is not a valid solar/natural time zone name";
         }
 
         # run with the class name
-        $result = do_tz_op(\%opts, $classname->new());
+        $result = do_tz_op( \%opts, $classname->new() );
     }
 
     # if longitude was provided (latitude optional), generate time zone parameters
-    my $use_lon_tz = 0; # default to more common hour-based time zones rather than nice longitude-based tz
-    if ( exists $opts{type}) {
+    my $use_lon_tz = 0;    # default to more common hour-based time zones rather than nice longitude-based tz
+    if ( exists $opts{type} ) {
         if ( $opts{type} eq "hour" ) {
             $use_lon_tz = 0;
         } elsif ( $opts{type} eq "longitude" ) {
             $use_lon_tz = 1;
         } else {
-            croak "unrecognized time zone type '".$opts{type}."'";
+            croak "unrecognized time zone type '" . $opts{type} . "'";
         }
     }
-    if ( exists $opts{longitude}) {
-        if ( exists $opts{latitude}) {
-            $result = do_tz_op(\%opts, TimeZone::Solar->new( longitude => $opts{longitude},
-                    latitude => $opts{latitude},
+    if ( exists $opts{longitude} ) {
+        if ( exists $opts{latitude} ) {
+            $result = do_tz_op(
+                \%opts,
+                TimeZone::Solar->new(
+                    longitude  => $opts{longitude},
+                    latitude   => $opts{latitude},
                     use_lon_tz => $use_lon_tz
-                ));
+                )
+            );
         } else {
-            $result = do_tz_op(\%opts, TimeZone::Solar->new( longitude => $opts{longitude},
+            $result = do_tz_op(
+                \%opts,
+                TimeZone::Solar->new(
+                    longitude  => $opts{longitude},
                     use_lon_tz => $use_lon_tz
-                ));
+                )
+            );
         }
     }
     return;
@@ -243,6 +244,7 @@ sub main
 try {
     main();
 } catch {
+
     # process any error/exception that we may have gotten
     my $ex = $_;
 
