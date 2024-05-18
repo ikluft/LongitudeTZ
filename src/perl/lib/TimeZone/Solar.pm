@@ -26,6 +26,19 @@ use DateTime::TimeZone v0.80.0;
 use Try::Tiny;
 Readonly::Scalar my $debug_mode => ( $ENV{TZSOLAR_DEBUG} // 0 ) ? 1 : 0;
 
+# accessor fields for implementation of CLI spec
+Readonly::Hash my %field_code => (
+    longitude => sub { return $_[0]->longitude(); },
+    latitude => sub { return $_[0]->latitude(); },
+    name => sub { return $_[0]->name(); },
+    short_name => sub { return $_[0]->short_name(); },
+    long_name => sub { return $_[0]->long_name(); },
+    offset => sub { return $_[0]->offset(); },
+    offset_min => sub { return $_[0]->offset_min(); },
+    offset_sec => sub { return $_[0]->offset_sec(); },
+    is_utc => sub { return $_[0]->is_utc(); },
+);
+
 # constants
 ## no critic ( Modules::ProhibitMultiplePackages )
 package TimeZone::Solar::Constant {
@@ -67,6 +80,7 @@ package TimeZone::Solar::Constant {
     }
 
     # get the value of a constant by name
+    # throws exception if requested contant name doesn't exist
     sub get
     {
         my $name = shift;
@@ -501,6 +515,20 @@ sub offset_min
 {
     my $self = shift;
     return $self->{offset_min};
+}
+
+# general read accessor for implementation of CLI spec
+# throws exception if requested field name doesn't exist
+sub get
+{
+    my $self = shift;
+    my $field = shift;
+
+    # require valid field name
+    if ( not exists $field_code{$field} ) {
+        croak( __PACKAGE__ . ": non-existent field requested: $field" );
+    }
+    return $field_code{$field}->( $self );
 }
 
 #
