@@ -4,6 +4,7 @@ On this page:
 
 * [Introduction](#introduction)
 * [Implementations](#implementations)
+* [Creating an Alternative](#creating_an_alternative)
 * [The Solar Time Zones Definition](#the_solar_time_zones_definition)
 * [Obsoleting Daylight Saving Time](#obsoleting_daylight_saving_time)
 * [Web Resources](#web_resources)
@@ -29,9 +30,11 @@ In places where regional government mandates use of Daylight Saving Time, the on
 
 Keep in mind that the decision to opt-out of Daylight Saving Time can be done by the owner of the computer. However, those who work for any national, regional or local government entity where DST is set by law, won't be able to make that decision on machines at work unless laws are changed. One can make the decision for devices personally owned.
 
+## <a name="creating_an_alternative">Creating an Alternative</a>
+
 With time zone data for the natural solar time zones, computers can convert between time zones automatically.
 
-This project is intended to make such an alternative. The project is to make software libraries to set local natural solar time zone based on longitude, and time zone files compatible with the *tz database* standard which allow any device or server to use them. The *tzfile* data files also allow systems to convert between traditional and longitude-based time zones automatically.
+This project is intended to make such an alternative. The objective is to make software libraries to set local natural solar time zone based on longitude. It also maintains time zone files compatible with the *tz database* standard which allow any device or server to use them. The *tzfile* data files are what allow systems to convert between traditional and longitude-based time zones automatically.
 
 An example of the tzfile data for the proposed Longitude Time Zones is provided at [docs/longitude-timezones.tzfile](docs/longitude-timezones.tzfile) in this repository.
 
@@ -62,7 +65,7 @@ Solar TimeZone libraries implementations in different programming languages:
   * available on PyPI: https://pypi.org/project/timezone_solar/
 * [C++](src/cpp/) - as _libtzsolar_ package
 * Rust - TODO
-* others coming, code contributions accepted
+* others coming, code contributions will be considered
 
 Each programming language implementation must follow the [LongitudeTZ Command Line Interface Specification](docs/cli-spec.md) so that [generalized black box testing](test/) can be performed across all the implementations.
 
