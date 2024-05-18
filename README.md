@@ -36,7 +36,7 @@ With time zone data for the natural solar time zones, computers can convert betw
 
 This project is intended to make such an alternative. The objective is to make software libraries to set local natural solar time zone based on longitude. It also maintains time zone files compatible with the *tz database* standard which allow any device or server to use them. The *tzfile* data files are what allow systems to convert between traditional and longitude-based time zones automatically.
 
-An example of the tzfile data for the proposed Longitude Time Zones is provided at [docs/longitude-timezones.tzfile](docs/longitude-timezones.tzfile) in this repository.
+An example of the tzfile data for the proposed Longitude Time Zones is provided at [data/solar-tz.tab](data/solar-tz.tab) in this repository.
 
 I'm running the idea up the flagpole. We'll see how many salutes it gets. Meanwhile this project is making software in various programming languages toward enabling the possibility.
 
@@ -106,7 +106,7 @@ Nautical and longitude-based time:
 
 Related: time zone technical standards:
 
-* [tzfile defining proposed Longitude Time Zones](docs/longitude-timezones.tzfile)
+* [tzfile defining proposed Longitude Time Zones](data/solar-tz.tab)
 * ["tz database"](https://en.wikipedia.org/wiki/Tz_database), Wikipedia
 * [Time Zone Database](https://www.iana.org/time-zones), Internet Assigned Numbers Authority (IANA)
 * [RFC8536: The Time Zone Information Format (TZif)](https://www.rfc-editor.org/info/rfc8536), Internet Engineering Task Force (IETF)
