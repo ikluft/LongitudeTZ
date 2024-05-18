@@ -361,40 +361,6 @@ sub test_valid_tz
         }
     }
 
-    # check data from arg-per-field phase
-    # one error code and stderr from the single run: 2 tests
-    # each field has a data result: 9 tests
-#    {
-#        is( $prog_result->{arg}{res}, 1, "run ".$expected->{short_name}."/arg: expect success" );
-#        if ( not $prog_result->{arg}{res} ) {
-#            debug "command run failed for ".$expected->{short_name}."/run/$field: test";
-#        }
-#        foreach my $field ( @SOLAR_TZ_FIELDS ) {
-#            is( $prog_result->{arg}{$field}{data}, $expected->{$field},
-#                "verify ".$expected->{short_name}." from arg/".$params_ref->{longitude}.": $field="
-#                    .$expected->{$field} );
-#        }
-#        is( $prog_result->{arg}{err}, "", "stderr for ".$expected->{short_name}."/arg: expect empty" );
-#        my $stderr = $prog_result->{arg}{err} // "";
-#        if ( length $stderr > 0 ) {
-#            say STDERR "error from $expected command: $stderr";
-#        }
-#    }
-
-    # check data from param-per-field phase
-    # one error code and stderr from the single run: 2 tests
-    # each field has a data result 9 tests
-#    {
-#        is( $prog_result->{param}{$field}{res}, 1, "run ".$expected->{short_name}."/param: expect success" );
-#        foreach my $field ( @SOLAR_TZ_FIELDS ) {
-#            is( $prog_result->{param}{$field}{data}, $expected->{$field},
-#                "verify ".$expected->{short_name}." from param/".$params_ref->{longitude}.": $field="
-#                    .$expected->{$field} );
-#        }
-#        is( $prog_result->{param}{$field}{err}, "", "stderr for ".$expected->{short_name}."/param: expect empty" );
-#    }
-
-
     return;
 }
 
