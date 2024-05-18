@@ -10,7 +10,7 @@ On this page:
 
 ## <a name="introduction">Introduction</a>
 
-This project is intended to develop software and time zone data files so timekeeping devices can be set to natural longitude-based time zones for their locality. These are based on Standard Time for the longitude, without peculiarities set by local or national governments. These time zone files and the software to look up which one applies to the current location allow users' devices to automatically convert to or from conventional time zones used by government entities.
+This project is intended to develop software and time zone data files so computers and timekeeping devices can be set to natural longitude-based time zones for their locality. These are based on Standard Time for the longitude, without peculiarities set by local or national governments. These time zone files and the software to look up which one applies to the current location allow users' devices to automatically convert to or from conventional time zones used by government entities.
 
 There are lots of reasons to do this...
 
@@ -20,12 +20,18 @@ People are tired of changing their clocks twice a year for daylight saving time.
 * Daylight saving time does not actually save energy.
 * Anyone can look up local sunrise and sunset times for planning events that actually need to be scheduled around daylight.
 * Studies have established there are health and safety hazards from disrupting circadian rhythms (daily sleep cycles).
+  * The most obvious health and safety problems come from abrupt changes when the clocks are changed, ranging from fatigue-related mishaps to heart attacks.
+  * There are also problems inherent to Daylight Saving Time. By shifting clocks an hour off, the day is no longer centered on solar noon. The unequal split of daylight favors evening activities at the expense of morning activities. People who have to wake earlier in the day get up in the dark, in order for others to have the appearance of an extra hour of sunlight in the evening.
 
-The real solution is to schedule activities around available sunlight at one's local latitude.
+*There is actually never any more daylight available that what naturally occurs at your latitude for the time of year.* So the real solution is to schedule daylight-sensitive activities around available sunlight at one's local latitude.
 
 In places where regional government mandates use of Daylight Saving Time, the only way we'll have the choice to opt-out of DST is if there's an alternative standard allowing us to stay on Standard Time.
 
-This project is intended to make such an alternative. The project is to make software libraries to set local solar/natural time zone based on longitude, and time zone files compatible with the *tz database* standard which allow any device or server to use them. The *tzfile* data files also allow systems to convert between traditional and longitude-based time zones automatically.
+Keep in mind that the decision to opt-out of Daylight Saving Time can be done by the owner of the computer. However, if you work for any national, regional or local government entity where DST is set by law, you won't be able to make that decision on machines at work unless your laws are changed. You can make the decision for devices you personally own.
+
+With time zone data for the natural solar time zones, computers can convert between time zones automatically.
+
+This project is intended to make such an alternative. The project is to make software libraries to set local natural solar time zone based on longitude, and time zone files compatible with the *tz database* standard which allow any device or server to use them. The *tzfile* data files also allow systems to convert between traditional and longitude-based time zones automatically.
 
 An example of the tzfile data for the proposed Longitude Time Zones is provided at [docs/longitude-timezones.tzfile](docs/longitude-timezones.tzfile) in this repository.
 
