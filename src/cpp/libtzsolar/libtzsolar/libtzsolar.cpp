@@ -43,10 +43,10 @@ bool TZSolar::tz_params_latitude ( short longitude, bool use_lon_tz, short latit
 
 
 // get timezone parameters (name and minutes offset) - called by constructor
-void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<short> opt_latitude ) {
+void TZSolar::tz_params ( short longitude, bool use_lon_tz, std::optional<short> opt_latitude ) {
     // if latitude is provided, use UTC within 10° latitude of poles
-    if ( opt_latitude != boost::none ) {
-        if ( this->tz_params_latitude( longitude, use_lon_tz, opt_latitude.get() )) {
+    if ( ! opt_latitude.has_value() ) {
+        if ( this->tz_params_latitude( longitude, use_lon_tz, opt_latitude.value() )) {
             return;
         }
     }
@@ -87,4 +87,42 @@ void TZSolar::tz_params ( short longitude, bool use_lon_tz, boost::optional<shor
     short_name = tz_name( tz_num, use_lon_tz, sign );
     offset_min = sign * tz_num * minutes_per_degree_lon * tz_degree_width();
 }
+
+    // get offset as a string in ±HH:MM format
+std::string TZSolar::str_offset() {
+    std::string sign = offset_min >= 0 ? "+" : "-";
+
+    // format hour
+    std::ostringstream ss_hour;
+    ss_hour << std::setw( 2 ) << std::setfill( '0' ) << abs(offset_min)/60;
+    std::string num_hour = ss_hour.str();
+
+    // format hour
+    std::ostringstream ss_min;
+    ss_min << std::setw( 2 ) << std::setfill( '0' ) << abs(offset_min)%60;
+    std::string num_min = ss_min.str();
+
+    return sign + num_hour + ":" + num_min;
+}
+
+// general read accessor for implementation of CLI spec
+std::string TZSolar::get(const std::string &field) {
+    static const std::unordered_map<std::string, std::function<std::string(TZSolar &)>> funcmap =
+    {
+        {"longitude", [](TZSolar &tzs) { return tzs.str_longitude(); }},
+        {"latitude", [](TZSolar &tzs) { return tzs.str_latitude(); }},
+        {"name", [](TZSolar &tzs) { return tzs.str_long_name(); }},
+        {"short_name", [](TZSolar &tzs) { return tzs.str_short_name(); }},
+        {"long_name", [](TZSolar &tzs) { return tzs.str_long_name(); }},
+        {"offset", [](TZSolar &tzs) { return tzs.str_offset(); }},
+        {"offset_min", [](TZSolar &tzs) { return tzs.str_offset_min(); }},
+        {"offset_sec", [](TZSolar &tzs) { return tzs.str_offset_sec(); }},
+        {"is_utc", [](TZSolar &tzs) { return tzs.str_is_utc(); }},
+    };
+
+    // call function to get field value, or throw std::out_of_range exception for unrecognized field
+    auto func = funcmap.at(field);
+    return func(*this);
+}
+
 
