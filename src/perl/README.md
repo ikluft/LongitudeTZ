@@ -111,25 +111,42 @@ The Solar time zones definition includes the following rules.
 
 # INSTALLATION
 
-TimeZone::Solar can be installed from CPAN. See https://metacpan.org/pod/TimeZone::Solar for the source code.
+TimeZone::Solar can be installed from CPAN. See [https://metacpan.org/pod/TimeZone::Solar](https://metacpan.org/pod/TimeZone::Solar) for source code of released packages. The source code repository is at [https://github.com/ikluft/LongitudeTZ](https://github.com/ikluft/LongitudeTZ).
 
-For a development environment, install Dist::Zilla. Additionally, installing Perl::Critic is optional but recommended for building and testing.
+## Set Up Perl Environment
 
-On Debian-based systems they can be installed with this command:
+For a development environment, make sure Perl is installed. Check first if binary packages are available for your OS & platform. More information can be found at [https://metacpan.org/dist/perl/view/INSTALL](https://metacpan.org/dist/perl/view/INSTALL).
+
+Then install Dist::Zilla. Additionally, installing Perl::Critic is optional but recommended for building and testing.
+
+On Debian-based Linux systems they can be installed with this command:
 
     sudo apt install libdist-zilla-perl libperl-critic-perl
 
-On RPM-based systems (Fedora, Red Hat and CentOS derivatives):
+On RPM-based Linux systems (Fedora, Red Hat and CentOS derivatives):
 
     sudo dnf install perl-Dist-Zilla perl-Perl-Critic
 
-Then run:
+On operating systems which don't provide binary packages of Dist::Zilla or Perl::Critic, install them from CPAN with this command:
+
+    cpan install Dist::Zilla Perl::Critic
+
+## Set Up TimeZone::Solar
+
+Download TimeZone::Solar source code using either "git clone https://github.com/ikluft/LongitudeTZ.git" or unpack the zip file from [https://github.com/ikluft/LongitudeTZ/archive/refs/heads/main.zip](https://github.com/ikluft/LongitudeTZ/archive/refs/heads/main.zip).
+
+Change into the source directory. Then run these Dist::Zilla commands to set up the environment for build, test and install:
 
     dzil authordeps --missing | cpanm
     dzil listdeps --missing | cpanm
     dzil build
     dzil test
     dzil install
+
+Prior to submitting pull requests for consideration for inclusion in the package, additional tests can be performed with the author and/or release options:
+
+    dzil test --author
+    dzil test --release
 
 # FUNCTIONS AND METHODS
 
