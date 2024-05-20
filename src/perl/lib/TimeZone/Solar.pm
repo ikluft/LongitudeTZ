@@ -760,34 +760,45 @@ The category "Solar" is used for the longer names for these time zones. The name
 
 =head1 INSTALLATION
 
-TimeZone::Solar can be installed from CPAN. See L<https://metacpan.org/pod/TimeZone::Solar> for source code of released packages. The source code repository is at L<https://github.com/ikluft/LongitudeTZ>.
+TimeZone::Solar can be installed from CPAN. See L<https://metacpan.org/pod/TimeZone::Solar> for source code of released packages. If Perl is properly installed, the installation is done with this command:
 
-=head2 Set Up Perl Environment
+    cpan TimeZone::Solar
+
+=head2 Perl Development Environment
+
+The source code repository is at L<https://github.com/ikluft/LongitudeTZ>.
 
 For a development environment, make sure Perl is installed. Check first if binary packages are available for your OS & platform. More information can be found at L<https://metacpan.org/dist/perl/view/INSTALL>.
 
-Then install Dist::Zilla. Additionally, installing Perl::Critic is optional but recommended for building and testing.
+Then install App::cpanminus (cpanm), Dist::Zilla (dzil) and Perl::Critic (perlcritic).
 
-On Debian-based Linux systems they can be installed with this command:
+On Debian-based Linux systems they can be installed with this command as root:
 
-    sudo apt install libdist-zilla-perl libperl-critic-perl
+    apt update
+    apt install cpanminus libdist-zilla-perl libperl-critic-perl
 
-On RPM-based Linux systems (Fedora, Red Hat and CentOS derivatives):
+On RPM-based Linux systems (Fedora, Red Hat and CentOS derivatives) as root:
 
-    sudo dnf install perl-Dist-Zilla perl-Perl-Critic
+    dnf install --refresh perl-App-cpanminus perl-Dist-Zilla perl-Perl-Critic
 
-On operating systems which don't provide binary packages of Dist::Zilla or Perl::Critic, install them from CPAN with this command:
+On Alpine Linux systems and containers:
 
-    cpan install Dist::Zilla Perl::Critic
+    apk update && apk upgrade
+    apk add make perl perl-utils perl-alien-build perl-class-tiny perl-config-tiny perl-date-manip perl-datetime perl-datetime-locale perl-datetime-timezone perl-dbd-csv perl-dbd-sqlite perl-dbi perl-http-date perl-ipc-run perl-list-moreutils perl-list-someutils perl-log-dispatch perl-log-log4perl perl-module-build perl-moose perl-moosex-types perl-namespace-autoclean perl-net-ssleay perl-params-validate perl-perlio-utf8_strict perl-pod-parser perl-readonly perl-term-readkey perl-test-leaktrace perl-test-warn perl-text-template perl-type-tiny perl-xml-dom perl-yaml
+    cpan -T App::cpanminus Dist::Zilla Perl::Critic </dev/null
+
+On operating systems which don't provide binary packages of App::cpanminus, Dist::Zilla or Perl::Critic, install them from CPAN with this command:
+
+    cpan -T App::cpanminus Dist::Zilla Perl::Critic </dev/null
 
 =head2 Set Up TimeZone::Solar
 
 Download TimeZone::Solar source code using either "git clone https://github.com/ikluft/LongitudeTZ.git" or unpack the zip file from L<https://github.com/ikluft/LongitudeTZ/archive/refs/heads/main.zip>.
 
-Change into the source directory. Then run these Dist::Zilla commands to set up the environment for build, test and install:
+Change into src/perl in the newly-unpacked source directory. Then run these Dist::Zilla commands to set up the environment for build, test and install:
 
-    dzil authordeps --missing | cpanm
-    dzil listdeps --missing | cpanm
+    dzil authordeps --missing | cpanm --notest
+    dzil listdeps --missing | cpanm --notest
     dzil build
     dzil test
     dzil install
