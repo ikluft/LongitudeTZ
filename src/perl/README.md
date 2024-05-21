@@ -135,7 +135,7 @@ On RPM-based Linux systems (Fedora, Red Hat and CentOS derivatives) as root:
 On Alpine Linux systems and containers:
 
     apk update && apk upgrade
-    apk add make perl perl-utils perl-alien-build perl-class-tiny perl-config-tiny perl-date-manip perl-datetime perl-datetime-locale perl-datetime-timezone perl-dbd-csv perl-dbd-sqlite perl-dbi perl-http-date perl-ipc-run perl-list-moreutils perl-list-someutils perl-log-dispatch perl-log-log4perl perl-module-build perl-moose perl-moosex-types perl-namespace-autoclean perl-net-ssleay perl-params-validate perl-perlio-utf8_strict perl-pod-parser perl-readonly perl-term-readkey perl-test-leaktrace perl-test-warn perl-text-template perl-type-tiny perl-xml-dom perl-yaml
+    apk add make git perl perl-utils perl-alien-build perl-class-tiny perl-config-tiny perl-date-manip perl-datetime perl-datetime-locale perl-datetime-timezone perl-dbd-csv perl-dbd-sqlite perl-dbi perl-http-date perl-ipc-run perl-list-moreutils perl-list-someutils perl-log-dispatch perl-log-log4perl perl-module-build perl-moose perl-moosex-types perl-namespace-autoclean perl-net-ssleay perl-params-validate perl-perlio-utf8_strict perl-pod-parser perl-readonly perl-term-readkey perl-test-leaktrace perl-test-pod perl-test-warn perl-text-template perl-type-tiny perl-xml-dom perl-yaml
     cpan -T App::cpanminus Dist::Zilla Perl::Critic </dev/null
 
 On operating systems which don't provide binary packages of App::cpanminus, Dist::Zilla or Perl::Critic, install them from CPAN with this command:
@@ -144,10 +144,13 @@ On operating systems which don't provide binary packages of App::cpanminus, Dist
 
 ## Set Up TimeZone::Solar
 
-Download TimeZone::Solar source code using either "git clone https://github.com/ikluft/LongitudeTZ.git" or unpack the zip file from [https://github.com/ikluft/LongitudeTZ/archive/refs/heads/main.zip](https://github.com/ikluft/LongitudeTZ/archive/refs/heads/main.zip).
+Download TimeZone::Solar source code with the git command:
+
+    git clone https://github.com/ikluft/LongitudeTZ.git
 
 Change into src/perl in the newly-unpacked source directory. Then run these Dist::Zilla commands to set up the environment for build, test and install:
 
+    cd LongitudeTZ/src/perl
     dzil authordeps --missing | cpanm --notest
     dzil listdeps --missing | cpanm --notest
     dzil build
