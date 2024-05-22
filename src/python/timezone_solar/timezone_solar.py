@@ -111,13 +111,43 @@ class TimeZoneSolar(tzinfo):
         # no effects on results from latitude between 80° north & south
         return None
 
+    # generate time zone parameters from given time zone name
+    @classmethod
+    def _tz_name2params(cls, tzname: str) -> dict:
+        match = re.fullmatch(r"^Lon(\d{3})([EW])$", tzname, flags=re.IGNORECASE)
+        if match:
+            is_west = match.group(2) == "W"
+            longitude = int(match.group(1)) * (-1 if is_west else 1)
+            if abs(int(longitude)) > 180:
+                raise ValueError(f"longitude {longitude} is out of bounds ±180")
+            use_lon_tz = True
+            return {"longitude": longitude, "use_lon_tz": use_lon_tz}
+        match = re.fullmatch(r"^(East|West)(\d{2})$", tzname, flags=re.IGNORECASE)
+        if match:
+            is_west = match.group(1) == "West"
+            hour_num = int(match.group(2))
+            if hour_num > 12:
+                raise ValueError(f"time zone hour {hour_num} is out of bounds ±12")
+            longitude = hour_num * 15 * (-1 if is_west else 1)
+            if abs(int(longitude)) > 180:
+                raise ValueError(f"longitude {longitude} is out of bounds ±180")
+            use_lon_tz = False
+            return {"longitude": longitude, "use_lon_tz": use_lon_tz}
+        raise ValueError(f"{tzname}  is not a valid solar/natural time zone name")
+
     # get timezone parameters (name and minutes offset) - called by __new__()
     @classmethod
-    def _tz_params(cls, tz_params) -> dict:
+    def _tz_params(cls, tz_params: dict) -> dict:
+
+        # rewrite parameters based on time zone if a tzname was provided
+        if "tzname" in tz_params and tz_params["tzname"] is not None:
+            tz_params = cls._tz_name2params(tz_params["tzname"])
+
+        # longitude is required
         if "longitude" not in tz_params:
             raise ValueError("_tz_params: longitude parameter missing")
 
-        # set time zone from longitude and latitude
+        # set time zone from longitude and latitude, if latitude was provided
         if "latitude" in tz_params and tz_params["latitude"] is not None:
             lat_params = cls._tz_params_latitude(tz_params)
             if lat_params is not None:

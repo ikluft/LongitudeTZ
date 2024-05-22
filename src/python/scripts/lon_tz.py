@@ -125,7 +125,7 @@ def _do_tzfile() -> None:
 
 
 def _do_lon_tz(args: dict) -> ErrStr | None:
-    """call timezone_solar to generate time zone from parmeters on command line"""
+    """call TimeZoneSolar to generate time zone from parmeters on command line"""
     err = None
 
     # collect parameters
@@ -142,8 +142,29 @@ def _do_lon_tz(args: dict) -> ErrStr | None:
             case "longitude":
                 tzs_params["use_lon_tz"] = True
 
-    # instantiate timezone_solar object and print requested field
+    # instantiate TimeZoneSolar object and print requested field(s)
     tzs = TimeZoneSolar(**tzs_params)
+    try:
+        get_keys = (','.join(args["get"])).split(sep=',')
+        for get_key in get_keys:
+            value = tzs.get(get_key)
+            if value is None:
+                print("")
+            else:
+                print(value)
+    except ValueError as tz_exc:
+        err = str(tz_exc)
+
+    return err
+
+
+def _do_named_tz(args: dict) -> ErrStr | None:
+    """call TimeZoneSolar to generate date for a named time zone"""
+    err = None
+
+    # instantiate TimeZoneSolar object and print requested field(s)
+    tzname = args["tzname"]
+    tzs = TimeZoneSolar(tzname=tzname)
     try:
         get_keys = (','.join(args["get"])).split(sep=',')
         for get_key in get_keys:
@@ -184,7 +205,7 @@ def _gen_arg_parser() -> argparse.ArgumentParser:
         help="turn on debugging mode",
     )
 
-    # mutually-exclusive arguments: --tzfile and --longitude
+    # mutually-exclusive arguments: --tzfile, --tzname and --longitude
     excl_group = top_parser.add_mutually_exclusive_group(required=True)
 
     # --tzfile/tzdata flag triggers output of tzdata file and ends program
@@ -195,14 +216,21 @@ def _gen_arg_parser() -> argparse.ArgumentParser:
         help="generate solar time zones tzdata text",
     )
 
+    # --tzname sets a name for a specified time zone, no other parameters allowed when this is used
+    excl_group.add_argument(
+        "--tzname",
+        type=str,
+        help="name of a specific solar time zone (mutually exclusive with --tzfile & --longitude)",
+    )
+
     # --longitude sets degrees of longitude for a specified time zone
     excl_group.add_argument(
         "--longitude",
         type=float,
-        help="longitude for solar time zone (required when not using --tzfile)",
+        help="longitude for solar time zone (mutually exclusive with --tzfile & --tzname)",
     )
 
-    # parameters for timezone_solar
+    # parameters for TimeZoneSolar
     top_parser.add_argument(
         "--latitude",
         type=float,
@@ -218,7 +246,7 @@ def _gen_arg_parser() -> argparse.ArgumentParser:
     top_parser.add_argument(
         "--get",
         action='append',
-        help="specify solar time zone field to output",
+        help="specify solar time zone field(s) for output",
     )
 
     return top_parser
@@ -249,6 +277,8 @@ def main():
         # call function named in argument parser settings with a dictionary of the CLI arguments
         if "tzfile" in args and args["tzfile"] is True:
             _do_tzfile()
+        elif "tzname" in args and args["tzname"] is not None:
+            err = _do_named_tz(args)
         else:
             err = _do_lon_tz(args)
     except Exception as exc:
