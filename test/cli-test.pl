@@ -34,10 +34,14 @@ Readonly::Array my @SOLAR_TZ_FIELDS => (
 );
 Readonly::Array my @SOLAR_TZ_ADHOC_TESTS => (qw( -180 -179.75 0 179.75 180 ));
 Readonly::Scalar my $SOLAR_TZ_DEG_STEP_SIZE => 90;
-Readonly::Scalar my $SOLAR_TZ_TEST_SETS     => 360 / $SOLAR_TZ_DEG_STEP_SIZE + scalar(@SOLAR_TZ_ADHOC_TESTS);
+Readonly::Scalar my $SOLAR_TZ_HR_STEP_SIZE  => 3;
+Readonly::Scalar my $SOLAR_TZ_HOUR_SETS     => 12 / $SOLAR_TZ_HR_STEP_SIZE + 1;
+Readonly::Scalar my $SOLAR_TZ_TEST_SETS     => 360 / $SOLAR_TZ_DEG_STEP_SIZE * 2
+    + scalar(@SOLAR_TZ_ADHOC_TESTS);
 Readonly::Scalar my $SOLAR_TZ_TESTS_PER_SET => 4 + scalar(@SOLAR_TZ_FIELDS) * 5;
 Readonly::Scalar my $TZDATA_TESTS           => 3;
-Readonly::Scalar my $TOTAL_TESTS            => $SOLAR_TZ_TEST_SETS * $SOLAR_TZ_TESTS_PER_SET * 2 + $TZDATA_TESTS;
+Readonly::Scalar my $TOTAL_TESTS            => $SOLAR_TZ_TEST_SETS * $SOLAR_TZ_TESTS_PER_SET * 2
+    + $SOLAR_TZ_HOUR_SETS * $SOLAR_TZ_TESTS_PER_SET + $TZDATA_TESTS;
 
 # globals
 my $debug = 0;
@@ -163,6 +167,24 @@ sub gen_expect_tz_info_hour
 sub gen_expect_tz_info
 {
     my $params_ref = shift;
+
+    # convert tzname, if provided, to longitude/use_lon_tz parameters
+    if ( exists $params_ref->{tzname} ) {
+        my $tzname = $params_ref->{tzname};
+        if ( $tzname =~ /^Lon(\d{3})([EW])$/ix ) {
+            $params_ref->{use_lon_tz} = 1;
+            my $is_west = lc $2 eq "w";
+            $params_ref->{longitude} = int( $1 ) * ( $is_west ? -1 : 1 );
+        } elsif ( $tzname =~ /^(East|West)(\d{2})$/ix ) {
+            $params_ref->{use_lon_tz} = 0;
+            my $is_west = lc $1 eq "west";
+            $params_ref->{longitude} = int( $2 ) * 15 * ( $is_west ? -1 : 1 );
+        } else {
+            croak "unrecognized time zone name $tzname provided for test";
+        }
+    }
+
+    # extract longitude type from parameters
     my $use_lon_tz = $params_ref->{use_lon_tz} // 0;
 
     # process high latitudes
@@ -200,22 +222,31 @@ sub run_prog_fields
     my $longitude  = $params_ref->{longitude};
     my $use_lon_tz = $params_ref->{use_lon_tz} // 0;
     my $type_str   = $use_lon_tz ? "longitude" : "hour";
+    my $tzname     = $params_ref->{tzname};
 
     # start with empty results
     my %result = ( "run" => {}, "arg" => {}, "param" => {} );
+
+    # set up base program command line - each test run will append its own parameters later
+    my @prog_cmd = ( $progpath );
+    if ( defined $tzname) {
+        push @prog_cmd, "--tzname=$tzname";
+    } else {
+        push @prog_cmd, "--longitude=$longitude", "--type=$type_str";
+    }
+    if ( $OSNAME eq "MSWin32" ) {
+        unshift @prog_cmd, "perl";    # Windows can't use shebang hints, needs help finding interpreter
+    }
 
     # run-per-field phase: separate runs for each field
     foreach my $field (@SOLAR_TZ_FIELDS) {
 
         # build command to run the program
-        my @prog_cmd = ( $progpath, "--longitude=$longitude", "--type=$type_str", "--get=$field" );
-        if ( $OSNAME eq "MSWin32" ) {
-            unshift @prog_cmd, "perl";    # Windows can't use shebang hints, needs help finding interpreter
-        }
+        my @prog_cmd2 = ( @prog_cmd, "--get=$field" );
 
         # run the program, capture stdout and stderr
         my ( $out, $err );
-        my $res = IPC::Run::run \@prog_cmd, \undef, \$out, \$err, IPC::Run::timeout(10);
+        my $res = IPC::Run::run \@prog_cmd2, \undef, \$out, \$err, IPC::Run::timeout(10);
         chomp $out;
 
         # save result for this field's run
@@ -228,17 +259,14 @@ sub run_prog_fields
     # arg-per-field phase: one run with separate --get arguments listing each field in order
     {
         # build command to run the program
-        my @prog_cmd = ( $progpath, "--longitude=$longitude", "--type=$type_str" );
+        my @prog_cmd2 = @prog_cmd;
         foreach my $field (@SOLAR_TZ_FIELDS) {
-            push @prog_cmd, "--get=$field";
-        }
-        if ( $OSNAME eq "MSWin32" ) {
-            unshift @prog_cmd, "perl";    # Windows can't use shebang hints, needs help finding interpreter
+            push @prog_cmd2, "--get=$field";
         }
 
         # run the program, capture stdout and stderr
         my ( $out, $err );
-        my $res = IPC::Run::run \@prog_cmd, \undef, \$out, \$err, IPC::Run::timeout(10);
+        my $res = IPC::Run::run \@prog_cmd2, \undef, \$out, \$err, IPC::Run::timeout(10);
         chomp $out;
         my @out_fields = split /^/xm, $out;
         foreach my $field (@SOLAR_TZ_FIELDS) {
@@ -255,15 +283,11 @@ sub run_prog_fields
     # param-per-field phase: one run with one --get argument with comma-delimited parameters for each field in order
     {
         # build command to run the program
-        my @prog_cmd =
-            ( $progpath, "--longitude=$longitude", "--type=$type_str", "--get=" . join( ",", @SOLAR_TZ_FIELDS ) );
-        if ( $OSNAME eq "MSWin32" ) {
-            unshift @prog_cmd, "perl";    # Windows can't use shebang hints, needs help finding interpreter
-        }
+        my @prog_cmd2 = ( @prog_cmd, "--get=" . join( ",", @SOLAR_TZ_FIELDS ));
 
         # run the program, capture stdout and stderr
         my ( $out, $err );
-        my $res = IPC::Run::run \@prog_cmd, \undef, \$out, \$err, IPC::Run::timeout(10);
+        my $res = IPC::Run::run \@prog_cmd2, \undef, \$out, \$err, IPC::Run::timeout(10);
         chomp $out;
         my @out_fields = split /^/xm, $out;
         foreach my $field (@SOLAR_TZ_FIELDS) {
@@ -303,6 +327,12 @@ sub test_valid_tz
     my ( $params_ref, $expected ) = @_;
     debug "testing for valid tz $expected (" . params_str($params_ref) . ")";
 
+    # generate base test title
+    my $base_title = "lon " . $params_ref->{longitude};
+    if ( exists $params_ref->{tzname}) {
+        $base_title = "tzname ". $params_ref->{tzname};
+    }
+
     # run CLI commands to generate tz info
     my $prog_result = run_prog_fields($params_ref);
 
@@ -320,7 +350,7 @@ sub test_valid_tz
         if ( $phase eq "arg" or $phase eq "param" ) {
             is( $prog_result->{$phase}{res},
                 1,
-                "prog $phase/" . $expected->{short_name} . " (lon " . $params_ref->{longitude} . "): expect success" );
+                "prog $phase/" . $expected->{short_name} . " ($base_title): expect success" );
             if ( not $prog_result->{$phase}{res} ) {
                 debug "command failed for $phase/" . $expected->{short_name};
             }
@@ -341,11 +371,9 @@ sub test_valid_tz
             # test field data
             is( $prog_result->{$phase}{$field}{data},
                 $expected->{$field},
-                "verify $test_name (lon " . $params_ref->{longitude} . "): $field=" . $expected->{$field} );
+                "verify $test_name ($base_title): $field=" . $expected->{$field} );
             if ( $prog_result->{$phase}{$field}{data} ne $expected->{$field} ) {
-                debug "failed $test_name (lon "
-                    . $params_ref->{longitude}
-                    . ") - got "
+                debug "failed $test_name ($base_title) - got "
                     . $prog_result->{$phase}{$field}{data}
                     . ", expected "
                     . $expected->{$field};
@@ -354,7 +382,7 @@ sub test_valid_tz
             # run-per-field phase has stderr result (expected empty) for every field
             if ( $phase eq "run" ) {
                 is( $prog_result->{$phase}{$field}{err},
-                    "", "stderr for $test_name (lon " . $params_ref->{longitude} . "): expect empty" );
+                    "", "stderr for $test_name ($base_title): expect empty" );
                 my $stderr = $prog_result->{$phase}{$field}{err} // "";
                 if ( length $stderr > 0 ) {
                     say STDERR "error from $test_name: $stderr";
@@ -367,9 +395,7 @@ sub test_valid_tz
             is( $prog_result->{$phase}{err}, "",
                       "stderr for $phase/"
                     . $expected->{short_name}
-                    . " (lon "
-                    . $params_ref->{longitude}
-                    . "): expect empty" );
+                    . " ($base_title): expect empty" );
             my $stderr = $prog_result->{$phase}{err} // "";
             if ( length $stderr > 0 ) {
                 say STDERR "error from $phase/" . $expected->{short_name} . " command: $stderr";
@@ -380,7 +406,7 @@ sub test_valid_tz
     return;
 }
 
-# run a single validity test
+# run a set of validity tests by longitude and optionally other time zone parameters
 sub run_validity_test_lon
 {
     my ( $progpath, $lon ) = @_;
@@ -393,16 +419,37 @@ sub run_validity_test_lon
     return;
 }
 
+# run a set of validity tests by tzname
+sub run_validity_test_tzname
+{
+    my ( $progpath, $tzname ) = @_;
+    my %params   = ( progpath => $progpath, tzname => $tzname );
+    my $expected = gen_expect_tz_info( \%params );
+    test_valid_tz( \%params, $expected );
+    return;
+}
+
 # check the DateTime::TimeZone recognizes the Solar times zones as valid
 sub run_validity_tests
 {
     my $progpath = shift;
 
     foreach my $lon1 (@SOLAR_TZ_ADHOC_TESTS) {
+        # test timezones by longitude
         run_validity_test_lon( $progpath, $lon1 );
     }
     for ( my $lon2 = -179 ; $lon2 <= 180 ; $lon2 += $SOLAR_TZ_DEG_STEP_SIZE ) {
+        # test timezones by longitude
         run_validity_test_lon( $progpath, $lon2 );
+
+        # test timezones by name
+        my $tzname = sprintf("Lon%03d%s", abs($lon2), $lon2>=0 ? "E" : "W");
+        run_validity_test_tzname( $progpath, $tzname );
+    }
+    for ( my $hour = -12 ; $hour <= 12; $hour += $SOLAR_TZ_HR_STEP_SIZE ) {
+        # test timezones by name
+        my $tzname = sprintf("%4s%02d", $hour>=0 ? "East" : "West", abs($hour));
+        run_validity_test_tzname( $progpath, $tzname );
     }
     return;
 }
