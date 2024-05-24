@@ -69,14 +69,12 @@ With --type=longitude, 360 longitude-based time zones are Lon000E to Lon180E and
 
     lon-tz --longitude=xxx.xxx --get=fieldname
     lon-tz --longitude=xxx.xxx --get=fieldname,fieldname,...
-    lon-tz --longitude=xxx.xxx --get=fieldname --get=fieldname ...
-    lon-tz --longitude=xxx.xxx --get=fieldname,fieldname --get=fieldname,fieldname ...
 
 determines a field of data to output from the specified time zone.
 
-The --get parameter is allowed to specify more than one field to be output. It can be specified more than once. Multiple fields may also be comma-delimited within one --get value. Either or both ways, it prints each requested field on a separate line on the program's output in the order that they were requested on the command line.
+The --get parameter is allowed to specify more than one field to be output. Multiple fields may be comma-delimited within one --get value. It prints each requested field on a separate line on the program's output in the order that they were requested on the command line.
 
-The --get parameter may be combined with other time zone parameters in order to extract data from any of those settings.
+The --get parameter displays the time zone parameters resulting from other command-line parameters which defined it.
 
 The allowed field names are
 

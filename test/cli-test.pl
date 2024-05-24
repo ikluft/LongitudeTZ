@@ -33,12 +33,14 @@ Readonly::Array my @SOLAR_TZ_FIELDS => (
         offset_sec is_utc )
 );
 Readonly::Array my @SOLAR_TZ_ADHOC_TESTS => (qw( -180 -179.75 0 179.75 180 ));
+Readonly::Scalar my $SOLAR_TZ_ARG_PER_FIELD => 0;  # 0 = omit arg-per-field tests, 1 = perform them
 Readonly::Scalar my $SOLAR_TZ_DEG_STEP_SIZE => 90;
 Readonly::Scalar my $SOLAR_TZ_HR_STEP_SIZE  => 3;
 Readonly::Scalar my $SOLAR_TZ_HOUR_SETS     => 12 / $SOLAR_TZ_HR_STEP_SIZE + 1;
 Readonly::Scalar my $SOLAR_TZ_TEST_SETS     => 360 / $SOLAR_TZ_DEG_STEP_SIZE * 2
     + scalar(@SOLAR_TZ_ADHOC_TESTS);
-Readonly::Scalar my $SOLAR_TZ_TESTS_PER_SET => 4 + scalar(@SOLAR_TZ_FIELDS) * 5;
+Readonly::Scalar my $SOLAR_TZ_TESTS_PER_SET => 2 + ($SOLAR_TZ_ARG_PER_FIELD?2:0)
+    + scalar(@SOLAR_TZ_FIELDS) * (4 + ($SOLAR_TZ_ARG_PER_FIELD?1:0));
 Readonly::Scalar my $TZDATA_TESTS           => 3;
 Readonly::Scalar my $TOTAL_TESTS            => $SOLAR_TZ_TEST_SETS * $SOLAR_TZ_TESTS_PER_SET * 2
     + $SOLAR_TZ_HOUR_SETS * $SOLAR_TZ_TESTS_PER_SET + $TZDATA_TESTS;
@@ -257,7 +259,7 @@ sub run_prog_fields
     }
 
     # arg-per-field phase: one run with separate --get arguments listing each field in order
-    {
+    if ( $SOLAR_TZ_ARG_PER_FIELD ) {
         # build command to run the program
         my @prog_cmd2 = @prog_cmd;
         foreach my $field (@SOLAR_TZ_FIELDS) {
@@ -345,6 +347,10 @@ sub test_valid_tz
     #   * one error code and stderr from the single run: 2 tests
     #   * each field has a data result: 9 tests
     foreach my $phase (qw(run arg param)) {
+
+        if ( $phase eq "arg" and not $SOLAR_TZ_ARG_PER_FIELD ) {
+            next;
+        }
 
         # arg-per-field and param-per-field phases have one run result for the phase
         if ( $phase eq "arg" or $phase eq "param" ) {
