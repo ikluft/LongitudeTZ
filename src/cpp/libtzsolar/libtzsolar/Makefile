@@ -11,9 +11,12 @@ OPENSSF_CPPFLAGS=-O2 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrou
 # compiler & linker flags
 CPPFLAGS = $(OPENSSF_CPPFLAGS)
 CXXFLAGS = -std=gnu++17
+LDLIBS  = -lboost_program_options
+
+lon-tz: lon-tz.o libtzsolar.o
 
 libtzsolar.o: libtzsolar.cpp libtzsolar.hpp
 
 .PHONY: clean
 clean:
-	-rm -f libtzsolar.o
+	-rm -f lon-tz lon-tz.o libtzsolar.o
