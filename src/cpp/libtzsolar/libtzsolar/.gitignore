@@ -6,3 +6,6 @@
 *.dll
 *.dylib
 *.obj
+
+# auto-generated files
+version.hpp

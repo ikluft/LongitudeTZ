@@ -13,16 +13,25 @@ CPPFLAGS = $(OPENSSF_CPPFLAGS)
 CXXFLAGS = -std=gnu++17
 LDLIBS  = -lboost_program_options
 
+# file lists
+.PHONY: all clean spotless
+CLEAN_FILES = lon-tz lon-tz.o libtzsolar.o
+SPOTLESS_FILES = version.hpp
+
+# first target is default build targer
+all: lon-tz
+
+# build targets handled by built-in make rules
 lon-tz: lon-tz.o libtzsolar.o
+libtzsolar.o: libtzsolar.cpp libtzsolar.hpp
+lon-tz.o: version.hpp lon-tz.cpp
 
-libtzsolar.o: libtzsolar.cpp libtzsolar.hpp version
+# build targets with explicit actions
+version.hpp: Changes changes2version.pl version.hpp.tt2
+	perl changes2version.pl version.hpp.tt2
 
-.PHONY: version
-version: version.hpp
-
-version.hpp: Changes changes2version.pl
-	perl changes2version.pl
-
-.PHONY: clean
+# cleanup targets
 clean:
-	-rm -f lon-tz lon-tz.o libtzsolar.o version.hpp
+	-rm -f $(CLEAN_FILES)
+spotless: clean
+	-rm -f $(SPOTLESS_FILES)
