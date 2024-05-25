@@ -15,8 +15,14 @@ LDLIBS  = -lboost_program_options
 
 lon-tz: lon-tz.o libtzsolar.o
 
-libtzsolar.o: libtzsolar.cpp libtzsolar.hpp
+libtzsolar.o: libtzsolar.cpp libtzsolar.hpp version
+
+.PHONY: version
+version: version.hpp
+
+version.hpp: Changes changes2version.pl
+	perl changes2version.pl
 
 .PHONY: clean
 clean:
-	-rm -f lon-tz lon-tz.o libtzsolar.o
+	-rm -f lon-tz lon-tz.o libtzsolar.o version.hpp
