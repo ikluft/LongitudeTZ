@@ -12,6 +12,7 @@ OPENSSF_CPPFLAGS=-O2 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrou
 CPPFLAGS = $(OPENSSF_CPPFLAGS)
 CXXFLAGS = -std=gnu++17
 LDLIBS  = -lboost_program_options
+LDFLAGS = -Wl,--copy-dt-needed-entries
 
 # file lists
 .PHONY: all clean spotless

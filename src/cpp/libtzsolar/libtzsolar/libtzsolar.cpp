@@ -4,16 +4,21 @@
 
 #include "libtzsolar.hpp"
 #include <cstdlib>
+#include <stdexcept>
+#include <string>
 #include <iomanip>
 #include <sstream>
 #include <cmath>
+#include <unordered_map>
+#include <functional>
+#include <optional>
 
 // generate a solar time zone name
 // parameters:
 //   tz_num: integer number for time zone - hourly or longitude based depending on use_lon_tz
 //   use_lon_tz: true=use longitude-based time zones, false=use hour-based time zones
 //   sign: +1 = positive/zero, -1 = negative
-std::string TZSolar::tz_name ( unsigned short tz_num, bool use_lon_tz, short sign ) {
+std::string TZSolar::tz_name ( const unsigned short tz_num, const bool use_lon_tz, const short sign ) {
     // generate time zone name prefix and suffix
     std::string prefix = use_lon_tz ? "Lon" : ( sign > 0 ? "East" : "West" );
     std::string suffix = use_lon_tz ? "" : ( sign > 0 ? "E" : "W" );
@@ -29,7 +34,7 @@ std::string TZSolar::tz_name ( unsigned short tz_num, bool use_lon_tz, short sig
 }
 
 // check latitude data and initialize special case for polar regions - internal method called by tz_params()
-bool TZSolar::tz_params_latitude ( short longitude, bool use_lon_tz, short latitude ) {
+bool TZSolar::tz_params_latitude ( const short longitude, const bool use_lon_tz, const short latitude ) {
     // special case: use East00/Lon000E (equal to UTC) within 10° latitude of poles
     if ( abs( latitude ) >= limit_latitude - precision_fp ) {
         // note: for polar latitudes, this must set all fields on behalf of the constructor
@@ -43,7 +48,7 @@ bool TZSolar::tz_params_latitude ( short longitude, bool use_lon_tz, short latit
 
 
 // get timezone parameters (name and minutes offset) - called by constructor
-void TZSolar::tz_params ( short longitude, bool use_lon_tz, std::optional<short> opt_latitude ) {
+void TZSolar::tz_params (const short longitude, const bool use_lon_tz, const std::optional<short> opt_latitude ) {
     // if latitude is provided, use UTC within 10° latitude of poles
     if ( ! opt_latitude.has_value() ) {
         if ( this->tz_params_latitude( longitude, use_lon_tz, opt_latitude.value() )) {

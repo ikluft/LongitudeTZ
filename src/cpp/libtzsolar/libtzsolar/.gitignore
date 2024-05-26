@@ -8,4 +8,5 @@
 *.obj
 
 # auto-generated files
+lon-tz
 version.hpp

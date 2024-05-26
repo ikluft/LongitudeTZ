@@ -3,6 +3,8 @@
  */
 
 #include "libtzsolar.hpp"
+#include "version.hpp"
+#include <string>
 #include <iostream>
 #include <boost/program_options.hpp>
 
@@ -37,7 +39,8 @@ int main(int argc, char* argv[])
 
     // print version
     if (vm.count("version")) {
-        // TODO
+        std::cout << "Longitude time zones library, C++ implementation version " << lon_tz_version.full;
+        return 0;
     }
 
     // TODO
