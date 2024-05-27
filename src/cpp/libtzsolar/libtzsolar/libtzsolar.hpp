@@ -14,9 +14,10 @@ class TZSolar {
     // time zone constants: names, regular expressions and numbers
     const std::string tzsolar_lon_zone_str = std::string ( "(Lon0[0-9][0-9][EW])|(Lon1[0-7][0-9][EW])|(Lon180[EW])" );
     const std::string tzsolar_hour_zone_str = std::string ( "(East|West)(0[0-9]|1[0-2])" );
-    const std::regex tzsolar_lon_zone_re = std::regex ( tzsolar_lon_zone_str );
-    const std::regex tzsolar_hour_zone_re = std::regex ( tzsolar_hour_zone_str );
-    const std::regex tzsolar_zone_re = std::regex ( tzsolar_lon_zone_str + "|" + tzsolar_hour_zone_str );
+    const std::regex tzsolar_lon_zone_re = std::regex ( tzsolar_lon_zone_str, std::regex::icase );
+    const std::regex tzsolar_hour_zone_re = std::regex ( tzsolar_hour_zone_str, std::regex::icase );
+    const std::regex tzsolar_zone_re = std::regex ( tzsolar_lon_zone_str + "|" + tzsolar_hour_zone_str,
+        std::regex::icase );
     const int precision_digits = 6;  // max decimal digits of precision
     const double precision_fp = std::pow( 10, -precision_digits ) / 2.0;  // 1/2 width of floating point equality
     const int max_degrees = 360;
@@ -47,7 +48,7 @@ class TZSolar {
     static std::string tz_name ( const unsigned short tz_num, const bool use_lon_tz, const short sign );
 
     // get timezone parameters (name and minutes offset) - called by constructor
-    bool tz_params_latitude ( const short longitude, const bool use_lon_tz, const short latitude );
+    bool tz_params_latitude ( const bool use_lon_tz, const short latitude );
 
     // get timezone parameters (name and minutes offset) - called by constructor
     void tz_params (const short longitude, const bool use_lon_tz, const std::optional<short> opt_latitude );

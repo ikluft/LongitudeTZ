@@ -9,9 +9,11 @@
 #include <iomanip>
 #include <sstream>
 #include <cmath>
+#include <regex>
 #include <unordered_map>
 #include <functional>
 #include <optional>
+#include <boost/numeric/conversion/cast.hpp>
 
 // generate a solar time zone name
 // parameters:
@@ -34,7 +36,7 @@ std::string TZSolar::tz_name ( const unsigned short tz_num, const bool use_lon_t
 }
 
 // check latitude data and initialize special case for polar regions - internal method called by tz_params()
-bool TZSolar::tz_params_latitude ( const short longitude, const bool use_lon_tz, const short latitude ) {
+bool TZSolar::tz_params_latitude ( const bool use_lon_tz, const short latitude ) {
     // special case: use East00/Lon000E (equal to UTC) within 10° latitude of poles
     if ( abs( latitude ) >= limit_latitude - precision_fp ) {
         // note: for polar latitudes, this must set all fields on behalf of the constructor
@@ -46,25 +48,14 @@ bool TZSolar::tz_params_latitude ( const short longitude, const bool use_lon_tz,
     return false;
 }
 
-
-// constructor from time zone name
-TZSolar::TZSolar( const std::string &tzname ) {
-    if (std::regex_search(tzname, tzsolar_lon_zone_re)) {
-        // TODO
-    }
-    if (std::regex_search(tzname, tzsolar_hour_zone_re)) {
-        // TODO
-    }
-}
-
-
 // get timezone parameters (name and minutes offset) - called by constructor
-void TZSolar::tz_params (const short longitude, const bool use_lon_tz, const std::optional<short> opt_latitude ) {
+void TZSolar::tz_params (const short lon, const bool use_lon_tz, const std::optional<short> opt_latitude ) {
     // if latitude is provided, use UTC within 10° latitude of poles
     if ( ! opt_latitude.has_value() ) {
-        if ( this->tz_params_latitude( longitude, use_lon_tz, opt_latitude.value() )) {
+        if ( this->tz_params_latitude( use_lon_tz, opt_latitude.value() )) {
             return;
         }
+        // fall through if latitude was provided but not in the extreme polar regions (so ignore it)
     }
 
     //
@@ -72,9 +63,10 @@ void TZSolar::tz_params (const short longitude, const bool use_lon_tz, const std
     //
 
     // safety check on longitude
-    if ( std::abs( longitude ) > max_longitude_fp + precision_fp ) {
+    if ( std::abs( lon ) > max_longitude_fp + precision_fp ) {
         throw std::out_of_range( "longitude out of range -180 to +180" );
     }
+    this->longitude = lon;
 
     // set flag for longitude time zones: 0 = hourly 1-hour/15-degree zones, 1 = longitude 4-minute/1-degree zones
     // defaults to hourly time zone ($use_lon_tz=0)
@@ -104,8 +96,39 @@ void TZSolar::tz_params (const short longitude, const bool use_lon_tz, const std
     offset_min = sign * tz_num * minutes_per_degree_lon * tz_degree_width();
 }
 
-    // get offset as a string in ±HH:MM format
+// constructor from time zone name
+TZSolar::TZSolar( const std::string &tzname ) {
+    // change tzname to lower case
+    std::string tzname_lower = tzname;
+    std::transform(tzname_lower.begin(), tzname_lower.end(), tzname_lower.begin(),
+        [](unsigned char c){ return std::tolower(c); });
+
+    // use regex to check for longitude-based time zone (like Lon180E, Lon123W)
+    if (std::regex_search(tzname_lower, tzsolar_lon_zone_re)) {
+        bool is_west = tzname_lower.at(6) == 'w';
+        short lon = boost::numeric_cast<short>(std::stoi(tzname_lower.substr(3,3)) * (is_west ? -1 : 1));
+        bool use_lon_tz = true;
+        this->tz_params(lon, use_lon_tz, std::nullopt);
+        return;
+    }
+
+    // use regex to check for hour-based time zone (like East12, West08)
+    if (std::regex_search(tzname_lower, tzsolar_hour_zone_re)) {
+        bool is_west = tzname_lower.substr(0,4) == "west";
+        short hour_num = boost::numeric_cast<short>(std::stoi(tzname_lower.substr(4,2)));
+        short lon = boost::numeric_cast<short>(hour_num * 15 * (is_west ? -1 : 1));
+        bool use_lon_tz = false;
+        this->tz_params(lon, use_lon_tz, std::nullopt);
+        return;
+    }
+
+    // reject string which didn't match regex patterns of valid solar time zones
+    throw std::invalid_argument( "not a valid solar time zone: " + tzname);
+}
+
+// get offset as a string in ±HH:MM format
 std::string TZSolar::str_offset() {
+
     std::string sign = offset_min >= 0 ? "+" : "-";
 
     // format hour
@@ -113,7 +136,7 @@ std::string TZSolar::str_offset() {
     ss_hour << std::setw( 2 ) << std::setfill( '0' ) << abs(offset_min)/60;
     std::string num_hour = ss_hour.str();
 
-    // format hour
+    // format minutes
     std::ostringstream ss_min;
     ss_min << std::setw( 2 ) << std::setfill( '0' ) << abs(offset_min)%60;
     std::string num_min = ss_min.str();
