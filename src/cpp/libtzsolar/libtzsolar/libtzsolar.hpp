@@ -54,10 +54,13 @@ class TZSolar {
 
     public:
 
-    // constructor
-    TZSolar( short longitude, bool use_lon_tz, std::optional<short> latitude ) {
+    // constructor from time zone parameters
+    TZSolar( const short longitude, const bool use_lon_tz, const std::optional<short> latitude ) {
         this->tz_params( longitude, use_lon_tz, latitude );
     }
+
+    // constructor from time zone name
+    explicit TZSolar( const std::string &tzname );
 
     //
     // read accessors
