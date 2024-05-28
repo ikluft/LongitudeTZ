@@ -113,12 +113,12 @@ def _gen_lon_tz(deg_in):
 def _do_tzfile() -> None:
     """generate tzdata file"""
 
-    # generate solar time zones in increments of 15 degrees of longitude (STHxxE/STHxxW)
+    # generate solar time zones in increments of 15 degrees of longitude (EastXX or WestXX)
     # standard 1-hour-wide time zones
     for h_zone in range(-12, 12 + 1):
         _gen_hour_tz(h_zone)
 
-    # generate solar time zones in incrememnts of 4 minutes / 1 degree of longitude (STLxxxE/STxxxW)
+    # generate solar time zones in incrememnts of 4 minutes / 1 degree of longitude (LonXXXE or LonXXXW)
     # hyperlocal 4-minute-wide time zones for conversion to/from niche uses of local solar time
     for d_zone in range(-180, 180 + 1):
         _gen_lon_tz(d_zone)
