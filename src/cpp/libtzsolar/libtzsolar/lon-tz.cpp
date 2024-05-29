@@ -43,30 +43,27 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    if (vm.count("tzfile")) {
-        if (vm.count("tzname") || vm.count("longitude")) {
-            std::cerr << "Mutually exclusive arguments: --tzfile cannot be combined with --tzname or --longitude";
-            std::cerr << desc;
-            return 1;
-        }
-        // TODO
-        return 0;
-    }
-
-    if (vm.count("tzname")) {
-        if (vm.count("longitude")) {
-            std::cerr << "Mutually exclusive arguments: --tzname cannot be combined with --longitude";
-            std::cerr << desc;
-            return 1;
-        }
-        // TODO
-        return 0;
-    }
-
-    if (!vm.count("longitude")) {
-        std::cerr << "One argument of --tzfile, --tzname or --longitude is required";
+    // check that one and only one of the mutually-exclusive arguments was provided
+    bool has_tzfile = vm.count("tzfile") > 0;
+    bool has_tzname = vm.count("tzname") > 0;
+    bool has_lon = vm.count("longitude") > 0;
+    if ((has_tzfile ? 1 : 0) + (has_tzname ? 1 : 0) + (has_lon ? 1 : 0) != 1 ) {
+        std::cerr << "Mutually exclusive arguments: one and only one of --tzfile, --tzname or --longitude allowed";
         std::cerr << desc;
         return 1;
+    }
+
+    // output tzfile time zone data
+    if ( has_tzfile ) {
+        // TODO
+        return 0;
+    }
+
+    // process time zone queries specified from --tzname or --longitude
+    if ( has_tzname ) {
+        // TODO
+    } else if ( has_lon ) {
+        // TODO
     }
 
     // TODO
