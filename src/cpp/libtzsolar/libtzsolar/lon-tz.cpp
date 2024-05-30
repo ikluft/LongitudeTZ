@@ -11,11 +11,14 @@
 namespace po = boost::program_options;
 
 // convert an int to a string with zero-padding
-std::string zeropad(const std::size_t length, const int value)
+std::string zeropad(const std::size_t length, const unsigned short value)
 {
-    std::string result = std::to_string(value);
-    result.insert(0, length - result.length(), '0');
-    return result;
+    std::string num = std::to_string(value);
+    if (num.length() > length) {
+        return num;
+    }
+    std::string pad(std::size_t(length - num.length()), '0');
+    return pad + num;
 }
 
 // generate standard 1-hour-wide (15 degrees longitude) time zones
@@ -35,9 +38,9 @@ void gen_hour_tz(const short hour) {
     unsigned short offset_min = 0;
 
     // generate strings from time zone parameters
-    std::string zone_abbrev = e_w + zeropad(2, hour);
-    std::string zone_name = "Solar/" + zone_abbrev;
-    std::string offset_str = sign + std::to_string(offset_hr) + zeropad(2, offset_min);
+    std::string zone_abbrev = e_w + zeropad(2, offset_hr);
+    std::string zone_name = std::string("Solar/") + zone_abbrev;
+    std::string offset_str = sign + std::to_string(offset_hr) + ":" + zeropad(2, offset_min);
 
     // output time zone data
     std::cout << std::string("# Solar Time by hourly increment: ") << sign << offset_hr << std::endl;
@@ -62,11 +65,11 @@ void gen_lon_tz(const short deg) {
     // use integer degrees to compute time zone parameters: longitude, east/west sign and minutes offset
     // $deg>=0: positive degrees (east longitude), straightforward assignments of data
     // $deg<0: negative degrees (west longitude)
-    unsigned short lon = std::abs(deg);
-    std::string e_w = (deg > 0) ? "E" : "W";
-    std::string sign = (deg >= 0) ? "+" : "-";
+    std::string e_w = (deg >= 0) ? "E" : "W";
+    std::string sign = (deg >= 0) ? "" : "-";
 
     // derive time zone parameters from 4 minutes of offset for each degree of longitude
+    unsigned short lon = std::abs(deg);
     unsigned short offset = 4 * lon;
     unsigned short offset_hr = int(offset/60);
     unsigned short offset_min = offset%60;
@@ -77,7 +80,7 @@ void gen_lon_tz(const short deg) {
     std::string offset_str = sign + std::to_string(offset_hr) + ":" + zeropad(2, offset_min);
 
     // output time zone data
-    std::cout << std::string("# Solar Time by hourly increment: ") << sign << offset_hr << std::endl;
+    std::cout << std::string("# Solar Time by degree of longitude: ") << lon << " " << e_w << std::endl;
     std::cout << "# Zone\tNAME\t\tSTDOFF\tRULES\tFORMAT\t[UNTIL]" << std::endl;
     std::cout << "Zone\t" << zone_name << "\t" << offset_str << "\t-\t" << zone_abbrev << std::endl;
     std::cout << std::endl;
