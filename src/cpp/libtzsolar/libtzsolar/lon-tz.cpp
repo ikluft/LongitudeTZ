@@ -103,6 +103,47 @@ void do_tzfile()
     }
 }
 
+// build a TZSolar object from the command line parameters
+TZSolar build_tz_obj( po::variables_map vm ) {
+    // create TZSolar object from --tzname request
+    if (vm.count("tzname") > 0) {
+        std::string tzname = vm["tzname"].as<std::string>();
+        return TZSolar(tzname);
+    }
+
+    // create TZSolar object from --longitude request
+    if (vm.count("longitude") > 0) {
+        float lon = vm["longitude"].as<float>();
+        bool use_lon_tz = false;
+        if (vm.count("type") > 0) {
+            std::string type_param = vm["type"].as<std::string>();
+            if (type_param == "longitude" or type_param == "lon") {
+                use_lon_tz = true;
+            } else if (type_param == "hour") {
+                use_lon_tz = false;
+            } else {
+                std::cerr << "build_tz_obj: bad --type '" << type_param << "' - use hour or longitude" << std::endl;
+                std::exit(1);
+            }
+        }
+        std::optional<short> opt_latitude;
+        if (vm.count("latitude") > 0) {
+            float lat = vm["latitude"].as<float>();
+            opt_latitude.emplace(lat);
+        }
+        return TZSolar(lon, use_lon_tz, opt_latitude);
+    }
+
+    // if control fell through, report parameter error
+    std::cerr << "build_tz_obj: --tzname or --longitude option required" << std::endl;
+    std::exit(1);
+}
+
+// process get requests on specified fields
+void do_tz_op( const TZSolar &tz_obj, const std::string &get_param) {
+    // TODO
+}
+
 // mainline: program entry point
 int main(int argc, char* argv[])
 {
@@ -155,12 +196,11 @@ int main(int argc, char* argv[])
     }
 
     // process time zone queries specified from --tzname or --longitude
-    if ( has_tzname ) {
-        // TODO
-    } else if ( has_lon ) {
-        // TODO
-    }
+    // note: by the logic above, one and only one of --tzname or --longitude must be set at this point
+    TZSolar tz_obj = build_tz_obj(vm);
 
-    // TODO
+    // process get requests for specified field(s)
+    do_tz_op(tz_obj, vm["get"].as<std::string>());
+
     return 0;
 }
