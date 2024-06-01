@@ -34,10 +34,10 @@ void gen_hour_tz(const short hour) {
     // Hours line up with time zones. So it's a equal to time zone offset.
     std::string sign = (hour >= 0) ? "+" : "-";
     std::string e_w = (hour >= 0) ? "East" : "West";
-    unsigned short offset_hr = std::abs(hour);
-    unsigned short offset_min = 0;
 
     // generate strings from time zone parameters
+    unsigned short offset_hr = std::abs(hour);
+    unsigned short offset_min = 0;
     std::string zone_abbrev = e_w + zeropad(2, offset_hr);
     std::string zone_name = std::string("Solar/") + zone_abbrev;
     std::string offset_str = sign + std::to_string(offset_hr) + ":" + zeropad(2, offset_min);
@@ -65,8 +65,8 @@ void gen_lon_tz(const short deg) {
     // use integer degrees to compute time zone parameters: longitude, east/west sign and minutes offset
     // $deg>=0: positive degrees (east longitude), straightforward assignments of data
     // $deg<0: negative degrees (west longitude)
-    std::string e_w = (deg >= 0) ? "E" : "W";
     std::string sign = (deg >= 0) ? "" : "-";
+    std::string e_w = (deg >= 0) ? "E" : "W";
 
     // derive time zone parameters from 4 minutes of offset for each degree of longitude
     unsigned short lon = std::abs(deg);
