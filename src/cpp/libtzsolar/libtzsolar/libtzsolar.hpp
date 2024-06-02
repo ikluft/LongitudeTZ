@@ -128,7 +128,7 @@ class TZSolar {
     }
 
     // general read accessor for implementation of CLI spec
-    std::string get(const std::string &field);
+    std::optional<std::string> get(const std::string &field);
 
     private:
 

@@ -145,7 +145,7 @@ std::string TZSolar::str_offset() {
 }
 
 // general read accessor for implementation of CLI spec
-std::string TZSolar::get(const std::string &field) {
+std::optional<std::string> TZSolar::get(const std::string &field) {
     static const std::unordered_map<std::string, std::function<std::string(TZSolar &)>> funcmap =
     {
         {"longitude", [](TZSolar &tzs) { return tzs.str_longitude(); }},
@@ -159,9 +159,14 @@ std::string TZSolar::get(const std::string &field) {
         {"is_utc", [](TZSolar &tzs) { return tzs.str_is_utc(); }},
     };
 
+    // non-existent field results in a blank response
+    if (!funcmap.count(field)) {
+        return nullptr;
+    }
+
     // call function to get field value, or throw std::out_of_range exception for unrecognized field
     auto func = funcmap.at(field);
-    return func(*this);
+    return std::make_optional<std::string>(func(*this));
 }
 
 
