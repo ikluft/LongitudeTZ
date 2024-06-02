@@ -77,12 +77,12 @@ class TZSolar {
     }
 
     // optional latitude used to detect if coordinates are too close to poles and use GMT instead
-    inline std::optional<short> get_opt_latitude() {
+    constexpr inline std::optional<short> get_opt_latitude() {
         return opt_latitude;
     }
 
     // determine if latitude was used to define the time zone
-    inline bool has_latitude() {
+    const inline bool has_latitude() {
         return opt_latitude.has_value();
     }
 
@@ -90,45 +90,45 @@ class TZSolar {
     // string read accessors for CLI
 
     // return string value of longitude
-    inline std::string str_longitude() {
+    const inline std::string str_longitude() {
         return std::to_string(longitude);
     }
 
     // return string value of latitude, use "" if optional value is not present
-    inline std::string str_latitude() {
+    const inline std::string str_latitude() {
         return opt_latitude.has_value() ? std::to_string(opt_latitude.value()) : "";
     }
 
     // time zone short/base name (without Solar/)
-    inline std::string str_short_name() {
+    const inline std::string str_short_name() {
         return short_name;
     }
 
     // time zone long name includes Solar/ prefix
-    inline std::string str_long_name() {
+    const inline std::string str_long_name() {
         return "Solar/" + short_name;
     }
 
     // get offset as a string in ±HH:MM format
-    std::string str_offset();
+    const std::string str_offset();
 
     // get offset minutes as a string
-    inline std::string str_offset_min() {
+    const inline std::string str_offset_min() {
         return std::to_string(offset_min);
     }
 
     // get offset seconds as a string
-    inline std::string str_offset_sec() {
+    const inline std::string str_offset_sec() {
         return std::to_string(offset_min*60);
     }
 
     // get is_utc flag as a string
-    inline std::string str_is_utc() {
+    const inline std::string str_is_utc() {
         return std::to_string(offset_min == 0 ? 1 : 0);
     }
 
     // general read accessor for implementation of CLI spec
-    std::optional<std::string> get(const std::string &field);
+    const std::optional<std::string> get(const std::string &field);
 
     private:
 
@@ -146,12 +146,12 @@ class TZSolar {
     }
 
     // formatting: time zone prefix string
-    inline std::string tz_prefix( short sign ) {
+    const inline std::string tz_prefix( short sign ) {
         return std::string( lon_tz ? "Lon" : ( sign > 0 ? "East" : "West" ));
     }
 
     // formatting: time zone suffix string
-    inline std::string tz_suffix( short sign) {
+    const inline std::string tz_suffix( short sign) {
         return std::string( lon_tz ? ( sign > 0 ? "E" : "W" ) : "" );
     }
 

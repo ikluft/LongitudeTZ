@@ -127,7 +127,7 @@ TZSolar::TZSolar( const std::string &tzname ) {
 }
 
 // get offset as a string in ±HH:MM format
-std::string TZSolar::str_offset() {
+const std::string TZSolar::str_offset() {
 
     std::string sign = offset_min >= 0 ? "+" : "-";
 
@@ -145,7 +145,7 @@ std::string TZSolar::str_offset() {
 }
 
 // general read accessor for implementation of CLI spec
-std::optional<std::string> TZSolar::get(const std::string &field) {
+const std::optional<std::string> TZSolar::get(const std::string &field) {
     static const std::unordered_map<std::string, std::function<std::string(TZSolar &)>> funcmap =
     {
         {"longitude", [](TZSolar &tzs) { return tzs.str_longitude(); }},
