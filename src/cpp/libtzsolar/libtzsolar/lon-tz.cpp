@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <boost/program_options.hpp>
+#include <boost/algorithm/string.hpp>
 
 namespace po = boost::program_options;
 
@@ -114,7 +115,7 @@ TZSolar build_tz_obj( po::variables_map vm ) {
     // create TZSolar object from --longitude request
     if (vm.count("longitude") > 0) {
         float lon = vm["longitude"].as<float>();
-        bool use_lon_tz = false;
+        bool use_lon_tz = false;  // flag defaults to false
         if (vm.count("type") > 0) {
             std::string type_param = vm["type"].as<std::string>();
             if (type_param == "longitude" or type_param == "lon") {
@@ -140,8 +141,17 @@ TZSolar build_tz_obj( po::variables_map vm ) {
 }
 
 // process get requests on specified fields
-void do_tz_op( const TZSolar &tz_obj, const std::string &get_param) {
-    // TODO
+const void do_tz_op( TZSolar &tz_obj, const std::string &get_param) {
+    std::vector<std::string> get_fields;
+    boost::algorithm::split( get_fields, get_param, boost::algorithm::is_any_of(","));
+    for ( auto iter = get_fields.begin(); iter != get_fields.end(); iter++ ) {
+        auto value = tz_obj.get(*iter);
+        if (value.has_value()) {
+            std::cout << value.value() << std::endl;
+        } else {
+            std::cout << std::endl;
+        }
+    }
 }
 
 // mainline: program entry point
