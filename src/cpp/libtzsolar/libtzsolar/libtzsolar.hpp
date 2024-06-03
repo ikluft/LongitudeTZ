@@ -34,8 +34,8 @@ class TZSolar {
     std::string short_name;  // time zone base name, i.e. Lon000E or East00
     bool lon_tz; // flag: use longitude timezones; if false defaults to hour-based time zones
     int offset_min;  // time zone offset in minutes
-    int longitude;   // longitude for time zone position
-    std::optional<short> opt_latitude;  // optional latitude for computing polar exclusion
+    float longitude;   // longitude for time zone position
+    std::optional<float> opt_latitude;  // optional latitude for computing polar exclusion
 
     //
     // protected methods
@@ -48,15 +48,15 @@ class TZSolar {
     static std::string tz_name ( const unsigned short tz_num, const bool use_lon_tz, const short sign );
 
     // get timezone parameters (name and minutes offset) - called by constructor
-    bool tz_params_latitude ( const bool use_lon_tz, const short latitude );
+    bool tz_params_latitude ( const bool use_lon_tz, const float latitude );
 
     // get timezone parameters (name and minutes offset) - called by constructor
-    void tz_params (const short longitude, const bool use_lon_tz, const std::optional<short> opt_latitude );
+    void tz_params (const float longitude, const bool use_lon_tz, const std::optional<float> opt_latitude );
 
     public:
 
     // constructor from time zone parameters
-    TZSolar( const short longitude, const bool use_lon_tz, const std::optional<short> latitude ) {
+    TZSolar( const float longitude, const bool use_lon_tz, const std::optional<float> latitude ) {
         this->tz_params( longitude, use_lon_tz, latitude );
     }
 
@@ -72,12 +72,12 @@ class TZSolar {
     }
 
     // longitude used to set time zone
-    constexpr int get_longitude() {
+    constexpr float get_longitude() {
         return longitude;
     }
 
     // optional latitude used to detect if coordinates are too close to poles and use GMT instead
-    constexpr inline std::optional<short> get_opt_latitude() {
+    constexpr inline std::optional<float> get_opt_latitude() {
         return opt_latitude;
     }
 

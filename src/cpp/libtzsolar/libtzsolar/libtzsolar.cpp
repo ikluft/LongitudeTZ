@@ -36,9 +36,9 @@ std::string TZSolar::tz_name ( const unsigned short tz_num, const bool use_lon_t
 }
 
 // check latitude data and initialize special case for polar regions - internal method called by tz_params()
-bool TZSolar::tz_params_latitude ( const bool use_lon_tz, const short latitude ) {
+bool TZSolar::tz_params_latitude ( const bool use_lon_tz, const float latitude ) {
     // special case: use East00/Lon000E (equal to UTC) within 10° latitude of poles
-    if ( abs( latitude ) >= limit_latitude - precision_fp ) {
+    if ( std::abs( latitude ) >= limit_latitude - precision_fp ) {
         // note: for polar latitudes, this must set all fields on behalf of the constructor
         lon_tz = use_lon_tz;
         short_name = lon_tz ? "Lon000E" : "East00";
@@ -49,7 +49,7 @@ bool TZSolar::tz_params_latitude ( const bool use_lon_tz, const short latitude )
 }
 
 // get timezone parameters (name and minutes offset) - called by constructor
-void TZSolar::tz_params (const short lon, const bool use_lon_tz, const std::optional<short> opt_latitude ) {
+void TZSolar::tz_params (const float lon, const bool use_lon_tz, const std::optional<float> opt_latitude ) {
     // if latitude is provided, use UTC within 10° latitude of poles
     if ( ! opt_latitude.has_value() ) {
         if ( this->tz_params_latitude( use_lon_tz, opt_latitude.value() )) {
@@ -106,7 +106,7 @@ TZSolar::TZSolar( const std::string &tzname ) {
     // use regex to check for longitude-based time zone (like Lon180E, Lon123W)
     if (std::regex_search(tzname_lower, tzsolar_lon_zone_re)) {
         bool is_west = tzname_lower.at(6) == 'w';
-        short lon = boost::numeric_cast<short>(std::stoi(tzname_lower.substr(3,3)) * (is_west ? -1 : 1));
+        float lon = boost::numeric_cast<float>(std::stof(tzname_lower.substr(3,3)) * (is_west ? -1 : 1));
         bool use_lon_tz = true;
         this->tz_params(lon, use_lon_tz, std::nullopt);
         return;
@@ -116,7 +116,7 @@ TZSolar::TZSolar( const std::string &tzname ) {
     if (std::regex_search(tzname_lower, tzsolar_hour_zone_re)) {
         bool is_west = tzname_lower.substr(0,4) == "west";
         short hour_num = boost::numeric_cast<short>(std::stoi(tzname_lower.substr(4,2)));
-        short lon = boost::numeric_cast<short>(hour_num * 15 * (is_west ? -1 : 1));
+        float lon = boost::numeric_cast<float>(hour_num * 15 * (is_west ? -1 : 1));
         bool use_lon_tz = false;
         this->tz_params(lon, use_lon_tz, std::nullopt);
         return;
