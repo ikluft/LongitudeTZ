@@ -15,6 +15,9 @@
 #include <optional>
 #include <boost/numeric/conversion/cast.hpp>
 
+// initialize static member data
+bool TZSolar::debug_flag = false;
+
 // generate a solar time zone name
 // parameters:
 //   tz_num: integer number for time zone - hourly or longitude based depending on use_lon_tz

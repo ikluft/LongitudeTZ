@@ -163,6 +163,7 @@ int main(int argc, char* argv[])
     desc.add_options()
     ("help", "Display this help message")
     ("version", "Display the version number")
+    ("debug", "Enable debugging output")
     ("tzfile", "Generate timezone database file")
     ("tzname", po::value<std::string>(), "Select a solar time zone by name")
     ("longitude", po::value<float>(), "Set the longitude parameter for a solar time zone")
@@ -186,6 +187,11 @@ int main(int argc, char* argv[])
     if (vm.count("version")) {
         std::cout << "Longitude time zones library, C++ implementation version " << lon_tz_version.full;
         return 0;
+    }
+
+    // set debugging flag
+    if (vm.count("debug")) {
+        TZSolar::set_debug_flag(true);
     }
 
     // check that one and only one of the mutually-exclusive arguments was provided

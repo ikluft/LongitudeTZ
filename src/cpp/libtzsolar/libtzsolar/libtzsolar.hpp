@@ -6,6 +6,7 @@
 #include <cmath>
 #include <regex>
 #include <optional>
+#include <iostream>
 
 // solar time zones class
 class TZSolar {
@@ -27,6 +28,10 @@ class TZSolar {
     const int polar_utc_area = 10;  // latitude near poles to use UTC
     const int limit_latitude = int ( max_latitude_fp - polar_utc_area );  // max latitude for solar time zones
     const int minutes_per_degree_lon = 4;  // minutes per degree longitude
+
+    // private class-static data
+    private:
+    static bool debug_flag;
 
     // member data
     protected:
@@ -54,6 +59,11 @@ class TZSolar {
     void tz_params (const float longitude, const bool use_lon_tz, const std::optional<float> opt_latitude );
 
     public:
+
+    // accessors for class-static data
+    const static inline bool get_debug_flag() { return debug_flag; }
+    inline static void set_debug_flag(bool flag_value) { debug_flag = flag_value; }
+    const static inline void debug_print(const std::string &msg) { if (debug_flag) { std::cerr << msg << std::endl; } }
 
     // constructor from time zone parameters
     TZSolar( const float longitude, const bool use_lon_tz, const std::optional<float> latitude ) {
