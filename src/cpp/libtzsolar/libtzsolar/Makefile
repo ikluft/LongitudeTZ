@@ -9,10 +9,12 @@ OPENSSF_CPPFLAGS=-O2 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrou
 	-Wl,-z,relro -Wl,-z,now
 
 # compiler & linker flags
-CPPFLAGS = $(OPENSSF_CPPFLAGS)
+# add DEBUG_FLAGS=-g to make command line in order to build with debugging
+DEBUG_FLAGS =
+CPPFLAGS = $(OPENSSF_CPPFLAGS) $(DEBUG_FLAGS)
 CXXFLAGS = -std=gnu++17
 LDLIBS  = -lboost_program_options
-LDFLAGS = -Wl,--copy-dt-needed-entries
+LDFLAGS = -Wl,--copy-dt-needed-entries $(DEBUG_FLAGS)
 
 # file lists
 .PHONY: all clean spotless
