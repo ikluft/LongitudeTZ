@@ -54,7 +54,7 @@ bool TZSolar::tz_params_latitude ( const bool use_lon_tz, const float latitude )
 // get timezone parameters (name and minutes offset) - called by constructor
 void TZSolar::tz_params (const float lon, const bool use_lon_tz, const std::optional<float> opt_latitude ) {
     // if latitude is provided, use UTC within 10° latitude of poles
-    if ( ! opt_latitude.has_value() ) {
+    if ( opt_latitude.has_value() ) {
         if ( this->tz_params_latitude( use_lon_tz, opt_latitude.value() )) {
             return;
         }
