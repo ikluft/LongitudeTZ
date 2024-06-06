@@ -15,8 +15,34 @@
 #include <optional>
 #include <boost/numeric/conversion/cast.hpp>
 
+// initialize static constants outside the header
+const std::string TZSolar::tzsolar_lon_zone_str = std::string ( "(Lon0[0-9][0-9][EW])|(Lon1[0-7][0-9][EW])|(Lon180[EW])" );
+const std::string TZSolar::tzsolar_hour_zone_str = std::string ( "(East|West)(0[0-9]|1[0-2])" );
+const std::regex TZSolar::tzsolar_lon_zone_re = std::regex ( tzsolar_lon_zone_str, std::regex::icase );
+const std::regex TZSolar::tzsolar_hour_zone_re = std::regex ( tzsolar_hour_zone_str, std::regex::icase );
+const std::regex TZSolar::tzsolar_zone_re = std::regex ( tzsolar_lon_zone_str + "|" + tzsolar_hour_zone_str,
+    std::regex::icase );
+const int TZSolar::precision_digits = 6;  // max decimal digits of precision
+const double TZSolar::precision_fp = std::pow( 10, -precision_digits ) / 2.0;  // 1/2 width of floating point equality
+const int TZSolar::max_degrees = 360;
+const int TZSolar::max_longitude_int = max_degrees / 2;  // min/max longitude in integer = 180
+const double TZSolar::max_longitude_fp = max_degrees / 2.0;  // min/max longitude in fp = 180.0
+const double TZSolar::max_latitude_fp = max_degrees / 4.0;  // min/max latitude in fp = 90.0
+const int TZSolar::polar_utc_area = 10;  // latitude near poles to use UTC
+const int TZSolar::limit_latitude = int ( max_latitude_fp - polar_utc_area );  // max latitude for solar time zones
+const int TZSolar::minutes_per_degree_lon = 4;  // minutes per degree longitude
+
 // initialize static member data
 bool TZSolar::debug_flag = false;
+
+// format a float as a string, looking like an int if it would be x.0
+const std::string TZSolar::float_cleanup( float num ) {
+    long num_int = std::lround( num );
+    if ( std::abs(num - boost::numeric_cast<float>(num_int)) < precision_fp ) {
+        return std::to_string(num_int);
+    }
+    return std::to_string(num);
+}
 
 // generate a solar time zone name
 // parameters:

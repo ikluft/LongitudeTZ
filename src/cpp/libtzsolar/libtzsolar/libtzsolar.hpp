@@ -2,8 +2,8 @@
  * libtzsolar.hpp - solar time zone library contants and public interface
  */
 
+#pragma once
 #include <string>
-#include <cmath>
 #include <regex>
 #include <optional>
 #include <iostream>
@@ -13,21 +13,20 @@ class TZSolar {
     public:
 
     // time zone constants: names, regular expressions and numbers
-    const std::string tzsolar_lon_zone_str = std::string ( "(Lon0[0-9][0-9][EW])|(Lon1[0-7][0-9][EW])|(Lon180[EW])" );
-    const std::string tzsolar_hour_zone_str = std::string ( "(East|West)(0[0-9]|1[0-2])" );
-    const std::regex tzsolar_lon_zone_re = std::regex ( tzsolar_lon_zone_str, std::regex::icase );
-    const std::regex tzsolar_hour_zone_re = std::regex ( tzsolar_hour_zone_str, std::regex::icase );
-    const std::regex tzsolar_zone_re = std::regex ( tzsolar_lon_zone_str + "|" + tzsolar_hour_zone_str,
-        std::regex::icase );
-    const int precision_digits = 6;  // max decimal digits of precision
-    const double precision_fp = std::pow( 10, -precision_digits ) / 2.0;  // 1/2 width of floating point equality
-    const int max_degrees = 360;
-    const int max_longitude_int = max_degrees / 2;  // min/max longitude in integer = 180
-    const double max_longitude_fp = max_degrees / 2.0;  // min/max longitude in fp = 180.0
-    const double max_latitude_fp = max_degrees / 4.0;  // min/max latitude in fp = 90.0
-    const int polar_utc_area = 10;  // latitude near poles to use UTC
-    const int limit_latitude = int ( max_latitude_fp - polar_utc_area );  // max latitude for solar time zones
-    const int minutes_per_degree_lon = 4;  // minutes per degree longitude
+    static const std::string tzsolar_lon_zone_str;
+    static const std::string tzsolar_hour_zone_str;
+    static const std::regex tzsolar_lon_zone_re;
+    static const std::regex tzsolar_hour_zone_re;
+    static const std::regex tzsolar_zone_re;
+    static const int precision_digits;
+    static const double precision_fp;
+    static const int max_degrees;
+    static const int max_longitude_int;
+    static const double max_longitude_fp;
+    static const double max_latitude_fp;
+    static const int polar_utc_area;
+    static const int limit_latitude;
+    static const int minutes_per_degree_lon;
 
     // private class-static data
     private:
@@ -101,12 +100,12 @@ class TZSolar {
 
     // return string value of longitude
     const inline std::string str_longitude() {
-        return std::to_string(longitude);
+        return float_cleanup(longitude);
     }
 
     // return string value of latitude, use "" if optional value is not present
     const inline std::string str_latitude() {
-        return opt_latitude.has_value() ? std::to_string(opt_latitude.value()) : "";
+        return opt_latitude.has_value() ? float_cleanup(opt_latitude.value()) : "";
     }
 
     // time zone short/base name (without Solar/)
@@ -144,6 +143,9 @@ class TZSolar {
 
     //
     // private internal utility methods
+
+    // format a float as a string, looking like an int if it would be x.0
+    static const std::string float_cleanup( float num );
 
     // time zone width in degrees of longitude differs, 1 if by each degree, 15 if by each hour
     constexpr short tz_degree_width() {
