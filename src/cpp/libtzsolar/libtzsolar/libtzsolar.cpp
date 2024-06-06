@@ -38,10 +38,17 @@ bool TZSolar::debug_flag = false;
 // format a float as a string, looking like an int if it would be x.0
 const std::string TZSolar::float_cleanup( float num ) {
     long num_int = std::lround( num );
+
+    // format as an integer if it's an x.0 value
     if ( std::abs(num - boost::numeric_cast<float>(num_int)) < precision_fp ) {
         return std::to_string(num_int);
     }
-    return std::to_string(num);
+
+    // format as floating point with defaultfloat format (i.e. to match Perl/Python output, show 123.1 not 123.099998)
+    // return std::to_string(num);
+    std::ostringstream ss;
+    ss << std::defaultfloat << num;
+    return ss.str();
 }
 
 // generate a solar time zone name
