@@ -59,7 +59,7 @@ const std::string TZSolar::float_cleanup( float num ) {
 std::string TZSolar::tz_name ( const unsigned short tz_num, const bool use_lon_tz, const short sign ) {
     // generate time zone name prefix and suffix
     std::string prefix = use_lon_tz ? "Lon" : ( sign > 0 ? "East" : "West" );
-    std::string suffix = use_lon_tz ? "" : ( sign > 0 ? "E" : "W" );
+    std::string suffix = use_lon_tz ? ( sign > 0 ? "E" : "W" ) : "";
 
     // generate string for digits in time zone name
     unsigned short num_digits = use_lon_tz ? 3 : 2;
@@ -204,5 +204,3 @@ const std::optional<std::string> TZSolar::get(const std::string &field) {
     auto func = funcmap.at(field);
     return std::make_optional<std::string>(func(*this));
 }
-
-
