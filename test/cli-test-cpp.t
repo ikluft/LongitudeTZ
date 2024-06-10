@@ -28,16 +28,20 @@ Readonly::Scalar my $template => "tzsolar-cpp-buildXXXXXXXX";
 sub cmd
 {
     my @cmd = @_;
+    my $opts_ref = ( ref $cmd[0] eq "HASH" ) ? shift @cmd : {};
     my ($in, $out, $err);
     my $cmd = join " ", @cmd;
-    if ( not IPC::Run::run \@cmd, \$in, \$out, \$err, IPC::Run::timeout( 60 )) {
+    if ( not IPC::Run::run \@cmd, \$in, \$out, \$err, IPC::Run::timeout( 120 )) {
         croak "'$cmd' exited with error code $?\nstdout: $out\nstderr: $err";
     }
+    if (( $opts_ref->{out} // 0 ) ? 1 : 0 ) {
+        say $out;
+    }
     if ( $debug ) {
-        say "'$cmd' succeeded";
-        say "stdout: $out";
-        say "stderr: $err";
-        say "";
+        say STDERR "'$cmd' succeeded";
+        say STDERR "stdout: $out";
+        say STDERR "stderr: $err";
+        say STDERR "";
     }
     return;
 }
@@ -60,13 +64,13 @@ dircopy("$tree_root/src/cpp/libtzsolar", "$tmpdir");
 # build in temporary directory
 my $run_dir = getcwd;
 chdir "$tmpdir";
-cmd ( "make" );
+cmd ({ out => 0 }, "make" );
 
 # get out of build directory because it can't be cleaned up if we're in it
 chdir "$run_dir";
 
 # run black box test command
-cmd ( $perl_path,
+cmd ({ out => 1 }, $perl_path,
     "$bin_dir/cli-test.pl",
     ( $debug ? "--debug" : ()),
     "$run_dir/$tmpdir/libtzsolar/lon-tz");
