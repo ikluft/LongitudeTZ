@@ -60,9 +60,11 @@ Solar TimeZone libraries implementations in different programming languages:
 * [Perl](src/perl/) as _TimeZone::Solar_ module
   * [![Perl](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml)
   * available on MetaCPAN: https://metacpan.org/pod/TimeZone::Solar
+  * adds solar timezones compatible with DateTime::TimeZone
 * [Python](src/python/) - as _timezone_solar_ package
   * [![Python](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-python.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-python.yml)
   * available on PyPI: https://pypi.org/project/timezone_solar/
+  * adds solar timezones compatible with datetime
 * [C++](src/cpp/) - as _libtzsolar_ package
 * Rust - TODO
 * others coming, code contributions will be considered
