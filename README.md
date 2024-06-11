@@ -3,8 +3,8 @@ Longitude-based Time Zones
 On this page:
 
 * [Introduction](#introduction)
-* [Implementations](#implementations)
 * [Creating an Alternative](#creating_an_alternative)
+* [Implementations](#implementations)
 * [The Solar Time Zones Definition](#the_solar_time_zones_definition)
 * [Obsoleting Daylight Saving Time](#obsoleting_daylight_saving_time)
 * [Web Resources](#web_resources)
