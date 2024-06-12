@@ -19,17 +19,6 @@ The project also makes and accepts contributions of code in various programming 
 
 The project also makes another set of overlay time zones the width of 1 degree of longitude, which puts them in 4-minute intervals of time. These are a hyper-local niche for potential use by outdoor events. These may be used by those who would like to have the middle of the scheduling day coincide with local solar noon. 
 
-## Implementations
-Solar TimeZone libraries implementations in different programming languages:
-
-* [Perl](https://github.com/ikluft/LongitudeTZ/tree/main/src/perl/) as _TimeZone::Solar_ module
-  * [![Perl](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml)
-  * available on MetaCPAN: https://metacpan.org/pod/TimeZone::Solar
-* [Python](https://github.com/ikluft/LongitudeTZ/tree/main/src/python/) - as _timezone_solar_ package
-  * [![Python](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-python.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-python.yml)
-* Rust - TODO
-* others coming, code contributions accepted
-
 ## The Solar Time Zones Definition
 The Solar time zones definition includes the following rules.
 
