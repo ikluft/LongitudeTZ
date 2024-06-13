@@ -97,7 +97,7 @@ The goal of this project is to aid existing and future efforts to end Daylight S
 
 ![XKCD comic #2846: Daylight Saving Choice](docs/daylight_saving_choice.png)
 
-[*XKCD comic #2846: "Daylight Saving Choice" 2023-10-28*](https://xkcd.com/2846/) (with attribution for Creative Commons CC-BY-NC-2.5 compliance)
+[*XKCD comic #2846: "Daylight Saving Choice" 2023-10-28*](https://xkcd.com/2846/) (with attribution for [Creative Commons CC-BY-NC-2.5](https://creativecommons.org/licenses/by-nc/2.5/) compliance)
 
 ## <a name="web_resources">Web Resources</a>
 
