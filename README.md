@@ -26,9 +26,9 @@ People are tired of changing their clocks twice a year for daylight saving time.
 
 *There is actually never any more daylight available that what naturally occurs at one's locality for the time of year.* So the real solution is to schedule daylight-sensitive activities around available sunlight.
 
-In places where regional government mandates use of Daylight Saving Time, the only way we'll have the choice to opt-out of DST is if there's an alternative standard allowing us to stay on Standard Time.
+In places where regional government mandates use of Daylight Saving Time, the only way we'll have the choice to opt-out of DST is if there's a technical alternative standard time zone allowing us to stay on Standard Time.
 
-Keep in mind that the decision to opt-out of Daylight Saving Time can be done by the owner of the computer. However, those who work for any national, regional or local government entity where DST is set by law, won't be able to make that decision on machines at work unless laws are changed. One can make the decision for devices personally owned.
+Keep in mind that the decision to opt-out of Daylight Saving Time can be done by the owner of the computer. However, those who work for any national, regional or local government entity where DST is set by law, won't be able to make that decision on machines where they work unless laws are changed. One can make the decision for devices personally owned.
 
 ## <a name="creating_an_alternative">Creating an Alternative</a>
 
