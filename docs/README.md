@@ -1,4 +1,11 @@
-# Longitude-based Time Zones
+# LongitudeTZ library documentation
+
+project documentation
+
+* [top-level project README](../README.md)
+* [LongitudeTZ Command-line Interface Specification](cli-spec.md)
+
+## Longitude-based Time Zones
 Many people are tired of changing their clocks twice a year for daylight time. DST is an antiquated tradition [which we now know doesn't do any good](https://www.webmd.com/sleep-disorders/news/20211105/harmful-effects-of-daylight-savings). Anyone can look up sunrise and sunset times for events that need to be scheduled around daylight.
 
 While there have been proposals for regional and national governments to repeal Daylight Saving Time, it hasn't made progress. One way to have the choice to opt-out of Daylight Saving Time is if there's an alternative standard allowing us to stay on Standard Time.
@@ -19,7 +26,7 @@ The project also makes and accepts contributions of code in various programming 
 
 The project also makes another set of overlay time zones the width of 1 degree of longitude, which puts them in 4-minute intervals of time. These are a hyper-local niche for potential use by outdoor events. These may be used by those who would like to have the middle of the scheduling day coincide with local solar noon. 
 
-## The Solar Time Zones Definition
+### The Solar Time Zones Definition
 The Solar time zones definition includes the following rules.
 
 * There are 24 hour-based Solar Time Zones, named West12, West11, West10, West09 through East12. East00 is equivalent to UTC. West00 is an alias for East00.
