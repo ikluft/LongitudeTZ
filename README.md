@@ -60,16 +60,18 @@ Solar TimeZone libraries implementations in different programming languages:
 * [Perl](src/perl/) as _TimeZone::Solar_ module
   * [![Perl](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-perl.yml)
   * available on MetaCPAN: https://metacpan.org/pod/TimeZone::Solar
-  * adds solar timezones compatible with DateTime::TimeZone
+  * adds solar timezones compatible with DateTime::TimeZone module
 * [Python](src/python/) - as _timezone_solar_ package
   * [![Python](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-python.yml/badge.svg)](https://github.com/ikluft/LongitudeTZ/actions/workflows/test-python.yml)
   * available on PyPI: https://pypi.org/project/timezone_solar/
-  * adds solar timezones compatible with datetime
+  * adds solar timezones compatible with datetime package
 * [C++](src/cpp/) - as _libtzsolar_ package
 * Rust - TODO
 * others coming, code contributions will be considered
 
 Each programming language implementation must follow the [LongitudeTZ Command Line Interface Specification](docs/cli-spec.md) so that [generalized black box testing](test/) can be performed across all the implementations.
+
+So far, black box tests have been written and run on the Perl, Python and C++ implementations.
 
 ## <a name="the_solar_time_zones_definition">The Solar Time Zones Definition</a>
 
