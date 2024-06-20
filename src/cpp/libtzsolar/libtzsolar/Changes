@@ -21,4 +21,5 @@ Revision history for C++ libtzsolar library
 0.0.1 2024-05-25T06:26:14 UTC
  [REVISION]
  - initial version of libtzsolar with lon-tz CLI
+ - library and CLI pass LongitudeTZ black box tests
 
