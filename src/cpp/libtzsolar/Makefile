@@ -1,4 +1,4 @@
-SUBDIRS = libtzsolar tests
+SUBDIRS = libtzsolar libtzsolar-boost tests
 .PHONY: all test clean $(SUBDIRS)
 
 all: subdirs
