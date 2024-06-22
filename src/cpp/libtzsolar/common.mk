@@ -15,7 +15,7 @@ OPENSSF_CPPFLAGS=-O2 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrou
 DEBUG_FLAGS =
 CPPFLAGS = $(OPENSSF_CPPFLAGS) $(DEBUG_FLAGS)
 CXXFLAGS = -std=gnu++17
-LDLIBS  = -lboost_program_options
+LDLIBS  = 
 LDFLAGS = -Wl,--copy-dt-needed-entries $(DEBUG_FLAGS)
 
 # cleanup targets
