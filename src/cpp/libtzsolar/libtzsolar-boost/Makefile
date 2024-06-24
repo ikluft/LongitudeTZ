@@ -8,8 +8,10 @@ all: libtzsolar-boost.o
 include ../common.mk
 
 # local settings - either overriding or in addition to common make rules
+CPPFLAGS = $(CPPFLAGS) -I../libtzsolar
 
 # file lists
-CLEAN_FILES = libtzsolar-boost.o
+CLEAN_FILES =
 SPOTLESS_FILES =
 
+# build targets handled by built-in make rules
