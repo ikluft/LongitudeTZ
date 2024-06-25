@@ -10,6 +10,7 @@
 #include <boost/algorithm/string.hpp>
 
 namespace po = boost::program_options;
+namespace alg = boost::algorithm;
 
 // convert an int to a string with zero-padding
 std::string zeropad(const std::size_t length, const unsigned short value)
@@ -143,7 +144,7 @@ TZSolar build_tz_obj( po::variables_map vm ) {
 // process get requests on specified fields
 const void do_tz_op( TZSolar &tz_obj, const std::string &get_param) {
     std::vector<std::string> get_fields;
-    boost::algorithm::split( get_fields, get_param, boost::algorithm::is_any_of(","));
+    alg::split( get_fields, get_param, alg::is_any_of(","));
     for ( auto iter = get_fields.begin(); iter != get_fields.end(); iter++ ) {
         auto value = tz_obj.get(*iter);
         if (value.has_value()) {

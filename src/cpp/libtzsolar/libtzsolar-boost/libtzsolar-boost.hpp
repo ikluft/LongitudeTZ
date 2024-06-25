@@ -9,8 +9,11 @@
 #include "boost/date_time/local_time/local_time.hpp"
 #include "../libtzsolar/libtzsolar.hpp"
 
+namespace pt = boost::posix_time;
+namespace dt = boost::date_time;
+
 template<class CharT>
-class solar_time_zone_base : boost::date_time::time_zone_base<boost::posix_time::ptime, CharT> {
+class solar_time_zone_base : dt::time_zone_base<pt::ptime, CharT> {
     private:
 
     // solar time zone
@@ -18,8 +21,8 @@ class solar_time_zone_base : boost::date_time::time_zone_base<boost::posix_time:
 
     public:
     typedef std::basic_string<CharT> string_type;
-    typedef boost::posix_time::ptime time_type;
-    typedef boost::date_time::time_zone_base<boost::posix_time::ptime,CharT> base_type;
+    typedef pt::ptime time_type;
+    typedef dt::time_zone_base<pt::ptime,CharT> base_type;
     typedef typename time_type::date_type::year_type year_type;
     typedef typename time_type::time_duration_type time_duration_type;
     typedef typename base_type::stringstream_type stringstream_type;
@@ -56,11 +59,11 @@ class solar_time_zone_base : boost::date_time::time_zone_base<boost::posix_time:
     }
     // Local time that DST starts -- undefined if has_dst is false
     virtual time_type dst_local_start_time(year_type y) const {
-        return boost::posix_time::ptime(); // not defined because there is no DST in solar time zones
+        return pt::ptime(); // not defined because there is no DST in solar time zones
     }
     // Local time that DST ends -- undefined if has_dst is false
     virtual time_type dst_local_end_time(year_type y) const {
-        return boost::posix_time::ptime(); // not defined because there is no DST in solar time zones
+        return pt::ptime(); // not defined because there is no DST in solar time zones
     }
     // Base offset from UTC for zone (eg: -07:30:00)
     virtual time_duration_type base_utc_offset() const {
