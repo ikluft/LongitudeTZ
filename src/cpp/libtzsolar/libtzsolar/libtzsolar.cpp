@@ -15,28 +15,30 @@
 #include <optional>
 #include <boost/numeric/conversion/cast.hpp>
 
+namespace ltz = longitude_tz;
+
 // initialize static constants outside the header
-const std::string TZSolar::tzsolar_lon_zone_str = std::string ( "(Lon0[0-9][0-9][EW])|(Lon1[0-7][0-9][EW])|(Lon180[EW])" );
-const std::string TZSolar::tzsolar_hour_zone_str = std::string ( "(East|West)(0[0-9]|1[0-2])" );
-const std::regex TZSolar::tzsolar_lon_zone_re = std::regex ( tzsolar_lon_zone_str, std::regex::icase );
-const std::regex TZSolar::tzsolar_hour_zone_re = std::regex ( tzsolar_hour_zone_str, std::regex::icase );
-const std::regex TZSolar::tzsolar_zone_re = std::regex ( tzsolar_lon_zone_str + "|" + tzsolar_hour_zone_str,
+const std::string ltz::TZSolar::tzsolar_lon_zone_str = std::string ( "(Lon0[0-9][0-9][EW])|(Lon1[0-7][0-9][EW])|(Lon180[EW])" );
+const std::string ltz::TZSolar::tzsolar_hour_zone_str = std::string ( "(East|West)(0[0-9]|1[0-2])" );
+const std::regex ltz::TZSolar::tzsolar_lon_zone_re = std::regex ( tzsolar_lon_zone_str, std::regex::icase );
+const std::regex ltz::TZSolar::tzsolar_hour_zone_re = std::regex ( tzsolar_hour_zone_str, std::regex::icase );
+const std::regex ltz::TZSolar::tzsolar_zone_re = std::regex ( tzsolar_lon_zone_str + "|" + tzsolar_hour_zone_str,
     std::regex::icase );
-const int TZSolar::precision_digits = 6;  // max decimal digits of precision
-const double TZSolar::precision_fp = std::pow( 10, -precision_digits ) / 2.0;  // 1/2 width of floating point equality
-const int TZSolar::max_degrees = 360;
-const int TZSolar::max_longitude_int = max_degrees / 2;  // min/max longitude in integer = 180
-const double TZSolar::max_longitude_fp = max_degrees / 2.0;  // min/max longitude in fp = 180.0
-const double TZSolar::max_latitude_fp = max_degrees / 4.0;  // min/max latitude in fp = 90.0
-const int TZSolar::polar_utc_area = 10;  // latitude near poles to use UTC
-const int TZSolar::limit_latitude = int ( max_latitude_fp - polar_utc_area );  // max latitude for solar time zones
-const int TZSolar::minutes_per_degree_lon = 4;  // minutes per degree longitude
+const int ltz::TZSolar::precision_digits = 6;  // max decimal digits of precision
+const double ltz::TZSolar::precision_fp = std::pow( 10, -precision_digits ) / 2.0;  // 1/2 width of floating point equality
+const int ltz::TZSolar::max_degrees = 360;
+const int ltz::TZSolar::max_longitude_int = max_degrees / 2;  // min/max longitude in integer = 180
+const double ltz::TZSolar::max_longitude_fp = max_degrees / 2.0;  // min/max longitude in fp = 180.0
+const double ltz::TZSolar::max_latitude_fp = max_degrees / 4.0;  // min/max latitude in fp = 90.0
+const int ltz::TZSolar::polar_utc_area = 10;  // latitude near poles to use UTC
+const int ltz::TZSolar::limit_latitude = int ( max_latitude_fp - polar_utc_area );  // max latitude for solar time zones
+const int ltz::TZSolar::minutes_per_degree_lon = 4;  // minutes per degree longitude
 
 // initialize static member data
-bool TZSolar::debug_flag = false;
+bool ltz::TZSolar::debug_flag = false;
 
 // format a float as a string, looking like an int if it would be x.0
-const std::string TZSolar::float_cleanup( float num ) {
+const std::string ltz::TZSolar::float_cleanup( float num ) {
     long num_int = std::lround( num );
 
     // format as an integer if it's an x.0 value
@@ -56,7 +58,7 @@ const std::string TZSolar::float_cleanup( float num ) {
 //   tz_num: integer number for time zone - hourly or longitude based depending on use_lon_tz
 //   use_lon_tz: true=use longitude-based time zones, false=use hour-based time zones
 //   sign: +1 = positive/zero, -1 = negative
-std::string TZSolar::tz_name ( const unsigned short tz_num, const bool use_lon_tz, const short sign ) {
+std::string ltz::TZSolar::tz_name ( const unsigned short tz_num, const bool use_lon_tz, const short sign ) {
     // generate time zone name prefix and suffix
     std::string prefix = use_lon_tz ? "Lon" : ( sign > 0 ? "East" : "West" );
     std::string suffix = use_lon_tz ? ( sign > 0 ? "E" : "W" ) : "";
@@ -72,7 +74,7 @@ std::string TZSolar::tz_name ( const unsigned short tz_num, const bool use_lon_t
 }
 
 // check latitude data and initialize special case for polar regions - internal method called by tz_params()
-bool TZSolar::tz_params_latitude ( const bool use_lon_tz, const float latitude ) {
+bool ltz::TZSolar::tz_params_latitude ( const bool use_lon_tz, const float latitude ) {
     // special case: use East00/Lon000E (equal to UTC) within 10° latitude of poles
     if ( std::abs( latitude ) >= limit_latitude - precision_fp ) {
         // note: for polar latitudes, this must set all fields on behalf of the constructor
@@ -85,7 +87,7 @@ bool TZSolar::tz_params_latitude ( const bool use_lon_tz, const float latitude )
 }
 
 // get timezone parameters (name and minutes offset) - called by constructor
-void TZSolar::tz_params (const float lon, const bool use_lon_tz, const std::optional<float> opt_latitude ) {
+void ltz::TZSolar::tz_params (const float lon, const bool use_lon_tz, const std::optional<float> opt_latitude ) {
     // if latitude is provided, use UTC within 10° latitude of poles
     if ( opt_latitude.has_value() ) {
         if ( this->tz_params_latitude( use_lon_tz, opt_latitude.value() )) {
@@ -133,7 +135,7 @@ void TZSolar::tz_params (const float lon, const bool use_lon_tz, const std::opti
 }
 
 // constructor from time zone name
-TZSolar::TZSolar( const std::string &tzname ) {
+ltz::TZSolar::TZSolar( const std::string &tzname ) {
     // change tzname to lower case
     std::string tzname_lower = tzname;
     std::transform(tzname_lower.begin(), tzname_lower.end(), tzname_lower.begin(),
@@ -163,7 +165,7 @@ TZSolar::TZSolar( const std::string &tzname ) {
 }
 
 // get offset as a string in ±HH:MM format
-const std::string TZSolar::str_offset() {
+const std::string ltz::TZSolar::str_offset() {
 
     std::string sign = offset_min >= 0 ? "+" : "-";
 
@@ -181,7 +183,7 @@ const std::string TZSolar::str_offset() {
 }
 
 // general read accessor for implementation of CLI spec
-const std::optional<std::string> TZSolar::get(const std::string &field) {
+const std::optional<std::string> ltz::TZSolar::get(const std::string &field) {
     static const std::unordered_map<std::string, std::function<std::string(TZSolar &)>> funcmap =
     {
         {"longitude", [](TZSolar &tzs) { return tzs.str_longitude(); }},
