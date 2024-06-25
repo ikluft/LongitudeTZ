@@ -12,11 +12,11 @@ OPENSSF_CPPFLAGS=-O2 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrou
 
 # compiler & linker flags
 # add DEBUG_FLAGS=-g to make command line in order to build with debugging
-DEBUG_FLAGS =
-CPPFLAGS = $(OPENSSF_CPPFLAGS) $(DEBUG_FLAGS)
-CXXFLAGS = -std=gnu++17
-LDLIBS  = 
-LDFLAGS = -Wl,--copy-dt-needed-entries $(DEBUG_FLAGS)
+DEBUG_FLAGS +=
+CPPFLAGS += $(OPENSSF_CPPFLAGS) $(DEBUG_FLAGS)
+CXXFLAGS += -std=gnu++17
+LDLIBS  +=
+LDFLAGS += -Wl,--copy-dt-needed-entries $(DEBUG_FLAGS)
 
 # cleanup targets
 .PHONY: clean spotless

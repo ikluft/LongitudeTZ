@@ -8,7 +8,7 @@ all: lon-tz
 include ../common.mk
 
 # local settings - either overriding or in addition to common make rules
-LDLIBS  = -lboost_program_options $(LDLIBS)
+LDLIBS += -lboost_program_options
 
 # file lists
 CLEAN_FILES = lon-tz lon-tz.o libtzsolar.o
