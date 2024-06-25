@@ -12,27 +12,28 @@ namespace pt = boost::posix_time;
 namespace dt = boost::date_time;
 
 namespace longitude_tz {
-    class solar_time_zone : dt::time_zone_base<pt::ptime, char> {
+    template<class CharT>
+    class solar_time_zone_base : dt::time_zone_base<pt::ptime, CharT> {
         private:
 
         // solar time zone
         TZSolar solar_tz;
 
         public:
-        typedef std::basic_string<char> string_type;
+        typedef std::basic_string<CharT> string_type;
         typedef pt::ptime time_type;
-        typedef dt::time_zone_base<pt::ptime,char> base_type;
+        typedef dt::time_zone_base<pt::ptime,CharT> base_type;
         typedef typename time_type::date_type::year_type year_type;
         typedef typename time_type::time_duration_type time_duration_type;
         typedef typename base_type::stringstream_type stringstream_type;
 
         // constructors as wrappers around TZSolar constructors
-        solar_time_zone(const float longitude, const bool use_lon_tz, const std::optional<float> latitude)
+        solar_time_zone_base(const float longitude, const bool use_lon_tz, const std::optional<float> latitude)
             : solar_tz(longitude, use_lon_tz, latitude) {}
-        explicit solar_time_zone(const std::string &tzname) : solar_tz(tzname) {}
+        explicit solar_time_zone_base(const std::string &tzname) : solar_tz(tzname) {}
 
         // virtual destructor
-        virtual ~solar_time_zone() {}
+        virtual ~solar_time_zone_base() {}
 
         // time_zone_base interface functions
 
@@ -100,4 +101,6 @@ namespace longitude_tz {
             return ss.str();
         }
     };
+
+    typedef solar_time_zone_base<char> solar_time_zone;
 }
