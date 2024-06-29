@@ -11,6 +11,7 @@
 
 namespace po = boost::program_options;
 namespace alg = boost::algorithm;
+namespace ltz = longitude_tz;
 
 // convert an int to a string with zero-padding
 std::string zeropad(const std::size_t length, const unsigned short value)
@@ -106,11 +107,11 @@ void do_tzfile()
 }
 
 // build a TZSolar object from the command line parameters
-TZSolar build_tz_obj( po::variables_map vm ) {
+ltz::TZSolar build_tz_obj( po::variables_map vm ) {
     // create TZSolar object from --tzname request
     if (vm.count("tzname") > 0) {
         std::string tzname = vm["tzname"].as<std::string>();
-        return TZSolar(tzname);
+        return ltz::TZSolar(tzname);
     }
 
     // create TZSolar object from --longitude request
@@ -133,7 +134,7 @@ TZSolar build_tz_obj( po::variables_map vm ) {
             float lat = vm["latitude"].as<float>();
             opt_latitude.emplace(lat);
         }
-        return TZSolar(lon, use_lon_tz, opt_latitude);
+        return ltz::TZSolar(lon, use_lon_tz, opt_latitude);
     }
 
     // if control fell through, report parameter error
@@ -142,7 +143,7 @@ TZSolar build_tz_obj( po::variables_map vm ) {
 }
 
 // process get requests on specified fields
-const void do_tz_op( TZSolar &tz_obj, const std::string &get_param) {
+const void do_tz_op( ltz::TZSolar &tz_obj, const std::string &get_param) {
     std::vector<std::string> get_fields;
     alg::split( get_fields, get_param, alg::is_any_of(","));
     for ( auto iter = get_fields.begin(); iter != get_fields.end(); iter++ ) {
@@ -192,7 +193,7 @@ int main(int argc, char* argv[])
 
     // set debugging flag
     if (vm.count("debug")) {
-        TZSolar::set_debug_flag(true);
+        ltz::TZSolar::set_debug_flag(true);
     }
 
     // check that one and only one of the mutually-exclusive arguments was provided
@@ -214,7 +215,7 @@ int main(int argc, char* argv[])
 
     // process time zone queries specified from --tzname or --longitude
     // note: by the logic above, one and only one of --tzname or --longitude must be set at this point
-    TZSolar tz_obj = build_tz_obj(vm);
+    ltz::TZSolar tz_obj = build_tz_obj(vm);
 
     // process get requests for specified field(s)
     do_tz_op(tz_obj, vm["get"].as<std::string>());
