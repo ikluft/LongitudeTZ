@@ -1,7 +1,7 @@
 libtzsolar C++ library
 ======================
 
-The _libtzsolar_ library is the C++ implementation of the Longitude Time Zones project.
+The _libtzsolar_ library is the C++ implementation of the Longitude Time Zones project. Each library integration has its own corresponding implementation of the LongitudeTZ command-line interface (CLI) spec so that black box tests can be performed on it. In addition, library specific unit tests should be implemented.
 
 ## "libtzsolar" - the core LongitudeTZ library
 
