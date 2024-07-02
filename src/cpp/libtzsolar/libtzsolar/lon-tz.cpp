@@ -3,14 +3,12 @@
  */
 
 #include "libtzsolar.hpp"
-#include "SolarCLI.hpp"
+#include "TZSolarCLI.hpp"
 #include "version.hpp"
 #include <string>
 #include <iostream>
 
 namespace ltz = longitude_tz;
-namespace po = boost::program_options;
-namespace alg = boost::algorithm;
 
 // build a TZSolar object from the command line parameters
 ltz::TZSolar build_tz_obj( po::variables_map vm ) {
@@ -115,7 +113,7 @@ int main(int argc, char* argv[])
 
     // output tzfile time zone data
     if ( has_tzfile ) {
-        do_tzfile();
+        ltz::TZSolarCLI::do_tzfile();
         return 0;
     }
 
