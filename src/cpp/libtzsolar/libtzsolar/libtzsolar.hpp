@@ -11,6 +11,8 @@
 namespace longitude_tz {
 
     // solar time zones class
+    // This serves as a base class for multiple library implementations.
+    // This can be used standalone for testing.
     class TZSolar {
         public:
 
@@ -30,18 +32,19 @@ namespace longitude_tz {
         static const int limit_latitude;
         static const int minutes_per_degree_lon;
 
-        // private class-static data
         private:
+
+        // class-static data
         static bool debug_flag;
 
         // member data
-        protected:
-
-        std::string short_name;  // time zone base name, i.e. Lon000E or East00
-        bool lon_tz; // flag: use longitude timezones; if false defaults to hour-based time zones
-        int offset_min;  // time zone offset in minutes
         float longitude;   // longitude for time zone position
+        bool lon_tz; // flag: use longitude timezones: false defaults to hour-based tz, true = degree-based tz
         std::optional<float> opt_latitude;  // optional latitude for computing polar exclusion
+        int offset_min;  // time zone offset in minutes
+        std::string short_name;  // time zone base name, i.e. Lon000E or East00
+
+        protected:
 
         //
         // protected methods
@@ -54,10 +57,10 @@ namespace longitude_tz {
         static std::string tz_name ( const unsigned short tz_num, const bool use_lon_tz, const short sign );
 
         // get timezone parameters (name and minutes offset) - called by constructor
-        bool tz_params_latitude ( const bool use_lon_tz, const float latitude );
+        bool tz_params_latitude ();
 
         // get timezone parameters (name and minutes offset) - called by constructor
-        void tz_params (const float longitude, const bool use_lon_tz, const std::optional<float> opt_latitude );
+        void tz_params ();
 
         public:
 
@@ -67,8 +70,10 @@ namespace longitude_tz {
         const static inline void debug_print(const std::string &msg) { if (debug_flag) { std::cerr << msg << std::endl; } }
 
         // constructor from time zone parameters
-        TZSolar( const float longitude, const bool use_lon_tz, const std::optional<float> latitude ) {
-            this->tz_params( longitude, use_lon_tz, latitude );
+        TZSolar( const float lon_in, const bool lon_tz_in, const std::optional<float> lat_in = std::nullopt )
+            : longitude(lon_in), lon_tz(lon_tz_in), opt_latitude(lat_in)
+        {
+            this->tz_params();
         }
 
         // constructor from time zone name

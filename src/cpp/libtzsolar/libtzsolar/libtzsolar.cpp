@@ -74,11 +74,14 @@ std::string ltz::TZSolar::tz_name ( const unsigned short tz_num, const bool use_
 }
 
 // check latitude data and initialize special case for polar regions - internal method called by tz_params()
-bool ltz::TZSolar::tz_params_latitude ( const bool use_lon_tz, const float latitude ) {
+bool ltz::TZSolar::tz_params_latitude () {
+    if ( !opt_latitude.has_value()) {
+        return false;
+    }
+
     // special case: use East00/Lon000E (equal to UTC) within 10° latitude of poles
-    if ( std::abs( latitude ) >= limit_latitude - precision_fp ) {
+    if ( std::abs( opt_latitude.value() ) >= limit_latitude - precision_fp ) {
         // note: for polar latitudes, this must set all fields on behalf of the constructor
-        lon_tz = use_lon_tz;
         short_name = lon_tz ? "Lon000E" : "East00";
         return true;
     }
@@ -87,10 +90,10 @@ bool ltz::TZSolar::tz_params_latitude ( const bool use_lon_tz, const float latit
 }
 
 // get timezone parameters (name and minutes offset) - called by constructor
-void ltz::TZSolar::tz_params (const float lon, const bool use_lon_tz, const std::optional<float> opt_latitude ) {
+void ltz::TZSolar::tz_params () {
     // if latitude is provided, use UTC within 10° latitude of poles
     if ( opt_latitude.has_value() ) {
-        if ( this->tz_params_latitude( use_lon_tz, opt_latitude.value() )) {
+        if ( this->tz_params_latitude()) {
             return;
         }
         // fall through if latitude was provided but not in the extreme polar regions (so ignore it)
@@ -101,27 +104,22 @@ void ltz::TZSolar::tz_params (const float lon, const bool use_lon_tz, const std:
     //
 
     // safety check on longitude
-    if ( std::abs( lon ) > max_longitude_fp + precision_fp ) {
+    if ( std::abs( longitude ) > max_longitude_fp + precision_fp ) {
         throw std::out_of_range( "longitude out of range -180 to +180" );
     }
-    this->longitude = lon;
-
-    // set flag for longitude time zones: 0 = hourly 1-hour/15-degree zones, 1 = longitude 4-minute/1-degree zones
-    // defaults to hourly time zone ($use_lon_tz=0)
-    lon_tz = use_lon_tz;
 
     // handle special case of half-wide tz at positive side of solar date line (180° longitude)
     if (( longitude >= max_longitude_int - this->tz_degree_width() / 2.0 - precision_fp )
         || ( longitude <= -max_longitude_int + precision_fp ))
     {
-        short_name = tz_name(( unsigned short )( max_longitude_int / tz_degree_width()), use_lon_tz, 1 );
+        short_name = tz_name(( unsigned short )( max_longitude_int / tz_degree_width()), lon_tz, 1 );
         offset_min = 720;
         return;
     }
 
     // handle special case of half-wide tz at negative side of solar date line (180° longitude)
     if ( longitude <= -max_longitude_int + this->tz_degree_width() / 2.0 + precision_fp ) {
-        short_name = tz_name(( unsigned short)( max_longitude_int / tz_degree_width()), use_lon_tz, -1 );
+        short_name = tz_name(( unsigned short)( max_longitude_int / tz_degree_width()), lon_tz, -1 );
         offset_min = -720;
         return;
     }
@@ -130,7 +128,7 @@ void ltz::TZSolar::tz_params (const float lon, const bool use_lon_tz, const std:
     unsigned short tz_num = ( unsigned short )( std::abs (( double ) longitude) / tz_degree_width() + 0.5
         + precision_fp );
     short sign = ( longitude > -tz_degree_width() / 2.0 + precision_fp ) ? 1 : -1;
-    short_name = tz_name( tz_num, use_lon_tz, sign );
+    short_name = tz_name( tz_num, lon_tz, sign );
     offset_min = sign * tz_num * minutes_per_degree_lon * tz_degree_width();
 }
 
@@ -144,9 +142,9 @@ ltz::TZSolar::TZSolar( const std::string &tzname ) {
     // use regex to check for longitude-based time zone (like Lon180E, Lon123W)
     if (std::regex_search(tzname_lower, tzsolar_lon_zone_re)) {
         bool is_west = tzname_lower.at(6) == 'w';
-        float lon = boost::numeric_cast<float>(std::stof(tzname_lower.substr(3,3)) * (is_west ? -1 : 1));
-        bool use_lon_tz = true;
-        this->tz_params(lon, use_lon_tz, std::nullopt);
+        longitude = boost::numeric_cast<float>(std::stof(tzname_lower.substr(3,3)) * (is_west ? -1 : 1));
+        lon_tz = true;
+        this->tz_params();
         return;
     }
 
@@ -154,9 +152,9 @@ ltz::TZSolar::TZSolar( const std::string &tzname ) {
     if (std::regex_search(tzname_lower, tzsolar_hour_zone_re)) {
         bool is_west = tzname_lower.substr(0,4) == "west";
         short hour_num = boost::numeric_cast<short>(std::stoi(tzname_lower.substr(4,2)));
-        float lon = boost::numeric_cast<float>(hour_num * 15 * (is_west ? -1 : 1));
-        bool use_lon_tz = false;
-        this->tz_params(lon, use_lon_tz, std::nullopt);
+        longitude = boost::numeric_cast<float>(hour_num * 15 * (is_west ? -1 : 1));
+        lon_tz = false;
+        this->tz_params();
         return;
     }
 
@@ -199,7 +197,7 @@ const std::optional<std::string> ltz::TZSolar::get(const std::string &field) {
 
     // non-existent field results in a blank response
     if (!funcmap.count(field)) {
-        return nullptr;
+        return std::nullopt;
     }
 
     // call function to get field value, or throw std::out_of_range exception for unrecognized field
