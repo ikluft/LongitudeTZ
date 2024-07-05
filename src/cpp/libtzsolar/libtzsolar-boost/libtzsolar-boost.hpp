@@ -13,12 +13,10 @@ namespace dt = boost::date_time;
 
 namespace longitude_tz {
     template<class CharT>
-    class solar_time_zone_base : dt::time_zone_base<pt::ptime, CharT> {
-        private:
-
-        // solar time zone
-        TZSolar solar_tz;
-
+    class solar_time_zone_base : public dt::time_zone_base<pt::ptime, CharT>, public TZSolar {
+        // This class uses multiple inheritance.
+        // TZSolar provides constructors and accessors for solar time zones
+        // time_zone_base provides accessor interface for compatibility with BOOST date_time
         public:
         typedef std::basic_string<CharT> string_type;
         typedef pt::ptime time_type;
@@ -29,8 +27,8 @@ namespace longitude_tz {
 
         // constructors as wrappers around TZSolar constructors
         solar_time_zone_base(const float longitude, const bool use_lon_tz, const std::optional<float> latitude)
-            : solar_tz(longitude, use_lon_tz, latitude) {}
-        explicit solar_time_zone_base(const std::string &tzname) : solar_tz(tzname) {}
+            : TZSolar(longitude, use_lon_tz, latitude) {}
+        explicit solar_time_zone_base(const std::string &tzname) : TZSolar(tzname) {}
 
         // virtual destructor
         virtual ~solar_time_zone_base() {}
@@ -44,7 +42,7 @@ namespace longitude_tz {
 
         // for the zone when not in daylight savings (eg: EST)
         virtual string_type std_zone_abbrev() const {
-            return const_cast<TZSolar&>(solar_tz).str_short_name();
+            return const_cast<TZSolar&>(this).str_short_name();
         }
 
         // for the timezone when in daylight savings (eg: Eastern Daylight Time)
@@ -54,7 +52,7 @@ namespace longitude_tz {
 
         // for the zone when not in daylight savings (eg: Eastern Standard Time)
         virtual string_type std_zone_name() const {
-            return const_cast<TZSolar&>(solar_tz).str_long_name();
+            return const_cast<TZSolar&>(this).str_long_name();
         }
 
         // True if zone uses daylight savings adjustments otherwise false
