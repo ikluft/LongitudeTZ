@@ -3,7 +3,6 @@
  */
 
 #include "libtzsolar-boost.hpp"
-#include "boost/date_time/local_time/local_time.hpp"
 
 // namespace ltz = longitude_tz;
 namespace longitude_tz {
@@ -11,8 +10,8 @@ namespace longitude_tz {
     // Base offset from UTC for zone (eg: -07:30:00)
     template<typename CharT>
     typename solar_time_zone_base<CharT>::time_duration_type solar_time_zone_base<CharT>::base_utc_offset() const {
-        short offset_part_hr = const_cast<TZSolar&>(solar_tz).get_offset_min() / 60;
-        short offset_part_min = const_cast<TZSolar&>(solar_tz).get_offset_min() % 60;
+        short offset_part_hr = const_cast<TZSolar&>(this).get_offset_min() / 60;
+        short offset_part_min = const_cast<TZSolar&>(this).get_offset_min() % 60;
         return solar_time_zone_base<CharT>::time_duration_type(offset_part_hr, offset_part_min, 0);
     }
 
