@@ -64,7 +64,8 @@ dircopy("$tree_root/src/cpp/libtzsolar", "$tmpdir");
 # build in temporary directory
 my $run_dir = getcwd;
 chdir "$tmpdir";
-cmd ({ out => 0 }, "make" );
+cmd ({ out => 0 }, qw(make clean) );
+cmd ({ out => 0 }, qw(make) );
 
 # get out of build directory because it can't be cleaned up if we're in it
 chdir "$run_dir";
