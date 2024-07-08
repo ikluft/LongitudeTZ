@@ -116,30 +116,30 @@ namespace longitude_tz {
         }
 
         // time zone short/base name (without Solar/)
-        const inline std::string str_short_name() {
-            return short_name;
+        const virtual std::string str_short_name() {
+            return std::string(short_name);
         }
 
         // time zone long name includes Solar/ prefix
-        const inline std::string str_long_name() {
+        const virtual std::string str_long_name() {
             return "Solar/" + short_name;
         }
 
         // get offset as a string in ±HH:MM format
-        const std::string str_offset();
+        const virtual std::string str_offset();
 
         // get offset minutes as a string
-        const inline std::string str_offset_min() {
+        const virtual std::string str_offset_min() {
             return std::to_string(offset_min);
         }
 
         // get offset seconds as a string
-        const inline std::string str_offset_sec() {
+        const virtual std::string str_offset_sec() {
             return std::to_string(offset_min*60);
         }
 
         // get is_utc flag as a string
-        const inline std::string str_is_utc() {
+        const virtual std::string str_is_utc() {
             return std::to_string(offset_min == 0 ? 1 : 0);
         }
 

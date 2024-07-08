@@ -42,7 +42,7 @@ namespace longitude_tz {
 
         // for the zone when not in daylight savings (eg: EST)
         virtual string_type std_zone_abbrev() const {
-            return const_cast<TZSolar&>(this).str_short_name();
+            return str_short_name();
         }
 
         // for the timezone when in daylight savings (eg: Eastern Daylight Time)
@@ -52,7 +52,7 @@ namespace longitude_tz {
 
         // for the zone when not in daylight savings (eg: Eastern Standard Time)
         virtual string_type std_zone_name() const {
-            return const_cast<TZSolar&>(this).str_long_name();
+            return str_long_name();
         }
 
         // True if zone uses daylight savings adjustments otherwise false
@@ -80,6 +80,36 @@ namespace longitude_tz {
 
         // Returns a POSIX time_zone string for this object
         virtual string_type to_posix_string() const;
+
+        // TZSolar virtual interface
+
+        // time zone short/base name (without Solar/)
+        const std::string str_short_name() override {
+            return std_zone_abbrev();
+        }
+
+        // time zone long name includes Solar/ prefix
+        const std::string str_long_name() override {
+            return std_zone_name();
+        }
+
+        // get offset as a string in ±HH:MM format
+        const std::string str_offset() override;
+
+        // get offset minutes as a string
+        const std::string str_offset_min() override {
+            return std::to_string((unsigned short)(base_utc_offset().total_seconds()/60));
+        }
+
+        // get offset seconds as a string
+        const std::string str_offset_sec() override {
+            return std::to_string((unsigned short)(base_utc_offset().total_seconds()));
+        }
+
+        // get is_utc flag as a string
+        const std::string str_is_utc() override {
+            return std::to_string((unsigned short)(base_utc_offset().total_seconds()/60) == 0 ? 1 : 0);
+        }
     };
 
     typedef solar_time_zone_base<char> solar_time_zone;
