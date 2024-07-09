@@ -1,32 +1,53 @@
 /*
- * lon-tz.cpp
+ * TZSolarCLI.cpp
+ * command line interface core/common routines for libtzsolar (C++ implementation of LongitudeTZ)
  */
 
 #include "libtzsolar.hpp"
 #include "TZSolarCLI.hpp"
 #include "version.hpp"
-#include <string>
-#include <iostream>
+#include <boost/program_options.hpp>
 
 namespace longitude_tz {
 
-    // process get requests on specified fields
-    const void TZSolarCLI::do_tz_op( const std::string &get_param) {
-        std::vector<std::string> get_fields;
-        alg::split( get_fields, get_param, alg::is_any_of(","));
-        for ( auto iter = get_fields.begin(); iter != get_fields.end(); iter++ ) {
-            auto value = tz_obj.get(*iter);
-            if (value.has_value()) {
-                std::cout << value.value() << std::endl;
+    // constructor - build TZSolar object from command line parameters
+    TZSolarCLI::TZSolarCLI( po::variables_map vm ) {
+        // create TZSolar object from --tzname request
+        if (vm.count("tzname") > 0) {
+            std::string tzname = vm["tzname"].as<std::string>();
+            tz_obj = TZSolar(tzname);
+        }
+
+        // create TZSolar object from --longitude request
+        if (vm.count("longitude") <= 0) {
+            // if control fell through, report parameter error
+            throw std::runtime_error( "build_tz_obj: --tzname or --longitude option required" );
+        }
+
+        // initialize
+        float lon = vm["longitude"].as<float>();
+        bool use_lon_tz = false;  // flag defaults to false
+        if (vm.count("type") > 0) {
+            std::string type_param = vm["type"].as<std::string>();
+            if (type_param == "longitude" or type_param == "lon") {
+                use_lon_tz = true;
+            } else if (type_param == "hour") {
+                use_lon_tz = false;
             } else {
-                std::cout << std::endl;
+                throw std::runtime_error( std::string("build_tz_obj: bad --type '" + type_param
+                    + "' - use hour or longitude"));
             }
         }
+        std::optional<short> opt_latitude;
+        if (vm.count("latitude") > 0) {
+            float lat = vm["latitude"].as<float>();
+            opt_latitude.emplace(lat);
+        }
+        tz_obj = TZSolar(lon, use_lon_tz, opt_latitude);
     }
 
-    // mainline: program entry point
-    int main(int argc, char* argv[])
-    {
+    // core of the mainline routine
+    int TZSolarCLI::mainline_core(int argc, char* argv[]) {
         po::options_description desc("lon-tz longitude time zones tool usage");
 
         // define options

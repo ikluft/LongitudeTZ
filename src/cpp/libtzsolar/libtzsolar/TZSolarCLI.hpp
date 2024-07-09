@@ -3,8 +3,10 @@
  * command line interface core/common routines for libtzsolar (C++ implementation of LongitudeTZ)
  */
 
+#pragma once
 #include <string>
 #include <iostream>
+#include "libtzsolar.hpp"
 #include <boost/program_options.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -15,13 +17,20 @@ namespace longitude_tz {
 
     class TZSolarCLI {
 
+        private:
+
+        TZSolar tz_obj;
+
         public:
+
+        // constructor
+        explicit TZSolarCLI( po::variables_map vm );
 
         // virtual methods which subclasses must provide
         // TODO
 
         // convert an int to a string with zero-padding
-        inline static std::string zeropad(const std::size_t length, const unsigned short value)
+        static std::string zeropad(const std::size_t length, const unsigned short value)
         {
             std::string num = std::to_string(value);
             if (num.length() > length) {
@@ -34,7 +43,7 @@ namespace longitude_tz {
         // generate standard 1-hour-wide (15 degrees longitude) time zones
         // input parameter: integer hours from GMT in the range
         // These correspond to the GMT+x/GMT-x time zones, except with boundaries defined by longitude lines.
-        inline static void gen_hour_tz(const short hour) {
+        static void gen_hour_tz(const short hour) {
             // validate parameter
             if (hour<-12 || hour>12) {
                 std::cerr << "gen_hour_tz: hour parameter must be -12 to +12 inclusive" << std::endl;
@@ -65,7 +74,7 @@ namespace longitude_tz {
         // Solar Time Zone centered on the meridian, including one half degree either side of the meridian.
         // Each time zone is named for its 1-degree-wide range.
         // The exception is at the Solar Date Line, where +12 and -12 time zones are one half degree wide.
-        inline static void gen_lon_tz(const short deg) {
+        static void gen_lon_tz(const short deg) {
             // validate parameter
             if (deg<-180 || deg>180) {
                 std::cerr << "gen_lon_tz: longitude parameter must be -180 to +180 inclusive" << std::endl;
@@ -98,7 +107,7 @@ namespace longitude_tz {
         }
 
         // generate and print tzfile data on standard output
-        inline static void do_tzfile()
+        static void do_tzfile()
         {
             // generate solar time zones in increments of 15 degrees of longitude (EastXX or WestXX)
             // standard 1-hour-wide time zones
@@ -112,5 +121,11 @@ namespace longitude_tz {
                 gen_lon_tz(d_zone);
             }
         }
+
+        // process get requests on specified fields
+        const void do_tz_op(const std::string &get_param);
+
+        // core of the mainline routine
+        int mainline_core(int argc, char* argv[]);
     };
 }
