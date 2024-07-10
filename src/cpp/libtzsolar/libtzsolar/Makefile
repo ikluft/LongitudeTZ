@@ -16,8 +16,8 @@ SPOTLESS_FILES = version.hpp
 
 # build targets handled by built-in make rules
 lon-tz: lon-tz.o libtzsolar.o
+lon-tz.o: lon-tz.cpp CLI.hpp libtzsolar.hpp version.hpp
 libtzsolar.o: libtzsolar.cpp libtzsolar.hpp
-lon-tz.o: version.hpp lon-tz.cpp
 
 # build targets with explicit actions
 version.hpp: Changes changes2version.pl version.hpp.tt2

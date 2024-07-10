@@ -163,7 +163,7 @@ ltz::TZSolar::TZSolar( const std::string &tzname ) {
 }
 
 // get offset as a string in ±HH:MM format
-const std::string ltz::TZSolar::str_offset() {
+const std::string ltz::TZSolar::str_offset() const {
 
     std::string sign = offset_min >= 0 ? "+" : "-";
 

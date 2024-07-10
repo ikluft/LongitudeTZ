@@ -1,9 +1,11 @@
 // [% dest_file %] - automatically generated [% timestamp %] - do not edit
 #pragma once  // include guard
 #include <string>
-struct LonTZVersionStruct {
-    std::string full;
-    short major, minor, patch;
-    std::string prerelease, metadata;
-};
-const LonTZVersionStruct lon_tz_version = { "[% version %]", [% semver.major  %], [% semver.minor %], [% semver.patch %], "[% semver.prerelease %]", "[% semver.metadata %]" };
+namespace longitude_tz {
+    struct LonTZVersionStruct {
+        std::string full;
+        short major, minor, patch;
+        std::string prerelease, metadata;
+    };
+    const LonTZVersionStruct lon_tz_version = { "[% version %]", [% semver.major  %], [% semver.minor %], [% semver.patch %], "[% semver.prerelease %]", "[% semver.metadata %]" };
+}

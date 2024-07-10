@@ -79,26 +79,29 @@ namespace longitude_tz {
         // constructor from time zone name
         explicit TZSolar( const std::string &tzname );
 
+        // destructor
+        virtual ~TZSolar() {};
+
         //
         // read accessors
 
         // time zone offset from GMT in minutes
-        constexpr int get_offset_min() {
+        const inline int get_offset_min() const {
             return offset_min;
         }
 
         // longitude used to set time zone
-        constexpr float get_longitude() {
+        const inline float get_longitude() const {
             return longitude;
         }
 
         // optional latitude used to detect if coordinates are too close to poles and use GMT instead
-        constexpr inline std::optional<float> get_opt_latitude() {
+        const inline std::optional<float> get_opt_latitude() const {
             return opt_latitude;
         }
 
         // determine if latitude was used to define the time zone
-        const inline bool has_latitude() {
+        const inline bool has_latitude() const {
             return opt_latitude.has_value();
         }
 
@@ -106,40 +109,40 @@ namespace longitude_tz {
         // string read accessors for CLI
 
         // return string value of longitude
-        const inline std::string str_longitude() {
+        const inline std::string str_longitude() const {
             return float_cleanup(longitude);
         }
 
         // return string value of latitude, use "" if optional value is not present
-        const inline std::string str_latitude() {
+        const inline std::string str_latitude() const {
             return opt_latitude.has_value() ? float_cleanup(opt_latitude.value()) : "";
         }
 
         // time zone short/base name (without Solar/)
-        const virtual std::string str_short_name() {
+        const virtual std::string str_short_name() const {
             return std::string(short_name);
         }
 
         // time zone long name includes Solar/ prefix
-        const virtual std::string str_long_name() {
+        const virtual std::string str_long_name() const {
             return "Solar/" + short_name;
         }
 
         // get offset as a string in ±HH:MM format
-        const virtual std::string str_offset();
+        const virtual std::string str_offset() const;
 
         // get offset minutes as a string
-        const virtual std::string str_offset_min() {
+        const virtual std::string str_offset_min() const {
             return std::to_string(offset_min);
         }
 
         // get offset seconds as a string
-        const virtual std::string str_offset_sec() {
+        const virtual std::string str_offset_sec() const {
             return std::to_string(offset_min*60);
         }
 
         // get is_utc flag as a string
-        const virtual std::string str_is_utc() {
+        const virtual std::string str_is_utc() const {
             return std::to_string(offset_min == 0 ? 1 : 0);
         }
 
@@ -155,22 +158,22 @@ namespace longitude_tz {
         static const std::string float_cleanup( float num );
 
         // time zone width in degrees of longitude differs, 1 if by each degree, 15 if by each hour
-        constexpr short tz_degree_width() {
+        constexpr short tz_degree_width() const {
             return lon_tz ? 1 : 15;  // 1 for longitude-based tz, 15 for hour-based tz
         }
 
         // number of numeric digits for formatting time zone name (3 digits if by degree, 2 digits if by hour)
-        constexpr short tz_digits() {
+        constexpr short tz_digits() const {
             return lon_tz ? 3 : 2;   // number of digits in time zone name
         }
 
         // formatting: time zone prefix string
-        const inline std::string tz_prefix( short sign ) {
+        const inline std::string tz_prefix( short sign ) const {
             return std::string( lon_tz ? "Lon" : ( sign > 0 ? "East" : "West" ));
         }
 
         // formatting: time zone suffix string
-        const inline std::string tz_suffix( short sign) {
+        const inline std::string tz_suffix( short sign) const {
             return std::string( lon_tz ? ( sign > 0 ? "E" : "W" ) : "" );
         }
 

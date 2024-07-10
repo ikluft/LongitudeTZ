@@ -9,7 +9,7 @@ use warnings;
 use feature qw(say);
 use Config;
 use Readonly;
-use Carp qw(croak);
+use Carp qw(croak confess);
 use Cwd;
 use File::Basename;
 use FindBin qw($Bin);
@@ -23,6 +23,10 @@ Readonly::Scalar my $bin_dir => $Bin;
 Readonly::Scalar my $tree_root => dirname($bin_dir);
 Readonly::Scalar my $perl_path => $Config{perlpath};
 Readonly::Scalar my $template => "tzsolar-cpp-buildXXXXXXXX";
+Readonly::Hash  my %test_tree => (
+    cpp => { src => "libtzsolar", prog => "lon-tz" },
+    boost => { src => "libtzsolar-boost", prog => "lon-tz-boost" },
+);
 
 # run a command directly without a shell
 sub cmd
@@ -32,7 +36,7 @@ sub cmd
     my ($in, $out, $err);
     my $cmd = join " ", @cmd;
     if ( not IPC::Run::run \@cmd, \$in, \$out, \$err, IPC::Run::timeout( 120 )) {
-        croak "'$cmd' exited with error code $?\nstdout: $out\nstderr: $err";
+        confess "'$cmd' exited with error code $?\nstdout: $out\nstderr: $err";
     }
     if (( $opts_ref->{out} // 0 ) ? 1 : 0 ) {
         say $out;
@@ -45,6 +49,12 @@ sub cmd
     }
     return;
 }
+
+# look up build parameters based on command name
+my $progbase = basename( $0, ".t" );
+$progbase =~ s/^ .* -//x;
+my $src_subdir = $test_tree{$progbase}{src};
+my $test_prog = $test_tree{$progbase}{prog};
 
 # make temporary build directory
 my %options = (CLEANUP => $debug ? 0 : 1);
@@ -63,7 +73,7 @@ dircopy("$tree_root/src/cpp/libtzsolar", "$tmpdir");
 
 # build in temporary directory
 my $run_dir = getcwd;
-chdir "$tmpdir";
+chdir "$run_dir/$tmpdir/$src_subdir";
 cmd ({ out => 0 }, qw(make clean) );
 cmd ({ out => 0 }, qw(make) );
 
@@ -74,4 +84,4 @@ chdir "$run_dir";
 cmd ({ out => 1 }, $perl_path,
     "$bin_dir/cli-test.pl",
     ( $debug ? "--debug" : ()),
-    "$run_dir/$tmpdir/libtzsolar/lon-tz");
+    "$run_dir/$tmpdir/$src_subdir/$test_prog");
