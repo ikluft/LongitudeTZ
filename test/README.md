@@ -8,4 +8,12 @@ The tests performed are
   * at the Date Line at -180 and -179.75
 * generation of the tzdata file from scratch, compared with a known good copy
 
-The wrapper for the tests is written in Perl because the reference implementation is in Perl, and it fits easily with the "prove" program which collects [Test Anything Protocol (TAP)](https://testanything.org/) results from all the language implementations' outputs.
+## Per-language Black Box tests
+
+The wrapper for the tests [cli-test.pl](cli-test.pl) is written in Perl because the reference implementation is in Perl, and it fits easily with the "prove" program which collects [Test Anything Protocol (TAP)](https://testanything.org/) results from all the language implementations' outputs. Each of the language-specific tesst scripts runs cli-test.pl with parameters pointing to the program in that language implementation which serves the CLI role and whose results are used to perform black box tests.
+
+* Perl black box tests are launched by [cli-test-perl.t](cli-test-perl.t)
+* Python black box tests are launched by [cli-test-python.t](cli-test-python.t)
+* C++ black box tests are split by libraries
+  * C++ core black box tests are launched by [cli-test-cpp.t](cli-test-cpp.t)
+  * C++ BOOST black box tests are launched by [cli-test-cpp-boost.t](cli-test-cpp-boost.t) - symlink to cli-test-cpp.t
