@@ -123,30 +123,45 @@ namespace longitude_tz {
         inline static void set_debug_flag(bool flag_value) { return TZSolar::set_debug_flag(flag_value); }
 
         // time zone short/base name (without Solar/)
-        const std::string str_short_name() {
+        const std::string str_short_name() const {
             return std::string(std_zone_abbrev());
         }
 
         // time zone long name includes Solar/ prefix
-        const std::string str_long_name() {
+        const std::string str_long_name() const {
             return std::string(std_zone_name());
         }
 
         // get offset as a string in ±HH:MM format
-        const std::string str_offset();
+        const std::string str_offset() const {
+            short dt_offset_min = base_utc_offset().total_seconds()/60;
+            std::string sign = dt_offset_min >= 0 ? "+" : "-";
+
+            // format hour
+            std::ostringstream ss_hour;
+            ss_hour << std::setw( 2 ) << std::setfill( '0' ) << abs(dt_offset_min)/60;
+            std::string num_hour = ss_hour.str();
+
+            // format minutes
+            std::ostringstream ss_min;
+            ss_min << std::setw( 2 ) << std::setfill( '0' ) << abs(dt_offset_min)%60;
+            std::string num_min = ss_min.str();
+
+            return sign + num_hour + ":" + num_min;
+        }
 
         // get offset minutes as a string
-        const std::string str_offset_min() {
+        const std::string str_offset_min() const {
             return std::to_string((unsigned short)(base_utc_offset().total_seconds()/60));
         }
 
         // get offset seconds as a string
-        const std::string str_offset_sec() {
+        const std::string str_offset_sec() const {
             return std::to_string((unsigned short)(base_utc_offset().total_seconds()));
         }
 
         // get is_utc flag as a string
-        const std::string str_is_utc() {
+        const std::string str_is_utc() const {
             return std::to_string((unsigned short)(base_utc_offset().total_seconds()/60) == 0 ? 1 : 0);
         }
 
