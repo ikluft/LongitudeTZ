@@ -1,0 +1,11 @@
+# C++ objects
+*.o
+*.a
+*.so
+*.so.*
+*.dll
+*.dylib
+*.obj
+
+# auto-generated files
+test-core
