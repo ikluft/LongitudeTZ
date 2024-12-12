@@ -5,7 +5,7 @@ Source files:
 * __init__.py - initialization for sources in timezone_solar module directory, loads the module
 * timezone_solar.py - core of the timezone_solar module
 * tzsconst.py - constants used by the timezone_solar module and its unit tests
-* test (directory) - containts unit tests
+* test (directory) - containts unit tests (to run tests, use the command line "python tests")
   * __main__.py - allows running all the tests by running the test module/directory as a Python script
   * test_010_tzsconst.py - unit tests for constants in tzsconst
   * test_011_basic.py - basic unit tests of timezone_solar time zones for each longitude or hourly zone

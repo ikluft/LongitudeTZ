@@ -44,6 +44,8 @@ interface.
 To do that, it provides the functions _utcoffset_, _dst_ and _tzname_.
 It inherits the _fromutc_ function from tzinfo.
 
+If the library is installed from source code from GitHub, use the Python flit command to build and install. It can be built with "flit built" and installed with "flit install".
+
 Online resources
 ----------------
 
