@@ -39,12 +39,12 @@ The Solaer time zones also have another set of overlay time zones the width of 1
 Usage of timezone_solar
 -----------------------
 
-The timezone_solar package implements the [https://docs.python.org/3.6/library/datetime.html#datetime.tzinfo](tzinfo)
+The timezone_solar package implements the [tzinfo](https://docs.python.org/3.6/library/datetime.html#datetime.tzinfo)
 interface.
 To do that, it provides the functions _utcoffset_, _dst_ and _tzname_.
 It inherits the _fromutc_ function from tzinfo.
 
-If the library is installed from source code from GitHub, use the Python flit command to build and install. It can be built with "flit built" and installed with "flit install".
+If the library is installed from source code from GitHub, use the Python [flit](https://flit.pypa.io/en/stable/) command to build and install. It can be built with "flit built" and installed with "flit install".
 
 Online resources
 ----------------
