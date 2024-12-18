@@ -10,12 +10,15 @@ OPENSSF_CPPFLAGS=-O2 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrou
         -Wl,-z,nodlopen -Wl,-z,noexecstack \
         -Wl,-z,relro -Wl,-z,now
 
+# additional compiler flags for hardening and safety
+EXTRA_CPPFLAGS=-Wextra
+
 # compiler & linker flags
 # add DEBUG_FLAGS=-g to make command line in order to build with debugging
 DEBUG_FLAGS +=
-CPPFLAGS += $(OPENSSF_CPPFLAGS) $(DEBUG_FLAGS)
+CPPFLAGS += $(OPENSSF_CPPFLAGS) $(EXTRA_CPPFLAGS) $(DEBUG_FLAGS)
 CXXFLAGS += -std=gnu++17
-LDLIBS  +=
+LDLIBS  += -lstdc++
 LDFLAGS += -Wl,--copy-dt-needed-entries $(DEBUG_FLAGS)
 
 # cleanup targets

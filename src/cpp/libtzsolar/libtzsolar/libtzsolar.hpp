@@ -65,9 +65,9 @@ namespace longitude_tz {
         public:
 
         // accessors for class-static data
-        const static inline bool get_debug_flag() { return debug_flag; }
+        static inline bool get_debug_flag() { return debug_flag; }
         inline static void set_debug_flag(bool flag_value) { debug_flag = flag_value; }
-        const static inline void debug_print(const std::string &msg) { if (debug_flag) { std::cerr << msg << std::endl; } }
+        static inline void debug_print(const std::string &msg) { if (debug_flag) { std::cerr << msg << std::endl; } }
 
         // constructor from time zone parameters
         TZSolar( const float lon_in, const bool lon_tz_in, const std::optional<float> lat_in = std::nullopt )
@@ -86,12 +86,12 @@ namespace longitude_tz {
         // read accessors
 
         // time zone offset from GMT in minutes
-        const inline int get_offset_min() const {
+        inline int get_offset_min() const {
             return offset_min;
         }
 
         // longitude used to set time zone
-        const inline float get_longitude() const {
+        inline float get_longitude() const {
             return longitude;
         }
 
@@ -101,7 +101,7 @@ namespace longitude_tz {
         }
 
         // determine if latitude was used to define the time zone
-        const inline bool has_latitude() const {
+        inline bool has_latitude() const {
             return opt_latitude.has_value();
         }
 

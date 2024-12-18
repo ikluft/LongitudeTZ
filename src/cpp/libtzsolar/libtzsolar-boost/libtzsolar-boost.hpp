@@ -69,12 +69,12 @@ namespace longitude_tz {
         }
 
         // Local time that DST starts -- undefined if has_dst is false
-        virtual time_type dst_local_start_time(year_type y) const override {
+        virtual time_type dst_local_start_time(year_type /* y */) const override {
             return pt::ptime(); // not defined because there is no DST in solar time zones
         }
 
         // Local time that DST ends -- undefined if has_dst is false
-        virtual time_type dst_local_end_time(year_type y)const  override {
+        virtual time_type dst_local_end_time(year_type /* y */)const  override {
             return pt::ptime(); // not defined because there is no DST in solar time zones
         }
 
@@ -119,7 +119,7 @@ namespace longitude_tz {
         // TZSolar compatible interface for use by CLI template
 
         // accessors for TZSolar debug flag
-        const static inline bool get_debug_flag() { return TZSolar::get_debug_flag(); }
+        static inline bool get_debug_flag() { return TZSolar::get_debug_flag(); }
         inline static void set_debug_flag(bool flag_value) { return TZSolar::set_debug_flag(flag_value); }
 
         // time zone short/base name (without Solar/)

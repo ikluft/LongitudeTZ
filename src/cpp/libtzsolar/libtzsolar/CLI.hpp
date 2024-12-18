@@ -159,7 +159,7 @@ namespace longitude_tz {
         }
         
         // process get requests on specified fields
-        const void do_tz_op(const std::string &get_param) {
+        void do_tz_op(const std::string &get_param) {
             std::vector<std::string> get_fields;
             alg::split( get_fields, get_param, alg::is_any_of(","));
             for ( auto iter = get_fields.begin(); iter != get_fields.end(); iter++ ) {
