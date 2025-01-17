@@ -2,21 +2,19 @@ Revision history for C++ libtzsolar library
 (Changelog in format of Perl's CPAN::Changes::Spec)
 
 {{$NEXT}}
- [API CHANGE]
+ - API CHANGE
+ - BUG FIXES
+ - DOCS
+ - ENHANCEMENTS
+ - MAJOR
+ - MINOR
+ - REVISION
+ - SECURITY
 
- [BUG FIXES]
-
- [DOCS]
-
- [ENHANCEMENTS]
-
- [MAJOR]
-
- [MINOR]
-
+0.0.2 2024-12-18T03:10:33 UTC
  [REVISION]
-
- [SECURITY]
+ - add -Wextra to build flags for memory safety and avoidance of undefined
+   behavior
 
 0.0.1 2024-05-25T06:26:14Z UTC
  [REVISION]
