@@ -318,11 +318,11 @@ Patches and enhancements may be submitted via a pull request at [https://github.
 
 # AUTHOR
 
-Ian Kluft &lt;ian.kluft+github@gmail.com>
+Ian Kluft L<https://metacpan.org/author/IKLUFT>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2024 by Ian Kluft.
+This software is copyright (c) 2024-2025 by Ian Kluft.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
