@@ -45,9 +45,9 @@ sub run_tests
     dies_ok { my $tz = TimeZone::Solar->new(); } "Longitude is mandatory";
     dies_ok { my $tz = TimeZone::Solar->new( longitude => 'zero' ); } "Longitude must be numeric";
     dies_ok { my $tz = TimeZone::Solar->new( longitude => 0, latitude => 'zero' ); } "Latitude must be numeric";
-    dies_ok { my $tz = TimeZone::Solar->new( longitude => 181 ); } "Longitude must be <=  180";
+    dies_ok { my $tz = TimeZone::Solar->new( longitude =>  181 ); } "Longitude must be <=  180";
     dies_ok { my $tz = TimeZone::Solar->new( longitude => -181 ); } "Longitude must be >= -180";
-    dies_ok { my $tz = TimeZone::Solar->new( longitude => 0, latitude => 91 ); } "Latitude must be <=  90";
+    dies_ok { my $tz = TimeZone::Solar->new( longitude => 0, latitude =>  91 ); } "Latitude must be <=  90";
     dies_ok { my $tz = TimeZone::Solar->new( longitude => 0, latitude => -91 ); } "Latitude must be >= -90";
 
     # force unlikely failures => 1 test
