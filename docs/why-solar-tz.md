@@ -2,7 +2,7 @@
 
 The purpose of the LongitudeTZ project is to develop data and libraries to enable any of us to opt out of Daylight Saving Time on devices we own. With time zone definitions that only use Standard Time based on our location's longitude, our devices can automatically convert to/from DST to interoperate with those who still use it.
 
-## More active resistance to Daylight Saving Time (DST)
+## Active resistance to Daylight Saving Time (DST)
 
 Everybody where Daylight Savings Time (DST) is in effect wants the clock changes to stop. Standard Time is the natural time at each location's longitude, centered on local solar noon to balance the amount of light between morning and afternoon regardless of the length of the day or time of year.
 
@@ -12,9 +12,10 @@ Think of it this way: Governments which set DST laws call it the official time i
 
 ## Info for Potential Volunteers and Participants
 
-To accomplish this goal, the project needs to recruit support for a two-pronged approach to the problem
+To accomplish this goal, the project needs to recruit support for a multiple-pronged approach to the problem
 
 1. generate [data for the "tzdata" database](longitude-timezones.tzfile), and get it accepted into the database.
   * this is a key for automatic time conversion with people who still use DST while others advocate for legislation to eliminate DST
 2. update libraries for multiple platforms and programming languages so that location data (particularly longitude) can be used to determine the local solar time zone for those who opt in
+3. one or a group of us may write an [Internet Draft for submission to the IETF RFC Editor](https://www.rfc-editor.org/pubprocess/) for publication as an Internet RFC
 
