@@ -114,13 +114,18 @@ Related: time zone technical standards:
 * ["tz database"](https://en.wikipedia.org/wiki/Tz_database), Wikipedia
 * [Time Zone Database](https://www.iana.org/time-zones), Internet Assigned Numbers Authority (IANA)
   * [Time zone and daylight saving time data](https://data.iana.org/time-zones/tz-link.html), links included with tzdata (tz database) releases
-* [RFC8536: The Time Zone Information Format (TZif)](https://www.rfc-editor.org/info/rfc8536), Internet Engineering Task Force (IETF)
+* Internet RFCs by Internet Engineering Task Force (IETF)
+  * [RFC6557: Procedures for Maintaining the Time Zone Database](https://www.rfc-editor.org/info/rfc6557)
+  * [RFC9636: The Time Zone Information Format (TZif)](https://www.rfc-editor.org/info/rfc9636)
 
-Related: in favor of Standard Time:
+Related: in favor of permanent Standard Time:
 
 * [Save Standard Time](https://savestandardtime.com/) - nonprofit organization promoting legislation for permanent standard time, opposing legislation for permanent daylight time
 * [International Alliance for Natural Time](https://naturaltimealliance.org/en/) - group of organizations and projects promoting timekeeping based on natural solar time
 * [Coalition for Permanent Standard Time](https://ditchdst.com/) - group of organizations opposed to the biannual clock change, advocating permanent standard time
+* [AMA calls for permanent standard time](https://www.ama-assn.org/press-center/press-releases/ama-calls-permanent-standard-time), 2022 press release by American Medical Association
+* [It is time to abolish the clock change and adopt permanent standard time in the United States](https://academic.oup.com/sleep/article/45/12/zsac236/6717940?login=false), 2022 position statement by Sleep Research Society
+* [Permanent standard time is the optimal choice for health and safety](https://jcsm.aasm.org/doi/10.5664/jcsm.10898), 2024 position statement by American Academy of Sleep Medicine
 
 Related: harmful effects of daylight saving time (DST):
 
@@ -128,3 +133,4 @@ Related: harmful effects of daylight saving time (DST):
 * [Debunking myths about daylight saving time: ten things everyone should know about the benefits of permanent standard time](https://jcsm.aasm.org/doi/10.5664/jcsm.10666), Journal of Clinical Sleep Medicine, 2023
 * [Daylight saving time is doing far more harm than good, according to sleep scientists](https://medicalxpress.com/news/2021-11-daylight-good-scientists.html) - Medical Xpress, 2022
 * [Daylight Saving Time does not save energy](https://phys.org/news/2014-03-daylight-energy.html), Phys[.]Org, 2014
+* [Why Should We Abolish Daylight Saving Time?](https://journals.sagepub.com/doi/10.1177/0748730419854197), 2019 paper in Journal of Biological Rhythms by Roenneberg T, Wirz-Justice A, Skene DJ, et al.
