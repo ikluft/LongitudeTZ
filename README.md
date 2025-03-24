@@ -113,6 +113,7 @@ Related: time zone technical standards:
 * [tzfile defining proposed Longitude Time Zones](data/solar-tz.tab)
 * ["tz database"](https://en.wikipedia.org/wiki/Tz_database), Wikipedia
 * [Time Zone Database](https://www.iana.org/time-zones), Internet Assigned Numbers Authority (IANA)
+  * [Time zone and daylight saving time data](https://data.iana.org/time-zones/tz-link.html), links included with tzdata (tz database) releases
 * [RFC8536: The Time Zone Information Format (TZif)](https://www.rfc-editor.org/info/rfc8536), Internet Engineering Task Force (IETF)
 
 Related: in favor of Standard Time:
