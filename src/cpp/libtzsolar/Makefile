@@ -14,3 +14,7 @@ clean:
 	for dir in $(SUBDIRS); do \
 		$(MAKE) -C $$dir clean; \
 	done
+spotless:
+	for dir in $(SUBDIRS); do \
+		$(MAKE) -C $$dir spotless; \
+	done
