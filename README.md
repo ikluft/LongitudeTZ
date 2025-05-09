@@ -134,3 +134,4 @@ Related: harmful effects of daylight saving time (DST):
 * [Daylight saving time is doing far more harm than good, according to sleep scientists](https://medicalxpress.com/news/2021-11-daylight-good-scientists.html) - Medical Xpress, 2022
 * [Daylight Saving Time does not save energy](https://phys.org/news/2014-03-daylight-energy.html), Phys[.]Org, 2014
 * [Why Should We Abolish Daylight Saving Time?](https://journals.sagepub.com/doi/10.1177/0748730419854197), 2019 paper in Journal of Biological Rhythms by Roenneberg T, Wirz-Justice A, Skene DJ, et al.
+* [Daylight Saving Time and Artificial Time Zones – A Battle Between Biological and Social Times](https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2019.00944/full), 2019 paper in Frontiers in Physiology by Till Roenneberg, Eva C. Winnebeck, Elizabeth B. Klerman
