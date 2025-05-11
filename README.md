@@ -110,7 +110,7 @@ Nautical and longitude-based time:
 
 Related: time zone technical standards:
 
-* [tzfile defining proposed Longitude Time Zones](data/solar-tz.tab)
+* [tzfile defining Longitude Time Zones](data/solar-tz.tab) proposed by this project
 * ["tz database"](https://en.wikipedia.org/wiki/Tz_database), Wikipedia
 * [Time Zone Database](https://www.iana.org/time-zones), Internet Assigned Numbers Authority (IANA)
   * [Time zone and daylight saving time data](https://data.iana.org/time-zones/tz-link.html), links included with tzdata (tz database) releases
@@ -129,6 +129,7 @@ Related: in favor of permanent Standard Time:
 
 Related: harmful effects of daylight saving time (DST):
 
+* [Daylight saving time and early school start times cost billions in lost productivity and health care expenses](https://theconversation.com/daylight-saving-time-and-early-school-start-times-cost-billions-in-lost-productivity-and-health-care-expenses-248280), The Conversation, 2025
 * [Sleep experts call for end of seasonal time changes ahead of ‘springing forward’](https://aasm.org/sleep-experts-call-for-end-of-seasonal-time-changes-ahead-of-springing-forward/), American Academy of Sleep Medicine (AASM), 2024
 * [Debunking myths about daylight saving time: ten things everyone should know about the benefits of permanent standard time](https://jcsm.aasm.org/doi/10.5664/jcsm.10666), Journal of Clinical Sleep Medicine, 2023
 * [Daylight saving time is doing far more harm than good, according to sleep scientists](https://medicalxpress.com/news/2021-11-daylight-good-scientists.html) - Medical Xpress, 2022
