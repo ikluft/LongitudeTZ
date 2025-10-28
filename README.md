@@ -1,5 +1,6 @@
 Longitude-based Time Zones
 ==========================
+<img src="docs/dst-opt-out.jpg" align="right" width="50%" />
 On this page:
 
 * [Introduction](#introduction)
@@ -8,6 +9,7 @@ On this page:
 * [The Solar Time Zones Definition](#the_solar_time_zones_definition)
 * [Obsoleting Daylight Saving Time](#obsoleting_daylight_saving_time)
 * [Web Resources](#web_resources)
+<br clear="all" />
 
 ## <a name="introduction">Introduction</a>
 
