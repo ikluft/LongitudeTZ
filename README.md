@@ -105,6 +105,8 @@ The goal of this project is to aid existing and future efforts to end Daylight S
 
 ## <a name="web_resources">Web Resources</a>
 
+See also the [LongitudeTZ project wiki](https://github.com/ikluft/LongitudeTZ/wiki)
+
 Nautical and longitude-based time:
 
 * ["Nautical time"](https://en.wikipedia.org/wiki/Nautical_time), Wikipedia
