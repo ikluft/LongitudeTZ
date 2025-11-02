@@ -25,10 +25,10 @@ People are tired of changing their clocks twice a year for daylight saving time.
 * Studies have established there are [health](https://savestandardtime.com/health/) and [safety](https://savestandardtime.com/safety/) hazards from disrupting circadian rhythms (daily sleep cycles).
   * The most obvious health and safety problems come from abrupt changes when the clocks are changed, ranging from fatigue-related mishaps to heart attacks.
   * There are also problems inherent to Daylight Saving Time. By shifting clocks an hour off, the day is no longer centered on solar noon. The unequal split of daylight favors evening activities at the expense of morning activities. People who have to wake earlier in the day get up in the dark, in order for others to have the appearance of an extra hour of sunlight in the evening. DST commonly results in sleep deprivation due to later evening activities conflicting with times people need to wake up in the morning.
+* There is actually never any more daylight available than what naturally occurs at one's locality for the time of year.
+* So the real solution is to schedule daylight-sensitive activities around available sunlight.
 
-*There is actually never any more daylight available than what naturally occurs at one's locality for the time of year.* So the real solution is to schedule daylight-sensitive activities around available sunlight.
-
-In places where regional government mandates use of Daylight Saving Time, the only way we'll have the choice to opt-out of DST is if there's a technical alternative standard time zone allowing us to stay on Standard Time.
+In places where regional government mandates use of Daylight Saving Time, the only way we'll have the choice to opt-out of DST is if there's a technical alternative standard time zone allowing us to stay on Standard Time, and the ability to interoperate with systems of those who are required to observe DST.
 
 Keep in mind that the decision to opt-out of Daylight Saving Time can be done by the owner of the computer. However, those who work for any national, regional or local government entity where DST is set by law, won't be able to make that decision on machines where they work unless laws are changed. One can make the decision for devices personally owned.
 
