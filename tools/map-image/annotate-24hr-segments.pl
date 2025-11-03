@@ -29,6 +29,7 @@ if ($err_out) {
 }
 
 # set up to generate image
+GD::Image->trueColor(1);
 my $img = GD::Image->newFromPngData($png_data);
 Readonly::Scalar my $img_width  => $img->width;
 Readonly::Scalar my $img_height => $img->height;
