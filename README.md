@@ -34,9 +34,11 @@ Keep in mind that the decision to opt-out of Daylight Saving Time can be done by
 
 ## <a name="creating_an_alternative">Creating an Alternative</a>
 
-With time zone data for the natural solar time zones, computers can convert between time zones automatically.
+With time zone data for the natural solar time zones, computers can convert between natural and regulatory time zones automatically.
 
-This project is intended to make such an alternative. The objective is to make software libraries to set local natural solar time zone based on longitude. It also maintains time zone files compatible with the *tz database* standard which allow any device or server to use them. The *tzfile* data files are what allow systems to convert between traditional and longitude-based time zones automatically.
+<a href="docs/world_zone_map-1200.png"><img src="docs/world_zone_map-1200.png" width="100%" title="Natural Time Zones by Longitude" /></a>
+
+This project is intended to make such an alternative. The objective is to make software libraries to set local natural solar time zone based on longitude. It also maintains time zone files compatible with the *TZ Database* standard which allow any device or server to use them. The *tzfile* data files are what allow systems to convert between traditional and longitude-based time zones automatically.
 
 An example of the tzfile data for the proposed Longitude Time Zones is provided at [data/solar-tz.tab](data/solar-tz.tab) in this repository.
 
@@ -49,7 +51,7 @@ National and regional governments continue to cling to daylight saving time part
 
 15 degrees of longitude appears more than once above. That isn't a coincidence. It's derived from 360 degrees of rotation in a day, divided by 24 hours in a day. The result is 15 degrees of longitude representing 1 hour in Earth's rotation. That makes each time zone one hour wide. So we'll use that too.
 
-With those items as its basis, this project is to establish "Solar Time Zone" data for use with the Internet Assigned Numbers Authority's [TZ database](https://www.iana.org/time-zones), and eventually submit it for inclusion in the database and a paper with the definition, perhaps as an Internet RFC.
+With those items as its basis, this project is to establish "Solar Time Zone" data for use with the Internet Assigned Numbers Authority's [TZ Database](https://www.iana.org/time-zones), and eventually submit it for inclusion in the database and a paper with the definition, perhaps as an Internet RFC.
 
 The project also makes and accepts contributions of code in various programming languages for anything necessary to implement this standard. That includes computing a Solar Time Zone from a latitude/longitude coordinates. Once part of the TZ Database, computers and phones which use it will be able to automatically convert times to and from the Solar Time Zones.
 
@@ -77,9 +79,9 @@ So far, black box tests have been written and run on the Perl, Python and C++ im
 
 ## <a name="the_solar_time_zones_definition">The Solar Time Zones Definition</a>
 
-Though not part of the LongitudeTZ project, this graphic by [Save Standard Time](https://savestandardtime.com/) exactly depicts the natural time zones this project also wants to implement.
+Though not part of the LongitudeTZ project, [Save Standard Time](https://savestandardtime.com/) also made an image of what ideal time zones would look like, which depicts the exact same natural time zones this project proposes.
 
-![Ideal Standard Time Zones graphic by Save Standard Time](docs/info-map-time-zones-world-ideal-map-ideal.jpg)
+<a href="docs/info-map-time-zones-world-ideal-map-ideal.jpg"><img src="docs/info-map-time-zones-world-ideal-map-ideal.jpg" width="100%" title="Ideal Standard Time Zones graphic by Save Standard Time" /></a>
 
 The Solar time zones definition includes the following rules.
 
@@ -115,9 +117,9 @@ Nautical and longitude-based time:
 Related: time zone technical standards:
 
 * [tzfile defining Longitude Time Zones](data/solar-tz.tab) proposed by this project
-* ["tz database"](https://en.wikipedia.org/wiki/Tz_database), Wikipedia
+* ["TZ Database"](https://en.wikipedia.org/wiki/Tz_database), Wikipedia
 * [Time Zone Database](https://www.iana.org/time-zones), Internet Assigned Numbers Authority (IANA)
-  * [Time zone and daylight saving time data](https://data.iana.org/time-zones/tz-link.html), links included with tzdata (tz database) releases
+  * [Time zone and daylight saving time data](https://data.iana.org/time-zones/tz-link.html), links included with tzdata (TZ Database) releases
 * Internet RFCs by Internet Engineering Task Force (IETF)
   * [RFC6557: Procedures for Maintaining the Time Zone Database](https://www.rfc-editor.org/info/rfc6557)
   * [RFC9636: The Time Zone Information Format (TZif)](https://www.rfc-editor.org/info/rfc9636)
