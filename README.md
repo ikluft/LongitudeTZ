@@ -13,7 +13,7 @@ On this page:
 
 ## <a name="introduction">Introduction</a>
 
-This project is intended to develop software and time zone data files so computers and timekeeping devices can be set to natural longitude-based time zones for their locality. These are based on Standard Time for the longitude, without peculiarities set by local or national governments. These time zone files and the software to look up which one applies to the current location allow users' devices to automatically convert to or from conventional time zones used by government entities.
+This project is intended to develop software and time zone data files so computers and timekeeping devices can be set to natural longitude-based time zones for their locality. These are based on Standard Time for the longitude, without peculiarities set by regional, tribal or national governments. These time zone files and the software to look up which one applies to the current location allow users' devices to automatically convert to or from conventional time zones used by government entities.
 
 There are lots of reasons to do this...
 
