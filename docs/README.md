@@ -24,7 +24,9 @@ With those items as its basis, this project is to establish "Solar Time Zone" da
 
 The project also makes and accepts contributions of code in various programming languages for anything necessary to implement this standard. That includes computing a Solar Time Zone from a latitude/longitude coordinates. Once part of the TZ Database, computers and phones which use it will be able to automatically convert times to and from the Solar Time Zones.
 
-The project also makes another set of overlay time zones the width of 1 degree of longitude, which puts them in 4-minute intervals of time. These are a hyper-local niche for potential use by outdoor events. These may be used by those who would like to have the middle of the scheduling day coincide with local solar noon. 
+The project also makes another set of overlay time zones the width of 1 degree of longitude, which puts them in 4-minute intervals of time. These are a hyper-local niche for anyone who prefers higher resolution such as for planning outdoor events around daylight. It may also be of interest to have smaller time increments in regions bisected by boundaries of hour-wide time zones. In general, the purpose is for more the middle of the scheduling day to coincide within a few minutes of local solar noon.
+
+<a href="world_zone_map-1200.png"><img src="world_zone_map-1200.png" width="100%" title="Natural Time Zones by Longitude" /></a>
 
 ### The Solar Time Zones Definition
 The Solar time zones definition includes the following rules.
