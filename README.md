@@ -21,7 +21,6 @@ People are tired of changing their clocks twice a year for daylight saving time.
 
 * Standard time is based on setting the local clock at average solar noon, and so follows nature. Daylight saving time artificially offsets it an hour to favor late-day activities. But there is not actually more daylight - it stakes that hour from early-day activities.
 * Daylight saving time does not actually save energy.
-* Anyone can look up local sunrise and sunset times for planning events that actually need to be scheduled around daylight.
 * Studies have established there are [health](https://savestandardtime.com/health/) and [safety](https://savestandardtime.com/safety/) hazards from disrupting circadian rhythms (daily sleep cycles).
   * The most obvious health and safety problems come from abrupt changes when the clocks are changed, ranging from fatigue-related mishaps to heart attacks.
   * There are also problems inherent to Daylight Saving Time. By shifting clocks an hour off, the day is no longer centered on solar noon. The unequal split of daylight favors evening activities at the expense of morning activities. People who have to wake earlier in the day get up in the dark, in order for others to have the appearance of an extra hour of sunlight in the evening. DST commonly results in sleep deprivation due to later evening activities conflicting with times people need to wake up in the morning.

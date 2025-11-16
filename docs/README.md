@@ -6,7 +6,7 @@ project documentation
 * [LongitudeTZ Command-line Interface Specification](cli-spec.md)
 
 ## Longitude-based Time Zones
-Many people are tired of changing their clocks twice a year for daylight time. DST is an antiquated tradition [which we now know doesn't do any good](https://www.webmd.com/sleep-disorders/news/20211105/harmful-effects-of-daylight-savings). Anyone can look up sunrise and sunset times for events that need to be scheduled around daylight.
+Many people are tired of changing their clocks twice a year for daylight time. DST is an antiquated tradition [which we now know doesn't do any good](https://www.webmd.com/sleep-disorders/news/20211105/harmful-effects-of-daylight-savings).
 
 While there have been proposals for regional and national governments to repeal Daylight Saving Time, it hasn't made progress. One way to have the choice to opt-out of Daylight Saving Time is if there's an alternative standard allowing us to stay on Standard Time.
 
