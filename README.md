@@ -19,12 +19,13 @@ There are lots of reasons to do this...
 
 People are tired of changing their clocks twice a year for daylight saving time. DST is an antiquated tradition which we now know doesn't do any good. ([see below](#web_resources)) There are many problems where DST has failed to deliver on its promises and/or is no longer useful the way it was originally intended.
 
-* Standard time is based on setting the local clock at average solar noon, and so follows nature. Daylight saving time artificially offsets it an hour to favor late-day activities. But there is not actually more daylight - it stakes that hour from early-day activities.
+* Standard time is based on setting the local clock at average solar noon, which is why it's accurate to say it follows nature. Daylight saving time artificially offsets it an hour to favor late-day activities. But there is not actually more daylight - it takes that hour from early-day activities.
 * Daylight saving time does not actually save energy.
 * Studies have established there are [health](https://savestandardtime.com/health/) and [safety](https://savestandardtime.com/safety/) hazards from disrupting circadian rhythms (daily sleep cycles).
   * The most obvious health and safety problems come from abrupt changes when the clocks are changed, ranging from fatigue-related mishaps to heart attacks.
   * There are also problems inherent to Daylight Saving Time. By shifting clocks an hour off, the day is no longer centered on solar noon. The unequal split of daylight favors evening activities at the expense of morning activities. People who have to wake earlier in the day get up in the dark, in order for others to have the appearance of an extra hour of sunlight in the evening. DST commonly results in sleep deprivation due to later evening activities conflicting with times people need to wake up in the morning.
 * There is actually never any more daylight available than what naturally occurs at one's locality for the time of year.
+  * Advocates of permanent DST fail to recognize that it doesn't work at all in winter. DST would have to work all year to be made permanent. The United States experimented with what was supposed to be a 2-year trial period of permanent DST in the mid-1970s. It went very badly with increased morning commute car accidents and children hit by cars going to school in the dark. That was the reason Congress repealed the permanent DST experiment after a matter of months, and made it illegal for states to legislate permanent DST.
 * So the real solution is to schedule daylight-sensitive activities around available sunlight.
 
 In places where regional government mandates use of Daylight Saving Time, the only way we'll have the choice to opt-out of DST is if there's a technical alternative standard time zone allowing us to stay on Standard Time, and the ability to interoperate with systems of those who are required to observe DST.
@@ -41,7 +42,7 @@ This project is intended to make such an alternative. The objective is to make s
 
 An example of the tzfile data for the proposed Longitude Time Zones is provided at [data/solar-tz.tab](data/solar-tz.tab) in this repository.
 
-I'm running the idea up the flagpole. We'll see how many salutes it gets. Meanwhile this project is making software in various programming languages toward enabling the possibility.
+I'm running the idea up the flagpole. We'll see how many salutes it gets, so to speak. Meanwhile this project is making documentation, data and software (in various programming languages) toward enabling the possibility.
 
 National and regional governments continue to cling to daylight saving time partly because almost everyone else has such a standard. In this age where our computers and cell phones are integral to scheduling, we really only need a de-facto standard. _It is possible to just stop using DST_, and let our computers convert the times to and from others who continue to use DST. Fortunately, there are standards we can build upon.
 * Lines of longitude are a well-established standard.
