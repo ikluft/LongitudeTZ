@@ -132,6 +132,7 @@ Related: in favor of permanent Standard Time:
 * [AMA calls for permanent standard time](https://www.ama-assn.org/press-center/press-releases/ama-calls-permanent-standard-time), 2022 press release by American Medical Association
 * [It is time to abolish the clock change and adopt permanent standard time in the United States](https://academic.oup.com/sleep/article/45/12/zsac236/6717940?login=false), 2022 position statement by Sleep Research Society
 * [Permanent standard time is the optimal choice for health and safety](https://jcsm.aasm.org/doi/10.5664/jcsm.10898), 2024 position statement by American Academy of Sleep Medicine
+* [Our Body Clock Might Prefer Permanent Standard Time](https://www.scientificamerican.com/article/nixing-daylight-saving-time-may-lower-risk-of-obesity-and-stroke/), Scientific American, Sept 2025
 * [Eliminating Daylight Saving Time Could Help Lower Obesity, Stroke Rates](https://www.healthline.com/health-news/daylight-saving-time-obesity-cardiovascular-risks-study#Should-daylight-saving-time-be-eliminated), Healthline, Oct 2025
 * [Why Permanent Standard Time Is A Smart Business Move](https://www.forbes.com/sites/julianhayesii/2025/11/14/why-permanent-standard-time-is-a-smart-business-move/), Forbes, Nov 2025
 
