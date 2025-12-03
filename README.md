@@ -81,23 +81,7 @@ So far, black box tests have been written and run on the Perl, Python and C++ im
 
 ## <a name="the_solar_time_zones_definition">The Solar Time Zones Definition</a>
 
-Though not part of the LongitudeTZ project, [Save Standard Time](https://savestandardtime.com/) also made an image of what ideal time zones would look like, which depicts the exact same natural time zones this project proposes.
-
-<a href="docs/info-map-time-zones-world-ideal-map-ideal.jpg"><img src="docs/info-map-time-zones-world-ideal-map-ideal.jpg" width="100%" title="Ideal Standard Time Zones graphic by Save Standard Time" /></a>
-
-The Solar time zones definition includes the following rules.
-
-* There are 24 hour-based Solar Time Zones, named West12, West11, West10, West09 through East12. East00 is equivalent to UTC. West00 is an alias for East00.
-  * Hour-based time zones are spaced in one-hour time increments, or 15 degrees of longitude.
-  * Each hour-based time zone is centered on a meridian at a multiple of 15 degrees. In positive and negative integers, these are 0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165 and 180.
-  * Each hour-based time zone spans the area ±7.5 degrees of longitude either side of its meridian.
-* There are 360 longitude-based Solar Time Zones, named Lon180W for 180 degrees West through Lon180E for 180 degrees East. Lon000E is equivalent to UTC. Lon000W is an alias for Lon000E.
-  * Longitude-based time zones are spaced in 4-minute time increments, or 1 degree of longitude.
-  * Each longitude-based time zone is centered on the meridian of an integer degree of longitude.
-  * Each longitude-based time zone spans the area ±0.5 degrees of longitude either side of its meridian.
-* In both hourly and longitude-based time zones, there is a limit to their usefulness at the poles. Beyond 80 degrees north or south, the definition uses UTC (East00 or Lon000E). This boundary is the only reason to include latitude in the computation of the time zone.
-* When converting coordinates to a time zone, each time zone includes its boundary meridian at the lower end of its absolute value, which is in the direction toward 0 (UTC). The exception is at exactly ±180.0 degrees, which would be excluded from both sides by this rule. That case is arbitrarily set as +180 just to pick one.
-* The category "Solar" is used for the longer names for these time zones. The names listed above are the short names. The full long name of each time zone is prefixed with "Solar/" such as "Solar/East00" or "Solar/Lon000E".
+See the [Solar Time Zones Definition page](docs/solar_tz_definition.md).
 
 ## <a name="obsoleting_daylight_saving_time">Obsoleting Daylight Saving Time</a>
 
@@ -108,6 +92,10 @@ The goal of this project is to aid existing and future efforts to end Daylight S
 [*XKCD comic #2846: "Daylight Saving Choice" 2023-10-28*](https://xkcd.com/2846/) (with attribution for [Creative Commons CC-BY-NC-2.5](https://creativecommons.org/licenses/by-nc/2.5/) compliance)
 
 ## <a name="web_resources">Web Resources</a>
+
+Though not part of the LongitudeTZ project, [Save Standard Time](https://savestandardtime.com/) also made an image of what ideal time zones would look like, which depicts the exact same natural time zones this project proposes.
+<br/>
+<a href="docs/info-map-time-zones-world-ideal-map-ideal.jpg"><img src="docs/info-map-time-zones-world-ideal-map-ideal.jpg" width="100%" title="Ideal Standard Time Zones graphic by Save Standard Time" /></a>
 
 See also the [LongitudeTZ project wiki](https://github.com/ikluft/LongitudeTZ/wiki)
 
