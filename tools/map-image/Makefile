@@ -1,4 +1,4 @@
-ALL: world_outline_map.svg world_zone_map.png world_zone_map-1200.png
+ALL: world_outline_map.svg world_zone_map.png world_zone_map-1200.png narrow_zone_map.png narrow_zone_map-1200.png
 
 map_dl/ne_50m_admin_0_countries.shp:
 	[ -d map_dl ] || mkdir map_dl
@@ -24,6 +24,12 @@ world_outline_map.svg: perlshaper.pl map_dl/ne_50m_admin_0_countries.shp map_dl/
 world_zone_map.png: world_outline_map.svg annotate-time-zones.pl Makefile
 	./annotate-time-zones.pl > world_zone_map.png
 
+narrow_zone_map.png: world_outline_map.svg annotate-time-zones.pl Makefile
+	./annotate-time-zones.pl --narrow > narrow_zone_map.png
+
 world_zone_map-1200.png: world_zone_map.png
+	pngtopnm "$<" | pamscale --width 1200 | pnmtopng -compression=9 > "$@"
+
+narrow_zone_map-1200.png: narrow_zone_map.png
 	pngtopnm "$<" | pamscale --width 1200 | pnmtopng -compression=9 > "$@"
 

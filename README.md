@@ -57,7 +57,9 @@ With those items as its basis, this project is to establish "Solar Time Zone" da
 
 The project also makes and accepts contributions of code in various programming languages for anything necessary to implement this standard. That includes computing a Solar Time Zone from a latitude/longitude coordinates. Once part of the TZ Database, computers and phones which use it will be able to automatically convert times to and from the Solar Time Zones.
 
-The project also makes another set of overlay time zones the width of 1 degree of longitude, which puts them in 4-minute intervals of time. These are a hyper-local niche for potential use by outdoor events. These may be used by those who would like to have the middle of the scheduling day coincide with local solar noon. 
+The project also makes another set of overlay time zones the width of 3.75 degrees of longitude, which puts them in 15-minute intervals of time. These are a more local niche for potential use by regions which have 30- or 15-minute offset time zones, or for planning outdoor events around local sunlight. These make the middle of the scheduling day better coincide with local solar noon.
+
+<a href="docs/narrow_zone_map-1200.png"><img src="docs/narrow_zone_map-1200.png" width="100%" title="Natural Time Zones by Longitude" /></a>
 
 ## <a name="implementations">Implementations</a>
 

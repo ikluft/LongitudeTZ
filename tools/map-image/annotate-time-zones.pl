@@ -9,23 +9,28 @@ use utf8;
 use feature qw(say);
 use Carp    qw(croak);
 use Readonly;
+use Getopt::Long;
 use Math::Trig ':pi';
 use IPC::Run qw(run);
 use GD;
 use GD::Text::Align;
 
 # constants
-Readonly::Scalar my $font_path        => "/usr/share/fonts:/usr/share/fonts/gnu-free";
-Readonly::Scalar my $font_sans        => "FreeSans.ttf";
-Readonly::Scalar my $font_sans_bold   => "FreeSansBold.ttf";
-Readonly::Scalar my $default_pt_size  => 14;
-Readonly::Scalar my $lon_pt_size      => 16;
-Readonly::Scalar my $tz_pt_size       => 32;
-Readonly::Scalar my $title_pt_size    => 56;
-Readonly::Scalar my $subtitle_pt_size => 32;
-Readonly::Scalar my $attrib_pt_size   => 22;
-Readonly::Scalar my $in_file          => "world_outline_map.svg";
+Readonly::Scalar my $font_path         => "/usr/share/fonts:/usr/share/fonts/gnu-free";
+Readonly::Scalar my $font_sans         => "FreeSans.ttf";
+Readonly::Scalar my $font_sans_bold    => "FreeSansBold.ttf";
+Readonly::Scalar my $default_pt_size   => 14;
+Readonly::Scalar my $lon_pt_size       => 16;
+Readonly::Scalar my $title_pt_size     => 56;
+Readonly::Scalar my $subtitle_pt_size  => 32;
+Readonly::Scalar my $attrib_pt_size    => 22;
+Readonly::Scalar my $in_file           => "world_outline_map.svg";
 Readonly::Scalar my $rsvg_convert_path => "/usr/bin/rsvg-convert";
+
+Readonly::Scalar my $time_zones_wide   => 24;
+Readonly::Scalar my $time_zones_narrow => 96;
+Readonly::Scalar my $tz_pt_size_wide   => 32;
+Readonly::Scalar my $tz_pt_size_narrow => 14;
 
 #
 # functions
@@ -55,9 +60,100 @@ sub draw_text
     return $align->draw($x, $y, $angle);
 }
 
+# draw boxes on image for time zones
+sub draw_boxes
+{
+    my $img = shift;
+    my $narrow_flag = shift;
+
+    my $img_width  = $img->width;
+    my $img_height = $img->height;
+
+    my $time_zones = $narrow_flag ? $time_zones_narrow : $time_zones_wide;
+    my $alpha_light_gray = $img->colorAllocateAlpha( 191, 191, 191, 96 );
+    for ( my $i = $time_zones - 1 ; $i >= 0 ; $i -= 2 ) {
+        $img->filledRectangle(
+            ( $i - 0.5 ) * ( $img_width / $time_zones ),
+            0,
+            ( $i + 0.5 ) * ( $img_width / $time_zones ) - 1,
+            $img_height - 1,
+            $alpha_light_gray
+        );
+    }
+}
+
+# generate time zone name string
+sub tz_name_str
+{
+    my $narrow_flag = shift;
+    my $num = shift;
+    my $ew = shift;
+
+    if ( $narrow_flag ) {
+        return sprintf "Narrow%02d%s", $num, $ew < 0 ? "W" : "E";
+    } else {
+        return sprintf "%s%02d", $ew < 0 ? "West" : "East", $num;
+    }
+}
+
+# draw time zone names on image
+sub draw_tz_names
+{
+    my $img = shift;
+    my $narrow_flag = shift;
+
+    my $color_lime_green = $img->colorAllocate( 50,  205, 50 );
+    my $img_width  = $img->width;
+    my $img_height = $img->height;
+    my $time_zones = $narrow_flag ? $time_zones_narrow : $time_zones_wide;
+    my $tz_pt_size = $narrow_flag ? $tz_pt_size_narrow : $tz_pt_size_wide;
+
+    draw_text($img,
+        tz_name_str($narrow_flag, $time_zones / 2, -1), 
+        0.25 * ( $img_width / $time_zones ) + 1,
+        $img_height - 80,
+        { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
+            valign => "center", halign => "left" });
+    for ( my $west_tz = $time_zones / 2 - 1; $west_tz > 0; $west_tz-- ) {
+        draw_text($img,
+            tz_name_str($narrow_flag, $west_tz, -1),
+            ( $time_zones / 2 - $west_tz ) * ( $img_width / $time_zones ) + 1,
+            $img_height - 80,
+            { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
+                valign => "center", halign => "left" });
+
+    }
+    draw_text($img,
+        tz_name_str($narrow_flag, 0, 1) . " / UTC",
+        $time_zones / 2 * ( $img_width / $time_zones ) - 1,
+        $img_height - 80,
+        { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
+            valign => "center", halign => "left" });
+    for ( my $east_tz = 1; $east_tz < $time_zones / 2; $east_tz++ ) {
+        draw_text($img,
+            tz_name_str($narrow_flag, $east_tz, 1),
+            ( $time_zones / 2 + $east_tz ) * ( $img_width / $time_zones ) + 1,
+            $img_height - 80,
+            { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
+                valign => "center", halign => "left" });
+
+    }
+    draw_text($img,
+        tz_name_str($narrow_flag, $time_zones / 2, 1), 
+        ( $time_zones - 0.25 ) * ( $img_width / $time_zones ) - 1,
+        $img_height - 80,
+        { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
+            valign => "center", halign => "left" });
+}
+
 #
 # mainline
 #
+
+# process command-line arguments
+my $narrow_flag = 0;
+GetOptions( "narrow" => \$narrow_flag )
+    or croak "usage: $0 [--narrow]";
 
 # set up input pipeline from SVG file to PNG to GD
 my ( $png_data, $err_out );
@@ -71,25 +167,15 @@ if ($err_out) {
 GD::Image->trueColor(1);
 GD::Text->font_path($font_path);
 my $img = GD::Image->newFromPngData($png_data);
-Readonly::Scalar my $img_width  => $img->width;
-Readonly::Scalar my $img_height => $img->height;
+my $img_width  = $img->width;
+my $img_height = $img->height;
 my $color_black      = $img->colorAllocate( 0,   0,   0 );
 my $color_steel_blue = $img->colorAllocate( 70,  130, 180 );
-my $color_lime_green = $img->colorAllocate( 50,  205, 50 );
 my $color_dark_gray  = $img->colorAllocate( 63,  63,  63 );
-my $alpha_light_gray = $img->colorAllocateAlpha( 191, 191, 191, 96 );
 $img->alphaBlending(1);
 
 # draw boxes
-for ( my $i = 23 ; $i >= 0 ; $i -= 2 ) {
-    $img->filledRectangle(
-        ( $i - 0.5 ) * ( $img_width / 24 ),
-        0,
-        ( $i + 0.5 ) * ( $img_width / 24 ) - 1,
-        $img_height - 1,
-        $alpha_light_gray
-    );
-}
+draw_boxes( $img, $narrow_flag );
 
 # draw longitude text and marker lines
 for ( my $lon = 180 ; $lon > 0 ; $lon -= 15 ) {
@@ -116,7 +202,7 @@ for ( my $lon = 180 ; $lon > 0 ; $lon -= 15 ) {
         { color => $color_dark_gray, pt_size => $lon_pt_size, angle => pip2, valign => "bottom", halign => "left" });
 }
 
-# 0 is UTC
+# draw longitude text: 0 is UTC
 my $centerline = 180 * ( $img_width / 360 );
 $img->line(
     $centerline,
@@ -129,30 +215,11 @@ draw_text( $img, "0°", 180 * ( $img_width / 360 ), $img_height - 35,
     { color => $color_dark_gray, pt_size => $lon_pt_size, angle => pip2, valign => "center", halign => "left" });
 
 # draw time zone names
-draw_text($img, "West12", 0.25 * ( $img_width / 24 ) + 1, $img_height - 80,
-    { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
-        valign => "center", halign => "left" });
-for ( my $west_tz = 11; $west_tz > 0; $west_tz-- ) {
-    draw_text($img, sprintf( "West%02d", $west_tz), ( 12 - $west_tz ) * ( $img_width / 24 ) + 1, $img_height - 80,
-        { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
-            valign => "center", halign => "left" });
-
-}
-draw_text($img, "East00 / UTC", 12 * ( $img_width / 24 ) - 1, $img_height - 80,
-    { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
-        valign => "center", halign => "left" });
-for ( my $east_tz = 1; $east_tz < 12; $east_tz++ ) {
-    draw_text($img, sprintf( "East%02d", $east_tz), ( 12 + $east_tz ) * ( $img_width / 24 ) + 1, $img_height - 80,
-        { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
-            valign => "center", halign => "left" });
-
-}
-draw_text($img, "East12", ( 24 - 0.25 ) * ( $img_width / 24 ) - 1, $img_height - 80,
-    { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
-        valign => "center", halign => "left" });
+draw_tz_names($img, $narrow_flag);
 
 # top titles
-my @title_box = draw_text($img, "Natural Time Zones by Longitude", $img_width / 2 - 1, 20,
+my @title_box = draw_text($img, "Natural Time Zones by Longitude" . ( $narrow_flag ? " (15 minute zones)" : "" ),
+    $img_width / 2 - 1, 20,
     { color => $color_steel_blue, font => $font_sans_bold, pt_size => $title_pt_size, halign => "center" });
 draw_text($img, "proposed addition to the TZ Database", $img_width / 2 - 1, $title_box[1] + 10,
     { color => $color_steel_blue, font => $font_sans_bold, pt_size => $subtitle_pt_size, halign => "center" });
