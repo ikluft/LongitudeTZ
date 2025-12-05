@@ -38,7 +38,7 @@ Keep in mind that the decision to opt-out of Daylight Saving Time can be done by
 
 With time zone data for the natural solar time zones, computers can convert between natural and regulatory time zones automatically.
 
-<a href="docs/world_zone_map-1200.png"><img src="docs/world_zone_map.png" width="100%" title="Natural Time Zones by Longitude" /></a>
+<a href="docs/world_zone_map.png"><img src="docs/world_zone_map-1200.png" width="100%" title="Natural Time Zones by Longitude" /></a>
 
 This project is intended to make such an alternative. The objective is to make software libraries to set local natural solar time zone based on longitude. It also maintains time zone files compatible with the *TZ Database* standard which allow any device or server to use them. The *tzfile* data files are what allow systems to convert between traditional and longitude-based time zones automatically.
 
@@ -59,7 +59,7 @@ The project also makes and accepts contributions of code in various programming 
 
 The project also makes another set of overlay time zones the width of 3.75 degrees of longitude, which puts them in 15-minute intervals of time. These are a more local niche for potential use by regions which have 30- or 15-minute offset time zones, or for planning outdoor events around local sunlight. These make the middle of the scheduling day better coincide with local solar noon.
 
-<a href="docs/narrow_zone_map-1200.png"><img src="docs/narrow_zone_map.png" width="100%" title="Natural Time Zones by Longitude" /></a>
+<a href="docs/narrow_zone_map.png"><img src="docs/narrow_zone_map-1200.png" width="100%" title="Natural Time Zones by Longitude: 15 minute zones" /></a>
 
 ## <a name="implementations">Implementations</a>
 
