@@ -5,7 +5,6 @@ On this page:
 
 * [Introduction](#introduction)
 * [Creating an Alternative](#creating_an_alternative)
-* [Implementations](#implementations)
 * [Obsoleting Daylight Saving Time](#obsoleting_daylight_saving_time)
 * [Web Resources](#web_resources)
 
