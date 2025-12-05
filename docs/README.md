@@ -2,7 +2,7 @@
 
 project documentation
 
-* [top-level project README](../README.md)
+* [Solar Time Zones Definition](solar_tz_definition.md)
 * [LongitudeTZ Command-line Interface Specification](cli-spec.md)
 
 ## Longitude-based Time Zones
@@ -26,7 +26,7 @@ The project also makes and accepts contributions of code in various programming 
 
 The project also makes another set of overlay time zones the width of 1 degree of longitude, which puts them in 4-minute intervals of time. These are a hyper-local niche for anyone who prefers higher resolution such as for planning outdoor events around daylight. It may also be of interest to have smaller time increments in regions bisected by boundaries of hour-wide time zones. In general, the purpose is for more the middle of the scheduling day to coincide within a few minutes of local solar noon.
 
-<a href="world_zone_map-1200.png"><img src="world_zone_map-1200.png" width="100%" title="Natural Time Zones by Longitude" /></a>
+<a href="world_zone_map-1200.png"><img src="world_zone_map.png" width="100%" title="Natural Time Zones by Longitude" /></a>
 
 ### The Solar Time Zones Definition
 

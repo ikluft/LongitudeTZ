@@ -16,20 +16,22 @@ use GD;
 use GD::Text::Align;
 
 # constants
-Readonly::Scalar my $font_path         => "/usr/share/fonts:/usr/share/fonts/gnu-free";
+Readonly::Scalar my $font_path         => "/usr/share/fonts:/usr/share/fonts/gnu-free:/usr/share/fonts/liberation-mono-fonts";
 Readonly::Scalar my $font_sans         => "FreeSans.ttf";
 Readonly::Scalar my $font_sans_bold    => "FreeSansBold.ttf";
+Readonly::Scalar my $font_mono         => "LiberationMono-Regular.ttf";
+Readonly::Scalar my $font_mono_bold    => "LiberationMono-Bold.ttf";
 Readonly::Scalar my $default_pt_size   => 14;
 Readonly::Scalar my $lon_pt_size       => 16;
 Readonly::Scalar my $title_pt_size     => 56;
 Readonly::Scalar my $subtitle_pt_size  => 32;
-Readonly::Scalar my $attrib_pt_size    => 22;
+Readonly::Scalar my $attrib_pt_size    => 20;
 Readonly::Scalar my $in_file           => "world_outline_map.svg";
 Readonly::Scalar my $rsvg_convert_path => "/usr/bin/rsvg-convert";
 
 Readonly::Scalar my $time_zones_wide   => 24;
 Readonly::Scalar my $time_zones_narrow => 96;
-Readonly::Scalar my $tz_pt_size_wide   => 32;
+Readonly::Scalar my $tz_pt_size_wide   => 24;
 Readonly::Scalar my $tz_pt_size_narrow => 14;
 
 #
@@ -74,9 +76,9 @@ sub draw_boxes
     for ( my $i = $time_zones - 1 ; $i >= 0 ; $i -= 2 ) {
         $img->filledRectangle(
             ( $i - 0.5 ) * ( $img_width / $time_zones ),
-            0,
+            $img_height * 0.056,
             ( $i + 0.5 ) * ( $img_width / $time_zones ) - 1,
-            $img_height - 1,
+            $img_height * 0.944 - 1,
             $alpha_light_gray
         );
     }
@@ -89,10 +91,23 @@ sub tz_name_str
     my $num = shift;
     my $ew = shift;
 
-    if ( $narrow_flag ) {
-        return sprintf "Narrow%02d%s", $num, $ew < 0 ? "W" : "E";
+    # compute optional offset suffix
+    my $suffix = "";
+    if ( $num == 0 ) {
+        $suffix = "  0:00 UTC";
+    } elsif ( $narrow_flag ) {
+        my $zones_per_hr = $time_zones_narrow / $time_zones_wide;
+        $suffix = sprintf " %s%d:%02d", $ew < 0 ? "-" : "+", $num / $zones_per_hr,
+            ( $num % $zones_per_hr ) * 60 / $zones_per_hr;
     } else {
-        return sprintf "%s%02d", $ew < 0 ? "West" : "East", $num;
+        $suffix = sprintf " %s%d:00", $ew < 0 ? "-" : "+", $num;
+    }
+
+    # format and return time zone name string
+    if ( $narrow_flag ) {
+        return sprintf "Narrow%02d%s%s", $num, $ew < 0 ? "W" : "E", $suffix;
+    } else {
+        return sprintf "%s%02d%s", $ew < 0 ? "West" : "East", $num, $suffix;
     }
 }
 
@@ -112,29 +127,29 @@ sub draw_tz_names
         tz_name_str($narrow_flag, $time_zones / 2, -1), 
         0.25 * ( $img_width / $time_zones ) + 1,
         $img_height - 80,
-        { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
+        { color => $color_lime_green, font => $font_mono_bold, pt_size => $tz_pt_size, angle => pip2,
             valign => "center", halign => "left" });
     for ( my $west_tz = $time_zones / 2 - 1; $west_tz > 0; $west_tz-- ) {
         draw_text($img,
             tz_name_str($narrow_flag, $west_tz, -1),
             ( $time_zones / 2 - $west_tz ) * ( $img_width / $time_zones ) + 1,
             $img_height - 80,
-            { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
+            { color => $color_lime_green, font => $font_mono_bold, pt_size => $tz_pt_size, angle => pip2,
                 valign => "center", halign => "left" });
 
     }
     draw_text($img,
-        tz_name_str($narrow_flag, 0, 1) . " / UTC",
+        tz_name_str($narrow_flag, 0, 1),
         $time_zones / 2 * ( $img_width / $time_zones ) - 1,
         $img_height - 80,
-        { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
+        { color => $color_lime_green, font => $font_mono_bold, pt_size => $tz_pt_size, angle => pip2,
             valign => "center", halign => "left" });
     for ( my $east_tz = 1; $east_tz < $time_zones / 2; $east_tz++ ) {
         draw_text($img,
             tz_name_str($narrow_flag, $east_tz, 1),
             ( $time_zones / 2 + $east_tz ) * ( $img_width / $time_zones ) + 1,
             $img_height - 80,
-            { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
+            { color => $color_lime_green, font => $font_mono_bold, pt_size => $tz_pt_size, angle => pip2,
                 valign => "center", halign => "left" });
 
     }
@@ -142,7 +157,7 @@ sub draw_tz_names
         tz_name_str($narrow_flag, $time_zones / 2, 1), 
         ( $time_zones - 0.25 ) * ( $img_width / $time_zones ) - 1,
         $img_height - 80,
-        { color => $color_lime_green, font => $font_sans_bold, pt_size => $tz_pt_size, angle => pip2,
+        { color => $color_lime_green, font => $font_mono_bold, pt_size => $tz_pt_size, angle => pip2,
             valign => "center", halign => "left" });
 }
 
@@ -218,15 +233,15 @@ draw_text( $img, "0°", 180 * ( $img_width / 360 ), $img_height - 35,
 draw_tz_names($img, $narrow_flag);
 
 # top titles
-my @title_box = draw_text($img, "Natural Time Zones by Longitude" . ( $narrow_flag ? " (15 minute zones)" : "" ),
+my @title_box = draw_text($img, "Natural Time Zones by Longitude" . ( $narrow_flag ? ": 15 minute zones" : "" ),
     $img_width / 2 - 1, 20,
     { color => $color_steel_blue, font => $font_sans_bold, pt_size => $title_pt_size, halign => "center" });
 draw_text($img, "proposed addition to the TZ Database", $img_width / 2 - 1, $title_box[1] + 10,
     { color => $color_steel_blue, font => $font_sans_bold, pt_size => $subtitle_pt_size, halign => "center" });
 
 # attribution
-draw_text($img, "https://github.com/ikluft/LongitudeTZ", 0.25 * ( $img_width / 24 ) + 1, $img_height / 2,
-    { color => $color_black, font => $font_sans, pt_size => $attrib_pt_size, angle => pip2,
+draw_text($img, "https://ikluft.github.io/LongitudeTZ/", 0.25 * ( $img_width / 24 ) + 1, $img_height * 0.4,
+    { color => $color_black, font => $font_mono, pt_size => $attrib_pt_size, angle => pip2,
         valign => "center", halign => "center" });
 
 # output the image
