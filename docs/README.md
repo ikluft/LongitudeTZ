@@ -117,4 +117,8 @@ Related: harmful effects of daylight saving time (DST):
 * [Why Should We Abolish Daylight Saving Time?](https://journals.sagepub.com/doi/10.1177/0748730419854197), 2019 paper in Journal of Biological Rhythms by Roenneberg T, Wirz-Justice A, Skene DJ, et al.
 * [Daylight Saving Time and Artificial Time Zones – A Battle Between Biological and Social Times](https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2019.00944/full), 2019 paper in Frontiers in Physiology by Till Roenneberg, Eva C. Winnebeck, Elizabeth B. Klerman
 
-And Save Standard Time keeps a [list of current legislation related to Standard or Daylight time](https://savestandardtime.com/current/)
+Save Standard Time keeps a [list of current legislation related to Standard or Daylight time](https://savestandardtime.com/current/)
+
+Acknowledgements of data and software used by the Longitude Time Zones Project:
+* Maps made with Natural Earth, free vector and raster map data at [naturalearthdata.com](naturalearthdata.com)
+* World map background rendered via [perlshaper](https://en.wikipedia.org/wiki/User:Gringer#Map_Drawing_using_Natural_Earth_Data) by David Eccles, Wellington, New Zealand
