@@ -1,5 +1,5 @@
-Longitude-based Time Zones
-==========================
+Natural Time Zones by Longitude
+===============================
 <img src="dst-opt-out.jpg" align="right" width="50%" />
 On this page:
 
@@ -45,7 +45,7 @@ With time zone data for the natural solar time zones, computers can convert betw
 
 This project is intended to make such an alternative. The objective is to make software libraries to set local natural solar time zone based on longitude. It also maintains time zone files compatible with the *TZ Database* standard which allow any device or server to use them. The *tzfile* data files are what allow systems to convert between traditional and longitude-based time zones automatically.
 
-An example of the tzfile data for the proposed Longitude Time Zones is provided at [data/solar-tz.tab](data/solar-tz.tab) in this repository.
+An example of the tzfile data for the proposed Longitude Time Zones is provided at [data/solar-tz.tab](https://github.com/ikluft/LongitudeTZ/tree/main/data/solar-tz.tab) in this repository.
 
 I'm running the idea up the flagpole. We'll see how many salutes it gets, so to speak. Meanwhile this project is making documentation, data and software (in various programming languages) toward enabling the possibility.
 
@@ -87,7 +87,7 @@ Nautical and longitude-based time:
 
 Related: time zone technical standards:
 
-* [tzfile defining Longitude Time Zones](data/solar-tz.tab) proposed by this project
+* [tzfile defining Longitude Time Zones](https://github.com/ikluft/LongitudeTZ/tree/main/data/solar-tz.tab) proposed by this project
 * ["TZ Database"](https://en.wikipedia.org/wiki/Tz_database), Wikipedia
 * [Time Zone Database](https://www.iana.org/time-zones), Internet Assigned Numbers Authority (IANA)
   * [Time zone and daylight saving time data](https://data.iana.org/time-zones/tz-link.html), links included with tzdata (TZ Database) releases
