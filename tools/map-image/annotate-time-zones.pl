@@ -25,7 +25,8 @@ Readonly::Scalar my $default_pt_size   => 14;
 Readonly::Scalar my $lon_pt_size       => 16;
 Readonly::Scalar my $title_pt_size     => 56;
 Readonly::Scalar my $subtitle_pt_size  => 32;
-Readonly::Scalar my $attrib_pt_size    => 20;
+Readonly::Scalar my $url_pt_size       => 18;
+Readonly::Scalar my $author_pt_size    => 14;
 Readonly::Scalar my $in_file           => "world_outline_map.svg";
 Readonly::Scalar my $rsvg_convert_path => "/usr/bin/rsvg-convert";
 
@@ -241,7 +242,10 @@ draw_text($img, "proposed addition to the TZ Database", $img_width / 2 - 1, $tit
 
 # attribution
 draw_text($img, "https://ikluft.github.io/LongitudeTZ/", 0.25 * ( $img_width / 24 ) + 1, $img_height * 0.4,
-    { color => $color_black, font => $font_mono, pt_size => $attrib_pt_size, angle => pip2,
+    { color => $color_black, font => $font_mono, pt_size => $url_pt_size, angle => pip2,
+        valign => "center", halign => "center" });
+draw_text($img, "by Ian Kluft, Longitude Time Zones Project", $img_width - 0.25 * ( $img_width / 24 ) + 1, $img_height * 0.4,
+    { color => $color_black, font => $font_sans, pt_size => $author_pt_size, angle => pip2,
         valign => "center", halign => "center" });
 
 # output the image
