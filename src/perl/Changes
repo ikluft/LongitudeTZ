@@ -8,6 +8,7 @@ Revision history for TimeZone::Solar
  [DOCS]
 
  [ENHANCEMENTS]
+ - Updated narrow time zones from 4 minutes clock (1 degree longitude) to 15 minutes clock (3.75 degrees longitude)
 
  [MAJOR]
 
