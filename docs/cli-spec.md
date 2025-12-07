@@ -30,12 +30,12 @@ This option causes all other options to be ignored, except --version which is hi
 
     lon-tz --tzname=Westxx
     lon-tz --tzname=Eastxx
-    lon-tz --tzname=LonxxxW
-    lon-tz --tzname=LonxxxE
+    lon-tz --tzname=NarrowxxW
+    lon-tz --tzname=NarrowxxE
 
-sets the time zone by name. West00 to West12 are 1-hour wide time zones in west longitude. East00 to East12 are 1-hour wide time zones in east longitude. Lon000W to Lon180W are 1-degree wide time zones in west longitude. Lon000E to Lon180E are 1-degree wide time zones in east longitude.
+sets the time zone by name. West00 to West12 are 1-hour wide time zones in west longitude. East00 to East12 are 1-hour wide time zones in east longitude. Narrow00W to Narrow48W are 3.75-degree (15 minute time) wide time zones in west longitude. Narrow00E to Narrow48E are 3.75-degree (15 minute time) wide time zones in east longitude.
 
-There are some peculiarities. West00 is an alias for and equal to East00. Likewise, Lon000W is and alias for and equal to Lon000E. On the other extreme, the Date Line at 180 degrees longitude makes for half-wide time zones either side of it. For hour-based time zones, East12 and West12 are half-hour wide time zones. For degree-based time zones, Lon180E and Lon180W are half-degree-wide time zones.
+There are some peculiarities. West00 is an alias for and equal to East00. Likewise, Narrow00W is and alias for and equal to Narrow00E. On the other extreme, the Date Line at 180 degrees longitude makes for half-wide time zones either side of it. For hour-based time zones, East12 and West12 are half-hour wide time zones. For narrow (15 minute clock) time zones, Narrow48E and Narrow48W are 1.875 degree (half of 3.75 degrees for 15 minutes time) wide time zones.
 
 ### --longitude
 
@@ -52,18 +52,18 @@ This option is mutually exclusive with the --tzname option.
 sets the latitude from the parameter, which may be used to override the time zone in polar regions.
 Outside of polar regions (beyond 80 degrees north or south latitude), it has no effect.
 The latitude is optional. If provided and set to a value in the polar region, it will override the time zone to UTC
-as East00 in hour-based time zones or Lon000E in degree-based time zones.
+as East00 in hour-based time zones or Narrow00E in narrow (15 minute clock) time zones.
 
 ### --type
 
     lon-tz --longitude=xxx.xxx --type=hour
-    lon-tz --longitude=xxx.xxx --type=longitude
+    lon-tz --longitude=xxx.xxx --type=narrow
 
-optionally sets the type of time zone to longitude or hour. The default is hour-wide time zones. --longitude may be abbreviated --lon.
+optionally sets the type of time zone to narrow or hour. The default is hour-wide time zones. --longitude may be abbreviated --lon.
 
 With --type=hour, 24 hour-based time zones are East00 to East12 and West00 to West12.
 
-With --type=longitude, 360 longitude-based time zones are Lon000E to Lon180E and Lon000W to Lon180W.
+With --type=narrow, 96 narrow (15-minute clock) time zones are Narrow00E to Narrow48E and Narrow00W to Narrow48W.
 
 ### --get
 
