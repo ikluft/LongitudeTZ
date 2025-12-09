@@ -94,11 +94,12 @@ sub tz_name_str
 
     # compute optional offset suffix
     my $suffix = "";
+    my $ew_str = $ew < 0 ? "West" : "East";
+    my $zones_per_hr = $time_zones_narrow / $time_zones_wide;
     if ( $num == 0 ) {
         $suffix = "  0:00 UTC";
     } elsif ( $narrow_flag ) {
-        my $zones_per_hr = $time_zones_narrow / $time_zones_wide;
-        $suffix = sprintf " %s%d:%02d", $ew < 0 ? "-" : "+", $num / $zones_per_hr,
+        $suffix = sprintf " %s%d:%02d", $ew < 0 ? "-" : "+", int( $num / $zones_per_hr ),
             ( $num % $zones_per_hr ) * 60 / $zones_per_hr;
     } else {
         $suffix = sprintf " %s%d:00", $ew < 0 ? "-" : "+", $num;
@@ -106,9 +107,10 @@ sub tz_name_str
 
     # format and return time zone name string
     if ( $narrow_flag ) {
-        return sprintf "Narrow%02d%s%s", $num, $ew < 0 ? "W" : "E", $suffix;
+        return sprintf "%s%02d%02d%s", $ew_str, int( $num / $zones_per_hr ),
+            ( $num % $zones_per_hr ) * 60 / $zones_per_hr, $suffix;
     } else {
-        return sprintf "%s%02d%s", $ew < 0 ? "West" : "East", $num, $suffix;
+        return sprintf "%s%02d%s", $ew_str, $num, $suffix;
     }
 }
 
@@ -126,7 +128,7 @@ sub draw_tz_names
 
     draw_text($img,
         tz_name_str($narrow_flag, $time_zones / 2, -1), 
-        0.25 * ( $img_width / $time_zones ) + 1,
+        0.25 * ( $img_width / $time_zones ) + 2,
         $img_height - 80,
         { color => $color_lime_green, font => $font_mono_bold, pt_size => $tz_pt_size, angle => pip2,
             valign => "center", halign => "left" });
@@ -156,7 +158,7 @@ sub draw_tz_names
     }
     draw_text($img,
         tz_name_str($narrow_flag, $time_zones / 2, 1), 
-        ( $time_zones - 0.25 ) * ( $img_width / $time_zones ) - 1,
+        ( $time_zones - 0.25 ) * ( $img_width / $time_zones ) - 2,
         $img_height - 80,
         { color => $color_lime_green, font => $font_mono_bold, pt_size => $tz_pt_size, angle => pip2,
             valign => "center", halign => "left" });
