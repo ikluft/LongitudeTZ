@@ -1,7 +1,7 @@
 # LongitudeTZ Project Update: 15-minute narrow time zones
 
 by Ian Kluft
-December 1, 2025
+December 1, 2025 (updated December 8, 2025)
 
 The Longitude Time Zones project will be undergoing a major update.
 
@@ -18,7 +18,7 @@ With the narrow time zones no longer set at 1 degree intervals of longitude, the
 For example, Lon000E would have been equivalent to UTC.
 Or fill in the longitude from 180 E to 180 W.
 
-So the new descriptive prefix for the narrow time zones is "Narrow". With 96 in total going from 48 east "Narrow48E" to UTC equivalent "Narrow00E" to 48 west "Narrow48W".
+In the interest of simplicity, the new prefix for the narrow time zones is the same "East" or "West" as the hour-based time zones, with 2 additional digits for the minutes of offset: 00, 15, 30 or 45. With 96 in total going from 48 east "East1200" to UTC equivalent "East0000" to 48 west "West1200".
 
 Many changes will be needed:
 
