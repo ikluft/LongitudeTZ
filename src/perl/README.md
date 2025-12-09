@@ -26,7 +26,7 @@ Using TimeZone::Solar alone, with longitude and latitude:
       longitude => -121.929, use_lon_tz => 1 );
     say $solar_tz_lat;
 
-This outputs "Solar/Narrow32W -08:15" using a narrow time zone (15 minutes clock).
+This outputs "Solar/West0815 -08:15" using a narrow time zone (15 minutes clock).
 
 Using TimeZone::Solar with DateTime:
 
@@ -103,13 +103,13 @@ The Solar time zones definition includes the following rules.
     - Hour-based time zones are spaced in one-hour time increments, or 15 degrees of longitude.
     - Each hour-based time zone is centered on a meridian at a multiple of 15 degrees. In positive and negative integers, these are 0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165 and 180.
     - Each hour-based time zone spans the area ±7.5 degrees of longitude either side of its meridian.
-- There are 96 narrow Solar Time Zones, named Narrow48W for 180 degrees West through Narrow48E for 180 degrees East. Narrow00E is equivalent to UTC. Narrow00W is an alias for Narrow00E.
+- There are 96 narrow Solar Time Zones, named West1200 for 180 degrees West through East1200 for 180 degrees East. East0000 is equivalent to UTC. West0000 is an alias for East0000.
     - Narrow time zones are spaced in 15-minute time increments, or 3.75 degrees of longitude.
     - Each narrow time zone is centered on multiples of 3.75 degrees from 0 to ±180 degrees.
     - Each narrow time zone spans the area ±1.875 degrees of longitude either side of its meridian.
-- In both hourly and narrow time zones, there is a limit to their usefulness at the poles. Beyond 80 degrees north or south, the definition uses UTC (East00 or Narrow00E). This boundary is the only reason to include latitude in the computation of the time zone.
+- In both hourly and narrow time zones, there is a limit to their usefulness at the poles. Beyond 80 degrees north or south, the definition uses UTC (East00 or East0000). This boundary is the only reason to include latitude in the computation of the time zone.
 - When converting coordinates to a time zone, each time zone includes its boundary meridian at the lower end of its absolute value, which is in the direction toward 0 (UTC). The exception is at exactly ±180.0 degrees, which would be excluded from both sides by this rule. That case is arbitrarily set as +180 just to pick one.
-- The category "Solar" is used for the longer names for these time zones. The names listed above are the short names. The full long name of each time zone is prefixed with "Solar/" such as "Solar/East00" or "Solar/Narrow00E".
+- The category "Solar" is used for the longer names for these time zones. The names listed above are the short names. The full long name of each time zone is prefixed with "Solar/" such as "Solar/East00" or "Solar/East0000".
 
 # INSTALLATION
 
@@ -177,7 +177,7 @@ Prior to submitting pull requests for consideration for inclusion in the package
 
     If a latitude parameter is provided, it only makes a difference if the latitude is within 10° of the poles,
     at or beyond 80° North or South latitude. In the polar regions, it uses the equivalent of UTC, which is Solar/East00
-    for hour-based time zones or Solar/Narrow00E for narrow time zones.
+    for hour-based time zones or Solar/East0000 for narrow time zones.
 
     _TimeZone::Solar_ uses a singleton pattern. So if a given solar time zone's class within the
     _DateTime::TimeZone::Solar::\*_ hierarchy already has an instance, that one will be returned.
@@ -272,8 +272,8 @@ Prior to submitting pull requests for consideration for inclusion in the package
 - is\_utc()
 
     Returns 1 (true) if the time zone is equivalent to UTC, meaning at 0 offset from UTC. This is only the case for
-    Solar/East00, Solar/West00 (which is an alias for Solar/East00), Solar/Narrow00E and Solar/Narrow00W
-    (which is an alias for Solar/Narrow00E). Otherwise it returns 0 because the time zone is not UTC.
+    Solar/East00, Solar/West00 (which is an alias for Solar/East00), Solar/East0000 and Solar/West0000
+    (which is an alias for Solar/East0000). Otherwise it returns 0 because the time zone is not UTC.
 
 - is\_dst\_for\_datetime()
 
