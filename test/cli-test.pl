@@ -13,18 +13,18 @@ use FindBin qw($Bin);
 use File::Slurp;
 
 # solar time zone constants which must be in common among all programming language implementations
-Readonly::Scalar my $TZSOLAR_LON_ZONE_RE  => qr((Lon0[0-9][0-9][EW]) | (Lon1[0-7][0-9][EW]) | (Lon180[EW]))x;
-Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE => qr((East|West)(0[0-9] | 1[0-2]))x;
-Readonly::Scalar my $TZSOLAR_ZONE_RE      => qr( $TZSOLAR_LON_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE )x;
-Readonly::Scalar my $PRECISION_DIGITS     => 6;                                   # max decimal digits of precision
-Readonly::Scalar my $PRECISION_FP         => ( 10**-$PRECISION_DIGITS ) / 2.0;    # 1/2 width of floating point equality
-Readonly::Scalar my $MAX_DEGREES          => 360;                                 # maximum degrees = 360
-Readonly::Scalar my $MAX_LONGITUDE_INT    => $MAX_DEGREES / 2;                    # min/max longitude in integer = 180
-Readonly::Scalar my $MAX_LONGITUDE_FP     => $MAX_DEGREES / 2.0;                  # min/max longitude in float = 180.0
-Readonly::Scalar my $MAX_LATITUDE_FP      => $MAX_DEGREES / 4.0;                  # min/max latitude in float = 90.0
-Readonly::Scalar my $POLAR_UTC_AREA       => 10;                                  # latitude near poles to use UTC
-Readonly::Scalar my $LIMIT_LATITUDE       => $MAX_LATITUDE_FP - $POLAR_UTC_AREA;  # max latitude for solar time zones
-Readonly::Scalar my $MINUTES_PER_DEG_LON  => 4;                                   # minutes of time per degree longitude
+Readonly::Scalar my $TZSOLAR_NARROW_ZONE_RE  => qr((East|West)(0[0-9] | 1[0-2])( 00 | 15 | 30 | 45 ))x;
+Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE    => qr((East|West)(0[0-9] | 1[0-2]))x;
+Readonly::Scalar my $TZSOLAR_ZONE_RE         => qr(( $TZSOLAR_NARROW_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE ) $ )x;
+Readonly::Scalar my $PRECISION_DIGITS        => 6;                                   # max decimal digits of precision
+Readonly::Scalar my $PRECISION_FP            => ( 10**-$PRECISION_DIGITS ) / 2.0;    # 1/2 width of fp equality
+Readonly::Scalar my $MAX_DEGREES             => 360;                                 # maximum degrees = 360
+Readonly::Scalar my $MAX_LONGITUDE_INT       => $MAX_DEGREES / 2;                    # min/max lon (int) = 180
+Readonly::Scalar my $MAX_LONGITUDE_FP        => $MAX_DEGREES / 2.0;                  # min/max lon (fp) = 180.0
+Readonly::Scalar my $MAX_LATITUDE_FP         => $MAX_DEGREES / 4.0;                  # min/max lat (fp) = 90.0
+Readonly::Scalar my $POLAR_UTC_AREA          => 10;                                  # latitude near poles to use UTC
+Readonly::Scalar my $LIMIT_LATITUDE          => $MAX_LATITUDE_FP - $POLAR_UTC_AREA;  # max latitude for solar tz
+Readonly::Scalar my $MINUTES_PER_DEG_LON     => 4;                                   # min (clock) per degree lon
 
 # solar time zone black box testing constants
 Readonly::Scalar my $TZDATA_REF_FILE => $Bin . "/solar-tz.tab";                   # tzdata reference file
@@ -69,12 +69,12 @@ sub params_str
     return join ", ", @result;
 }
 
-# generate longitude-based tz data
-sub gen_expect_tz_info_lon
+# generate narrow tz data
+sub gen_expect_tz_info_narrow
 {
     my $params_ref      = shift;
     my $longitude       = $params_ref->{longitude};
-    my $tz_degree_width = 1;
+    my $tz_degree_width = 3.75;
 
     # start on result
     my %expected;
@@ -85,14 +85,14 @@ sub gen_expect_tz_info_lon
     if (   ( $longitude >= $MAX_LONGITUDE_INT - $tz_degree_width / 2.0 - $PRECISION_FP )
         or ( $longitude <= -$MAX_LONGITUDE_INT + $PRECISION_FP ) )
     {
-        # special case: half-wide tz at positive side of solar date line (180° longitude)
-        $expected{short_name} = "Lon180E";
+        # special case: half-wide tz at positive side of date line (180° longitude)
+        $expected{short_name} = "East1200";
         $expected{offset_min} = "720";
         $expected{is_utc}     = "0";
     } elsif ( $longitude <= -$MAX_LONGITUDE_INT + $tz_degree_width / 2.0 + $PRECISION_FP ) {
 
-        # special case: half-wide tz at negative side of solar date line (180° longitude)
-        $expected{short_name} = "Lon180W";
+        # special case: half-wide tz at negative side of date line (180° longitude)
+        $expected{short_name} = "West1200";
         $expected{offset_min} = "-720";
         $expected{is_utc}     = "0";
     } else {
@@ -100,9 +100,11 @@ sub gen_expect_tz_info_lon
         # all other cases
         my $tz_int = int( abs($longitude) / $tz_degree_width + 0.5 + $PRECISION_FP );
         my $sign   = ( $longitude > -$tz_degree_width / 2.0 + $PRECISION_FP ) ? 1 : -1;
+        my $tz_hour = int( $tz_int / 4 );
+        my $tz_min = $tz_int % 4 * 15;
         $expected{short_name} =
-            sprintf( "Lon%03d%1s", int( abs($longitude) + 0.5 + $PRECISION_FP ), $longitude < 0 ? "W" : "E" );
-        $expected{offset_min} = $sign * $tz_int * ( $MINUTES_PER_DEG_LON * $tz_degree_width );
+            sprintf( "%s%02d%02d", $longitude < 0 ? "West" : "East", $tz_hour, $tz_min );
+        $expected{offset_min} = $sign * ( $tz_hour * 60 + $tz_min );
         $expected{is_utc}     = $expected{offset_min} == 0 ? "1" : "0";
     }
 
@@ -112,7 +114,7 @@ sub gen_expect_tz_info_lon
         my $sign_str = $expected{offset_min} >= 0 ? "+" : "-";
         my $hours    = int( abs( $expected{offset_min} ) / 60 );
         my $minutes  = abs( $expected{offset_min} ) % 60;
-        $expected{offset} = sprintf "%s%02d%s%02d", $sign_str, $hours, ":", $minutes;
+        $expected{offset} = sprintf "%s%02d:%02d", $sign_str, $hours, $minutes;
     }
     return \%expected;
 }
@@ -170,24 +172,24 @@ sub gen_expect_tz_info
 {
     my $params_ref = shift;
 
-    # convert tzname, if provided, to longitude/use_lon_tz parameters
+    # convert tzname, if provided, to longitude/use_narrow parameters
     if ( exists $params_ref->{tzname} ) {
         my $tzname = $params_ref->{tzname};
-        if ( $tzname =~ /^Lon(\d{3})([EW])$/ix ) {
-            $params_ref->{use_lon_tz} = 1;
-            my $is_west = lc $2 eq "w";
-            $params_ref->{longitude} = int( $1 ) * ( $is_west ? -1 : 1 );
-        } elsif ( $tzname =~ /^(East|West)(\d{2})$/ix ) {
-            $params_ref->{use_lon_tz} = 0;
+        if ( $tzname =~ /^(East|West)(\d{2})(\d{2})$/ix ) {
+            $params_ref->{use_narrow} = 1;
             my $is_west = lc $1 eq "west";
-            $params_ref->{longitude} = int( $2 ) * 15 * ( $is_west ? -1 : 1 );
+            $params_ref->{longitude} = ( int( $2 ) * 15 + int( $3 ) / 4 ) * ( $is_west ? -1 : 1 );
+        } elsif ( $tzname =~ /^(East|West)(\d{2})$/ix ) {
+            $params_ref->{use_narrow} = 0;
+            my $is_west = lc $1 eq "west";
+            $params_ref->{longitude} = ( int( $2 ) * 15 ) * ( $is_west ? -1 : 1 );
         } else {
             croak "unrecognized time zone name $tzname provided for test";
         }
     }
 
     # extract longitude type from parameters
-    my $use_lon_tz = $params_ref->{use_lon_tz} // 0;
+    my $use_narrow = $params_ref->{use_narrow} // 0;
 
     # process high latitudes
     if ( exists $params_ref->{latitude} ) {
@@ -195,7 +197,7 @@ sub gen_expect_tz_info
             my %expected;
             $expected{longitude}  = $params_ref->{longitude};
             $expected{latitude}   = $params_ref->{latitude};
-            $expected{short_name} = $use_lon_tz ? "Lon000E" : "East00";
+            $expected{short_name} = $use_narrow ? "East0000" : "East00";
             $expected{name}       = $expected{long_name} = "Solar/" . $expected{short_name};
             $expected{offset}     = "+00:00";
             $expected{offset_min} = "0";
@@ -205,10 +207,10 @@ sub gen_expect_tz_info
         }
     }
 
-    if ($use_lon_tz) {
+    if ($use_narrow) {
 
-        # generate longitude-based tz expected info
-        return gen_expect_tz_info_lon($params_ref);
+        # generate narrow tz expected info
+        return gen_expect_tz_info_narrow($params_ref);
     } else {
 
         # generate hour-based tz expected info
@@ -222,8 +224,8 @@ sub run_prog_fields
     my $params_ref = shift;
     my $progpath   = $params_ref->{progpath};
     my $longitude  = $params_ref->{longitude};
-    my $use_lon_tz = $params_ref->{use_lon_tz} // 0;
-    my $type_str   = $use_lon_tz ? "longitude" : "hour";
+    my $use_narrow = $params_ref->{use_narrow} // 0;
+    my $type_str   = $use_narrow ? "longitude" : "hour";
     my $tzname     = $params_ref->{tzname};
 
     # start with empty results
@@ -413,12 +415,12 @@ sub test_valid_tz
 }
 
 # run a set of validity tests by longitude and optionally other time zone parameters
-sub run_validity_test_lon
+sub run_validity_test_narrow
 {
     my ( $progpath, $lon ) = @_;
 
-    foreach my $use_lon_tz ( 0 .. 1 ) {
-        my %params   = ( progpath => $progpath, longitude => $lon, use_lon_tz => $use_lon_tz );
+    foreach my $use_narrow ( 0 .. 1 ) {
+        my %params   = ( progpath => $progpath, longitude => $lon, use_narrow => $use_narrow );
         my $expected = gen_expect_tz_info( \%params );
         test_valid_tz( \%params, $expected );
     }
@@ -442,14 +444,17 @@ sub run_validity_tests
 
     foreach my $lon1 (@SOLAR_TZ_ADHOC_TESTS) {
         # test timezones by longitude
-        run_validity_test_lon( $progpath, $lon1 );
+        run_validity_test_narrow( $progpath, $lon1 );
     }
     for ( my $lon2 = -179 ; $lon2 <= 180 ; $lon2 += $SOLAR_TZ_DEG_STEP_SIZE ) {
         # test timezones by longitude
-        run_validity_test_lon( $progpath, $lon2 );
+        run_validity_test_narrow( $progpath, $lon2 );
 
         # test timezones by name
-        my $tzname = sprintf("Lon%03d%s", abs($lon2), $lon2>=0 ? "E" : "W");
+        my $tzname = sprintf("%s%02d%02d",
+            $lon2>=0 ? "East" : "West",
+            int(abs($lon2)/15),
+            int(abs($lon2)/60) % 4 *15 );
         run_validity_test_tzname( $progpath, $tzname );
     }
     for ( my $hour = -12 ; $hour <= 12; $hour += $SOLAR_TZ_HR_STEP_SIZE ) {

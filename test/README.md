@@ -3,7 +3,7 @@ The [LongitudeTZ Command Line Interface (CLI) Specification](../docs/cli-spec.md
 
 The tests performed are
 
-* Validity tests for both longitude and hour-based time zones
+* Validity tests for both narrow and hour-based time zones
   * at 45-degree intervals
   * at the Date Line at -180, -179.75, +179.75, +180
   * request each field separately and together as a group to compare with valid results
