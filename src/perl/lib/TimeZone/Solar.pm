@@ -45,10 +45,10 @@ Readonly::Hash my %field_code => (
 package TimeZone::Solar::Constant {
 
     use Carp qw(croak);
-    Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
-    Readonly::Scalar my $TZSOLAR_NARROW_ZONE_RE  => qr((East|West)(0[0-9] | 1[0-2])( 00 | 15 | 30 | 45 ))x;
-    Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE => qr((East|West)(0[0-9] | 1[0-2]))x;
-    Readonly::Scalar my $TZSOLAR_ZONE_RE      => qr(( $TZSOLAR_NARROW_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE ) $ )x;
+    Readonly::Scalar my $TZSOLAR_CLASS_PREFIX   => "DateTime::TimeZone::Solar::";
+    Readonly::Scalar my $TZSOLAR_NARROW_ZONE_RE => qr((East|West)(0[0-9] | 1[0-2])( 00 | 15 | 30 | 45 ))x;
+    Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE   => qr((East|West)(0[0-9] | 1[0-2]))x;
+    Readonly::Scalar my $TZSOLAR_ZONE_RE        => qr(( $TZSOLAR_NARROW_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE ) $ )x;
     Readonly::Scalar my $PRECISION_DIGITS  => 6;                                  # max decimal digits of precision
     Readonly::Scalar my $PRECISION_FP      => ( 10**-$PRECISION_DIGITS ) / 2.0;   # 1/2 width of floating point equality
     Readonly::Scalar my $MAX_DEGREES       => 360;                                # maximum degrees = 360
@@ -160,6 +160,7 @@ BEGIN {
     Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
 
     foreach my $tz_dir (qw( East West )) {
+
         # hour-based timezones from -12 to +12
         foreach my $tz_int ( 0 .. 12 ) {
             my $short_name = sprintf( "%s%02d", $tz_dir, $tz_int );
@@ -170,9 +171,10 @@ BEGIN {
         }
 
         foreach my $tz_int ( 0 .. 48 ) {
-        # narrow (15 minutes clock) time zones count from -48 (12:00 W) to +48 (12:00 E)
-            my $tz_hour = int( $tz_int / 4 );
-            my $tz_min = ( $tz_int % 4 ) * 15;
+
+            # narrow (15 minutes clock) time zones count from -48 (12:00 W) to +48 (12:00 E)
+            my $tz_hour    = int( $tz_int / 4 );
+            my $tz_min     = ( $tz_int % 4 ) * 15;
             my $short_name = sprintf( "%s%02d%02d", $tz_dir, $tz_hour, $tz_min );
             my $long_name  = "Solar/" . $short_name;
             my $class_name = $TZSOLAR_CLASS_PREFIX . $short_name;
@@ -257,8 +259,8 @@ sub _tz_params_latitude
 # formatting functions
 sub _tz_prefix
 {
-    my ( $sign ) = @_;
-    return  $sign > 0 ? "East" : "West";
+    my ($sign) = @_;
+    return $sign > 0 ? "East" : "West";
 }
 
 # get timezone parameters (name and minutes offset) - called by new()
@@ -301,10 +303,7 @@ sub _tz_params
     if (   $params{longitude} >= _const("MAX_LONGITUDE_INT") - $tz_degree_width / 2.0 - _const("PRECISION_FP")
         or $params{longitude} <= -_const("MAX_LONGITUDE_INT") + _const("PRECISION_FP") )
     {
-        my $tz_name = sprintf "%s%02d%s",
-            _tz_prefix( 1 ),
-            _const("MAX_LONGITUDE_INT") / 15,
-            $use_narrow ? "00" : "";
+        my $tz_name = sprintf "%s%02d%s", _tz_prefix(1), _const("MAX_LONGITUDE_INT") / 15, $use_narrow ? "00" : "";
         $params{short_name} = $tz_name;
         $params{name}       = "Solar/" . $tz_name;
         $params{offset_min} = 720;
@@ -314,10 +313,7 @@ sub _tz_params
 
     # handle special case of half-wide tz at negative side of solar date line (180° longitude)
     if ( $params{longitude} <= -_const("MAX_LONGITUDE_INT") + $tz_degree_width / 2.0 + _const("PRECISION_FP") ) {
-        my $tz_name = sprintf "%s%02d%s",
-            _tz_prefix( -1 ),
-            _const("MAX_LONGITUDE_INT") / 15,
-            $use_narrow ? "00" : "";
+        my $tz_name = sprintf "%s%02d%s", _tz_prefix(-1), _const("MAX_LONGITUDE_INT") / 15, $use_narrow ? "00" : "";
         $params{short_name} = $tz_name;
         $params{name}       = "Solar/" . $tz_name;
         $params{offset_min} = -720;
@@ -327,14 +323,11 @@ sub _tz_params
 
     # handle other times zones
     my $tz_int  = int( abs( $params{longitude} ) / $tz_degree_width + 0.5 + _const("PRECISION_FP") );
-    my $tz_hour = $use_narrow ? int( $tz_int / 4 ) : $tz_int;
-    my $tz_min = $use_narrow ? ( $tz_int % 4 ) * 15 : 0;
+    my $tz_hour = $use_narrow ? int( $tz_int / 4 )                                              : $tz_int;
+    my $tz_min  = $use_narrow ? ( $tz_int % 4 ) * 15                                            : 0;
     my $sign    = ( $params{longitude} > -$tz_degree_width / 2.0 + _const("PRECISION_FP") ) ? 1 : -1;
-    my $tz_name = sprintf "%s%02d%s",
-        _tz_prefix( $sign ),
-        $tz_hour,
-        $use_narrow ? sprintf( "%02d", $tz_min ) : "";
-    my $offset = $sign * $tz_int * ( _const("MINUTES_PER_DEGREE_LON") * $tz_degree_width );
+    my $tz_name = sprintf "%s%02d%s", _tz_prefix($sign), $tz_hour, $use_narrow ? sprintf( "%02d", $tz_min ) : "";
+    my $offset  = $sign * $tz_int * ( _const("MINUTES_PER_DEGREE_LON") * $tz_degree_width );
     $params{short_name} = $tz_name;
     $params{name}       = "Solar/" . $tz_name;
     $params{offset_min} = $offset;
@@ -437,12 +430,12 @@ sub new
     my $tzsolar_class_prefix = _const("TZSOLAR_CLASS_PREFIX");
     my $tzsolar_zone_re      = _const("TZSOLAR_ZONE_RE");
     if ( $in_class =~ qr( $tzsolar_class_prefix ( $tzsolar_zone_re ) )x ) {
-        my $in_tz = $1;
-        my $digits1 = ( substr( $in_tz, 4, 2 ) =~ qr/^ [0-9] {2} $/x );  # flag: found hours digits, always required
-        my $digits2 = ( substr( $in_tz, 6, 2 ) =~ qr/^ [0-9] {2} $/x );  # flag: found minutes digits, for narrow tz
+        my $in_tz   = $1;
+        my $digits1 = ( substr( $in_tz, 4, 2 ) =~ qr/^ [0-9] {2} $/x );    # flag: found hours digits, always required
+        my $digits2 = ( substr( $in_tz, 6, 2 ) =~ qr/^ [0-9] {2} $/x );    # flag: found minutes digits, for narrow tz
         my $tz_hour = int substr( $in_tz, 4, 2 );
         if ( substr( $in_tz, 0, 4 ) eq "East" and $digits1 ) {
-            if ( $digits2 ) {
+            if ($digits2) {
                 my $tz_min = int substr( $in_tz, 6, 2 );
                 $args{longitude}  = ( $tz_hour + $tz_min / 60 ) * 15;
                 $args{use_narrow} = true;
@@ -451,7 +444,7 @@ sub new
                 $args{use_narrow} = false;
             }
         } elsif ( substr( $in_tz, 0, 4 ) eq "West" and $digits1 ) {
-            if ( $digits2 ) {
+            if ($digits2) {
                 my $tz_min = int substr( $in_tz, 6, 2 );
                 $args{longitude}  = -( $tz_hour + $tz_min / 60 ) * 15;
                 $args{use_narrow} = true;

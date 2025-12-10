@@ -25,15 +25,15 @@ Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
 Readonly::Scalar my $MAX_HOURS            => 24;                              # maximum degrees = 24
 Readonly::Scalar my $NARROW_PER_HOUR      => 4;                               # narrow time zones per hourly zone
 Readonly::Scalar my $tests_per_class      => 5;
-Readonly::Scalar my $total_tests => ( $MAX_HOURS * $NARROW_PER_HOUR + 2 ) * $tests_per_class
-    + ( $MAX_HOURS + 2 ) * $tests_per_class;
+Readonly::Scalar my $total_tests => ( $MAX_HOURS * $NARROW_PER_HOUR + 2 ) * $tests_per_class +
+    ( $MAX_HOURS + 2 ) * $tests_per_class;
 Readonly::Hash my %differences => (
 
     # special cases where we expect different results than the class name given
     $TZSOLAR_CLASS_PREFIX . "West0000" => $TZSOLAR_CLASS_PREFIX . "East0000",
     $TZSOLAR_CLASS_PREFIX . "West1200" => $TZSOLAR_CLASS_PREFIX . "East1200",
-    $TZSOLAR_CLASS_PREFIX . "West00"  => $TZSOLAR_CLASS_PREFIX . "East00",
-    $TZSOLAR_CLASS_PREFIX . "West12"  => $TZSOLAR_CLASS_PREFIX . "East12",
+    $TZSOLAR_CLASS_PREFIX . "West00"   => $TZSOLAR_CLASS_PREFIX . "East00",
+    $TZSOLAR_CLASS_PREFIX . "West12"   => $TZSOLAR_CLASS_PREFIX . "East12",
 );
 
 # test a sigle subclass by name
@@ -69,12 +69,12 @@ sub test_subclasses_narrow
 {
     test_subclass_name( $TZSOLAR_CLASS_PREFIX . "West1200" );
     for ( my $hour = -( $MAX_HOURS / 2 - 1 ) ; $hour <= 0 ; $hour++ ) {
-        for ( my $min = 0; $min < 60; $min += 60 / $NARROW_PER_HOUR ) {
+        for ( my $min = 0 ; $min < 60 ; $min += 60 / $NARROW_PER_HOUR ) {
             test_subclass_name( sprintf "%sWest%02d%02d", $TZSOLAR_CLASS_PREFIX, abs($hour), $min );
         }
     }
     for ( my $hour = 0 ; $hour <= $MAX_HOURS / 2 - 1 ; $hour++ ) {
-        for ( my $min = 0; $min < 60; $min += 60 / $NARROW_PER_HOUR ) {
+        for ( my $min = 0 ; $min < 60 ; $min += 60 / $NARROW_PER_HOUR ) {
             test_subclass_name( sprintf "%sEast%02d%02d", $TZSOLAR_CLASS_PREFIX, $hour, $min );
         }
     }

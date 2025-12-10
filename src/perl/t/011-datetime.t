@@ -102,7 +102,9 @@ sub run_tests_from_lmt
     is( $dt->hour, 1,  "convert from $tz_name (name) to Floating (name)" );
 
     eval {
-        $dt = DateTime->new( @test_timestamp, time_zone => $TZ_Solar, )->set_time_zone('floating')
+        $dt =
+            DateTime->new( @test_timestamp, time_zone => $TZ_Solar, )
+            ->set_time_zone('floating')
             ->set_time_zone('Australia/Melbourne');
     };
     is( $@,        '', "convert from $tz_name to Floating to Olson" );

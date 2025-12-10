@@ -82,14 +82,14 @@ sub gen_narrow_tz
     # $tz_pos>=0: positive degrees (east longitude), straightforward assignments of data
     # $tz_pos<0: negative degrees (west longitude)
     my $ew         = ( $tz_pos >= 0 ) ? "East" : "West";
-    my $sign       = ( $tz_pos >= 0 ) ? ""  : "-";
-    my $offset_hr  = abs( int( $tz_pos / 4 ));
-    my $offset_min = abs( $tz_pos ) % 4 * 15;
+    my $sign       = ( $tz_pos >= 0 ) ? ""     : "-";
+    my $offset_hr  = abs( int( $tz_pos / 4 ) );
+    my $offset_min = abs($tz_pos) % 4 * 15;
 
     # generate strings from time zone parameters
-    my $zone_abbrev = sprintf( "%s%02d%02d",  $ew,   $offset_hr, $offset_min );
-    my $zone_name   = sprintf( "%s/%s",     "Solar", $zone_abbrev );
-    my $offset_str  = sprintf( "%s%d:%02d", $sign,   $offset_hr, $offset_min );
+    my $zone_abbrev = sprintf( "%s%02d%02d", $ew,     $offset_hr, $offset_min );
+    my $zone_name   = sprintf( "%s/%s",      "Solar", $zone_abbrev );
+    my $offset_str  = sprintf( "%s%d:%02d",  $sign,   $offset_hr, $offset_min );
 
     # output time zone data
     say "# Solar Time by 15-minute increment: $offset_str";
