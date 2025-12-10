@@ -2,7 +2,7 @@
 # ABSTRACT: local solar timezone lookup and utilities including DateTime compatibility
 # part of Perl implementation of solar timezones library
 #
-# Copyright © 2020-2024 Ian Kluft. This program is free software; you can
+# Copyright © 2020-2025 Ian Kluft. This program is free software; you can
 # redistribute it and/or modify it under the terms of the GNU General Public
 # License Version 3. See  https://www.gnu.org/licenses/gpl-3.0-standalone.html
 
@@ -20,11 +20,12 @@ use autodie;
 use overload
     '""' => "as_string",
     'eq' => "eq_string";
+use boolean;
 use Carp qw(croak);
 use Readonly;
-use DateTime::TimeZone v0.80.0;
+use DateTime::TimeZone 0.08000;
 use Try::Tiny;
-Readonly::Scalar my $debug_mode => ( $ENV{TZSOLAR_DEBUG} // 0 ) ? 1 : 0;
+Readonly::Scalar my $debug_mode => ( $ENV{TZSOLAR_DEBUG} // 0 ) ? true : false;
 
 # accessor fields for implementation of CLI spec
 Readonly::Hash my %field_code => (
@@ -45,9 +46,9 @@ package TimeZone::Solar::Constant {
 
     use Carp qw(croak);
     Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
-    Readonly::Scalar my $TZSOLAR_NARROW_ZONE_RE  => qr((Narrow[0-3][0-9][EW]) | (Narrow4[0-8][EW]))x;
+    Readonly::Scalar my $TZSOLAR_NARROW_ZONE_RE  => qr((East|West)(0[0-9] | 1[0-2])( 00 | 15 | 30 | 45 ))x;
     Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE => qr((East|West)(0[0-9] | 1[0-2]))x;
-    Readonly::Scalar my $TZSOLAR_ZONE_RE      => qr( $TZSOLAR_NARROW_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE )x;
+    Readonly::Scalar my $TZSOLAR_ZONE_RE      => qr(( $TZSOLAR_NARROW_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE ) $ )x;
     Readonly::Scalar my $PRECISION_DIGITS  => 6;                                  # max decimal digits of precision
     Readonly::Scalar my $PRECISION_FP      => ( 10**-$PRECISION_DIGITS ) / 2.0;   # 1/2 width of floating point equality
     Readonly::Scalar my $MAX_DEGREES       => 360;                                # maximum degrees = 360
@@ -125,7 +126,7 @@ sub _tz_subclass
     );
 
     ## no critic (BuiltinFunctions::ProhibitStringyEval)
-    my $class_check = 0;
+    my $class_check = false;
     try {
         $class_check =
               eval "package $class {" . "\@"
@@ -147,7 +148,7 @@ sub _tz_subclass
     $classpath =~ s/::/\//gx;
     $classpath .= ".pm";
     ## no critic ( Variables::RequireLocalizedPunctuationVars) # this must be global to work
-    $INC{$classpath} = 1;
+    $INC{$classpath} = true;
     return;
 }
 
@@ -158,8 +159,8 @@ BEGIN {
     # duplicate constant within BEGIN scope because it runs before constant assignments
     Readonly::Scalar my $TZSOLAR_CLASS_PREFIX => "DateTime::TimeZone::Solar::";
 
-    # hour-based timezones from -12 to +12
     foreach my $tz_dir (qw( East West )) {
+        # hour-based timezones from -12 to +12
         foreach my $tz_int ( 0 .. 12 ) {
             my $short_name = sprintf( "%s%02d", $tz_dir, $tz_int );
             my $long_name  = "Solar/" . $short_name;
@@ -167,12 +168,12 @@ BEGIN {
             _tz_subclass($class_name);
             $DateTime::TimeZone::Catalog::LINKS{$short_name} = $long_name;
         }
-    }
 
-    # narrow (15 minutes clock) time zones from -48 to +48
-    foreach my $tz_dir (qw( E W )) {
         foreach my $tz_int ( 0 .. 48 ) {
-            my $short_name = sprintf( "Narrow%02d%s", $tz_int, $tz_dir );
+        # narrow (15 minutes clock) time zones count from -48 (12:00 W) to +48 (12:00 E)
+            my $tz_hour = int( $tz_int / 4 );
+            my $tz_min = ( $tz_int % 4 ) * 15;
+            my $short_name = sprintf( "%s%02d%02d", $tz_dir, $tz_hour, $tz_min );
             my $long_name  = "Solar/" . $short_name;
             my $class_name = $TZSOLAR_CLASS_PREFIX . $short_name;
             _tz_subclass($class_name);
@@ -206,7 +207,7 @@ sub isa
 {
     my ( $class, $type ) = @_;
     if ( $type eq "DateTime::TimeZone" ) {
-        return 1;
+        return true;
     }
     return $class->SUPER::isa($type);
 }
@@ -241,10 +242,10 @@ sub _tz_params_latitude
         croak __PACKAGE__ . "::_tz_params_latitude: latitude when provided must be in range -90..+90";
     }
 
-    # special case: use East00/Narrow00E (equal to UTC) within 10° latitude of poles
+    # special case: use East00/East0000 (equal to UTC) within 10° latitude of poles
     if ( abs( $param_ref->{latitude} ) >= _const("LIMIT_LATITUDE") - _const("PRECISION_FP") ) {
-        my $use_lon_tz = $param_ref->{use_lon_tz} // 0;
-        $param_ref->{short_name} = $use_lon_tz ? "Narrow00E" : "East00";
+        my $use_narrow = $param_ref->{use_narrow} // $param_ref->{use_lon_tz} // 0;
+        $param_ref->{short_name} = $use_narrow ? "East0000" : "East00";
         $param_ref->{name}       = "Solar/" . $param_ref->{short_name};
         $param_ref->{offset_min} = 0;
         $param_ref->{offset}     = _offset_min2str(0);
@@ -256,14 +257,8 @@ sub _tz_params_latitude
 # formatting functions
 sub _tz_prefix
 {
-    my ( $use_lon_tz, $sign ) = @_;
-    return $use_lon_tz ? "Narrow" : ( $sign > 0 ? "East" : "West" );
-}
-
-sub _tz_suffix
-{
-    my ( $use_lon_tz, $sign ) = @_;
-    return $use_lon_tz ? ( $sign > 0 ? "E" : "W" ) : "";
+    my ( $sign ) = @_;
+    return  $sign > 0 ? "East" : "West";
 }
 
 # get timezone parameters (name and minutes offset) - called by new()
@@ -298,19 +293,18 @@ sub _tz_params
     }
 
     # set flag for longitude time zones: 0 = hourly 1-hour/15-degree zones, 1 = longitude 4-minute/1-degree zones
-    # defaults to hourly time zone ($use_lon_tz=0)
-    my $use_lon_tz      = $params{use_lon_tz} // 0;
-    my $tz_degree_width = $use_lon_tz ? 3.75 : 15;    # 3.75 for narrow (15min) tz, 15 for hour-based tz
-    my $tz_digits       = 2;
+    # defaults to hourly time zone ($use_narrow=0)
+    my $use_narrow      = $params{use_narrow} // $params{use_lon_tz} // false;
+    my $tz_degree_width = $use_narrow ? 3.75 : 15;    # 3.75 for narrow (15min) tz, 15 for hour-based tz
 
     # handle special case of half-wide tz at positive side of solar date line (180° longitude)
     if (   $params{longitude} >= _const("MAX_LONGITUDE_INT") - $tz_degree_width / 2.0 - _const("PRECISION_FP")
         or $params{longitude} <= -_const("MAX_LONGITUDE_INT") + _const("PRECISION_FP") )
     {
-        my $tz_name = sprintf "%s%0*d%s",
-            _tz_prefix( $use_lon_tz, 1 ),
-            $tz_digits, _const("MAX_LONGITUDE_INT") / $tz_degree_width,
-            _tz_suffix( $use_lon_tz, 1 );
+        my $tz_name = sprintf "%s%02d%s",
+            _tz_prefix( 1 ),
+            _const("MAX_LONGITUDE_INT") / 15,
+            $use_narrow ? "00" : "";
         $params{short_name} = $tz_name;
         $params{name}       = "Solar/" . $tz_name;
         $params{offset_min} = 720;
@@ -320,10 +314,10 @@ sub _tz_params
 
     # handle special case of half-wide tz at negative side of solar date line (180° longitude)
     if ( $params{longitude} <= -_const("MAX_LONGITUDE_INT") + $tz_degree_width / 2.0 + _const("PRECISION_FP") ) {
-        my $tz_name = sprintf "%s%0*d%s",
-            _tz_prefix( $use_lon_tz, -1 ),
-            $tz_digits, _const("MAX_LONGITUDE_INT") / $tz_degree_width,
-            _tz_suffix( $use_lon_tz, -1 );
+        my $tz_name = sprintf "%s%02d%s",
+            _tz_prefix( -1 ),
+            _const("MAX_LONGITUDE_INT") / 15,
+            $use_narrow ? "00" : "";
         $params{short_name} = $tz_name;
         $params{name}       = "Solar/" . $tz_name;
         $params{offset_min} = -720;
@@ -333,11 +327,13 @@ sub _tz_params
 
     # handle other times zones
     my $tz_int  = int( abs( $params{longitude} ) / $tz_degree_width + 0.5 + _const("PRECISION_FP") );
+    my $tz_hour = $use_narrow ? int( $tz_int / 4 ) : $tz_int;
+    my $tz_min = $use_narrow ? ( $tz_int % 4 ) * 15 : 0;
     my $sign    = ( $params{longitude} > -$tz_degree_width / 2.0 + _const("PRECISION_FP") ) ? 1 : -1;
-    my $tz_name = sprintf "%s%0*d%s",
-        _tz_prefix( $use_lon_tz, $sign ),
-        $tz_digits, $tz_int,
-        _tz_suffix( $use_lon_tz, $sign );
+    my $tz_name = sprintf "%s%02d%s",
+        _tz_prefix( $sign ),
+        $tz_hour,
+        $use_narrow ? sprintf( "%02d", $tz_min ) : "";
     my $offset = $sign * $tz_int * ( _const("MINUTES_PER_DEGREE_LON") * $tz_degree_width );
     $params{short_name} = $tz_name;
     $params{name}       = "Solar/" . $tz_name;
@@ -437,24 +433,32 @@ sub new
         croak __PACKAGE__ . "->new() prohibited for unrelated class $class";
     }
 
-    # if we got here via DateTime::TimeZone::Solar::*->new(), override longitude/use_lon_tz parameters from class name
+    # if we got here via DateTime::TimeZone::Solar::*->new(), override longitude/use_narrow parameters from class name
     my $tzsolar_class_prefix = _const("TZSOLAR_CLASS_PREFIX");
     my $tzsolar_zone_re      = _const("TZSOLAR_ZONE_RE");
-    if ( $in_class =~ qr( $tzsolar_class_prefix ( $tzsolar_zone_re ))x ) {
+    if ( $in_class =~ qr( $tzsolar_class_prefix ( $tzsolar_zone_re ) )x ) {
         my $in_tz = $1;
-        if ( substr( $in_tz, 0, 4 ) eq "East" ) {
-            my $tz_int = int substr( $in_tz, 4, 2 );
-            $args{longitude}  = $tz_int * 15;
-            $args{use_lon_tz} = 0;
-        } elsif ( substr( $in_tz, 0, 4 ) eq "West" ) {
-            my $tz_int = int substr( $in_tz, 4, 2 );
-            $args{longitude}  = -$tz_int * 15;
-            $args{use_lon_tz} = 0;
-        } elsif ( substr( $in_tz, 0, 3 ) eq "Lon" ) {
-            my $tz_int = int substr( $in_tz, 3, 3 );
-            my $sign   = ( substr( $in_tz, 6, 1 ) eq "E" ? 1 : -1 );
-            $args{longitude}  = $sign * $tz_int;
-            $args{use_lon_tz} = 1;
+        my $digits1 = ( substr( $in_tz, 4, 2 ) =~ qr/^ [0-9] {2} $/x );  # flag: found hours digits, always required
+        my $digits2 = ( substr( $in_tz, 6, 2 ) =~ qr/^ [0-9] {2} $/x );  # flag: found minutes digits, for narrow tz
+        my $tz_hour = int substr( $in_tz, 4, 2 );
+        if ( substr( $in_tz, 0, 4 ) eq "East" and $digits1 ) {
+            if ( $digits2 ) {
+                my $tz_min = int substr( $in_tz, 6, 2 );
+                $args{longitude}  = ( $tz_hour + $tz_min / 60 ) * 15;
+                $args{use_narrow} = true;
+            } else {
+                $args{longitude}  = $tz_hour * 15;
+                $args{use_narrow} = false;
+            }
+        } elsif ( substr( $in_tz, 0, 4 ) eq "West" and $digits1 ) {
+            if ( $digits2 ) {
+                my $tz_min = int substr( $in_tz, 6, 2 );
+                $args{longitude}  = -( $tz_hour + $tz_min / 60 ) * 15;
+                $args{use_narrow} = true;
+            } else {
+                $args{longitude}  = -$tz_hour * 15;
+                $args{use_narrow} = false;
+            }
         } else {
             croak __PACKAGE__ . "->new() received unrecognized class name $in_class";
         }
@@ -565,12 +569,12 @@ sub offset_sec
 # By definition, there is never a Daylight Savings change in the Solar time zones.
 #
 sub spans                     { return []; }
-sub has_dst_changes           { return 0; }
-sub is_floating               { return 0; }
-sub is_olson                  { return 0; }
+sub has_dst_changes           { return false; }
+sub is_floating               { return false; }
+sub is_olson                  { return false; }
 sub category                  { return "Solar"; }
-sub is_utc                    { my $self = shift; return $self->{offset_min} == 0 ? 1 : 0; }
-sub is_dst_for_datetime       { return 0; }
+sub is_utc                    { my $self = shift; return $self->{offset_min} == 0 ? true : false; }
+sub is_dst_for_datetime       { return false; }
 sub offset_for_datetime       { my $self = shift; return $self->offset_sec(); }
 sub offset_for_local_datetime { my $self = shift; return $self->offset_sec(); }
 sub short_name_for_datetime   { my $self = shift; return $self->short_name(); }
@@ -630,10 +634,10 @@ Using TimeZone::Solar alone, with longitude and latitude:
 
   # example with latitude (location: SJC airport, San Jose, California)
   my $solar_tz_lat = TimeZone::Solar->new( latitude => 37.363,
-    longitude => -121.929, use_lon_tz => 1 );
+    longitude => -121.929, use_narrow => 1 );
   say $solar_tz_lat;
 
-This outputs "Solar/Narrow32W -08:15" using a longitude-based time zone.
+This outputs "Solar/East0815 -08:15" using a longitude-based time zone.
 
 Using TimeZone::Solar with DateTime:
 
@@ -732,7 +736,7 @@ Each hour-based time zone spans the area ±7.5 degrees of longitude either side 
 =back
 
 =item *
-There are 96 narrow (15 minute clock) Solar Time Zones, named Narrow48W for 180 degrees West through Narrow48E for 180 degrees East. Narrow00E is equivalent to UTC. Narrow00W is an alias for Narrow00E.
+There are 96 narrow (15 minute clock) Solar Time Zones, named West1200 for 180 degrees West through East1200 for 180 degrees East. East0000 is equivalent to UTC. West0000 is an alias for East0000.
 
 =over
 
@@ -748,13 +752,13 @@ Each narrow (15 minute clock) time zone spans the area ±1.875 degrees of longit
 =back
 
 =item *
-In both hourly and narrow time zones, there is a limit to their usefulness at the poles. Beyond 80 degrees north or south, the definition uses UTC (East00 or Narrow00E). This boundary is the only reason to include latitude in the computation of the time zone.
+In both hourly and narrow time zones, there is a limit to their usefulness at the poles. Beyond 80 degrees north or south, the definition uses UTC (East00 or East0000). This boundary is the only reason to include latitude in the computation of the time zone.
 
 =item *
 When converting coordinates to a time zone, each time zone includes its boundary meridian at the lower end of its absolute value, which is in the direction toward 0 (UTC). The exception is at exactly ±180.0 degrees, which would be excluded from both sides by this rule. That case is arbitrarily set as +180 just to pick one.
 
 =item *
-The category "Solar" is used for the longer names for these time zones. The names listed above are the short names. The full long name of each time zone is prefixed with "Solar/" such as "Solar/East00" or "Solar/Narrow00E".
+The category "Solar" is used for the longer names for these time zones. The names listed above are the short names. The full long name of each time zone is prefixed with "Solar/" such as "Solar/East00" or "Solar/East0000".
 
 =back
 
@@ -817,15 +821,15 @@ Prior to submitting pull requests for consideration for inclusion in the package
 
 =over
 
-=item $obj = TimeZone::Solar->new( longitude => $float, use_lon_tz => $bool, [latitude => $float] )
+=item $obj = TimeZone::Solar->new( longitude => $float, use_narrow => $bool, [latitude => $float] )
 
-Create a new instance of the time zone for the given longitude as a floating point number. The "use_lon_tz" parameter
+Create a new instance of the time zone for the given longitude as a floating point number. The "use_narrow" parameter
 is a boolean flag which if true selects narrow time zones, at a width of 1 degree of longitude. If false or
 omitted, it selects hour-based time zones, at a width of 15 degrees of longitude.
 
 If a latitude parameter is provided, it only makes a difference if the latitude is within 10° of the poles,
 at or beyond 80° North or South latitude. In the polar regions, it uses the equivalent of UTC, which is Solar/East00
-for hour-based time zones or Solar/Narrow00E for narrow time zones.
+for hour-based time zones or Solar/East0000 for narrow time zones.
 
 I<TimeZone::Solar> uses a singleton pattern. So if a given solar time zone's class within the
 I<DateTime::TimeZone::Solar::*> hierarchy already has an instance, that one will be returned.
@@ -910,15 +914,15 @@ always returns an empty list because there are never any Daylight Time transitio
 
 =item has_dst_changes()
 
-always returns 0 (false) because there are never any Daylight Time transitions in solar time zones.
+always returns false because there are never any Daylight Time transitions in solar time zones.
 
 =item is_floating()
 
-always returns 0 (false) because the solar time zones are not floating time zones.
+always returns false because the solar time zones are not floating time zones.
 
 =item is_olson()
 
-always returns 0 (false) because the solar time zones are not in the Olson time zone database.
+always returns false because the solar time zones are not in the Olson time zone database.
 (Maybe some day.)
 
 =item category()
@@ -927,13 +931,13 @@ always returns "Solar" for the time zone category.
 
 =item is_utc()
 
-Returns 1 (true) if the time zone is equivalent to UTC, meaning at 0 offset from UTC. This is only the case for
-Solar/East00, Solar/West00 (which is an alias for Solar/East00), Solar/Narrow00E and Solar/Narrow00W (which is an alias
-for Solar/Narrow00E). Otherwise it returns 0 because the time zone is not UTC.
+Returns true if the time zone is equivalent to UTC, meaning at 0 offset from UTC. This is only the case for
+Solar/East00, Solar/West00 (which is an alias for Solar/East00), Solar/East0000 and Solar/West0000 (which is an alias
+for Solar/East0000). Otherwise it returns 0 because the time zone is not UTC.
 
 =item is_dst_for_datetime()
 
-always returns 0 (false) because Daylight Saving Time never occurs in Solar time zones.
+always returns false because Daylight Saving Time never occurs in Solar time zones.
 
 =item offset_for_datetime()
 

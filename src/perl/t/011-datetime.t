@@ -145,18 +145,18 @@ sub run_dt_solartz
 {
     my ( $dt, $dt_hour, $dt_min );
     my $tz_name_hour = "Solar/West08";    # hour-based time zone, same as US Pacific Standard Time
-    eval { $dt = DateTime->new( year => $test_year, month => 6, hour => 1, time_zone => $tz_name_hour ) };
+    eval { $dt = DateTime->new( year => $test_year, month => 6, day => 1, hour => 1, time_zone => $tz_name_hour ) };
     is( $@, '', 'dt with solar time zone not previously instantiated: no errors' );
     $dt_hour = ( ( defined $dt ) and $dt->hour );
     is( $dt_hour, 1, 'dt with solar time zone not previously instantiated: hour = 1' );
 
-    my $tz_name_lon = "Solar/Lon122W";    # longitude-based time zone of San Jose CA or Seattle WA
+    my $tz_name_lon = "Solar/West0815";    # longitude-based time zone of Portland OR, San Jose CA or Seattle WA
     eval { $dt = DateTime->new( @test_timestamp, time_zone => "$tz_name_hour", )->set_time_zone($tz_name_lon); };
     is( $@, '', "convert from $tz_name_hour (name) to $tz_name_lon (name): no errors" );
     $dt_hour = ( ( defined $dt ) and $dt->hour );
     $dt_min  = ( ( defined $dt ) and $dt->minute );
     is( $dt_hour, 0,  "convert from $tz_name_hour (name) to $tz_name_lon (name): hour = 0" );
-    is( $dt_min,  52, "convert from $tz_name_hour (name) to $tz_name_lon (name): minute = 52" );
+    is( $dt_min,  45, "convert from $tz_name_hour (name) to $tz_name_lon (name): minute = 45" );
 
     #$debug_mode and print STDERR "debug(run_dt_solartz): dt = ".Dumper($dt);
 

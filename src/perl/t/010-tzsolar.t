@@ -21,23 +21,23 @@ use IO::File;
 use TimeZone::Solar;
 
 # constants
-Readonly::Scalar my $TZSOLAR_LON_ZONE_RE  => qr((Lon0[0-9][0-9][EW]) | (Lon1[0-7][0-9][EW]) | (Lon180[EW]))x;
-Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE => qr((East|West)(0[0-9] | 1[0-2]))x;
-Readonly::Scalar my $TZSOLAR_ZONE_RE      => qr( $TZSOLAR_LON_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE )x;
+Readonly::Scalar my $TZSOLAR_NARROW_ZONE_RE  => qr((East|West)(0[0-9] | 1[0-2])( 00 | 15 | 30 | 45 ))x;
+Readonly::Scalar my $TZSOLAR_HOUR_ZONE_RE    => qr((East|West)(0[0-9] | 1[0-2]))x;
+Readonly::Scalar my $TZSOLAR_ZONE_RE         => qr(( $TZSOLAR_NARROW_ZONE_RE | $TZSOLAR_HOUR_ZONE_RE ) $ )x;
 Readonly::Hash my %constants => (
-    TZSOLAR_CLASS_PREFIX   => "DateTime::TimeZone::Solar::",
-    TZSOLAR_LON_ZONE_RE    => $TZSOLAR_LON_ZONE_RE,
-    TZSOLAR_HOUR_ZONE_RE   => $TZSOLAR_HOUR_ZONE_RE,
-    TZSOLAR_ZONE_RE        => $TZSOLAR_ZONE_RE,
-    PRECISION_DIGITS       => 6,
-    PRECISION_FP           => 0.0000005,
-    MAX_DEGREES            => 360,
-    MAX_LONGITUDE_INT      => 180,
-    MAX_LONGITUDE_FP       => 180.0,
-    MAX_LATITUDE_FP        => 90.0,
-    POLAR_UTC_AREA         => 10,
-    LIMIT_LATITUDE         => 80,
-    MINUTES_PER_DEGREE_LON => 4,
+    TZSOLAR_CLASS_PREFIX      => "DateTime::TimeZone::Solar::",
+    TZSOLAR_NARROW_ZONE_RE    => $TZSOLAR_NARROW_ZONE_RE,
+    TZSOLAR_HOUR_ZONE_RE      => $TZSOLAR_HOUR_ZONE_RE,
+    TZSOLAR_ZONE_RE           => $TZSOLAR_ZONE_RE,
+    PRECISION_DIGITS          => 6,
+    PRECISION_FP              => 0.0000005,
+    MAX_DEGREES               => 360,
+    MAX_LONGITUDE_INT         => 180,
+    MAX_LONGITUDE_FP          => 180.0,
+    MAX_LATITUDE_FP           => 90.0,
+    POLAR_UTC_AREA            => 10,
+    LIMIT_LATITUDE            => 80,
+    MINUTES_PER_DEGREE_LON    => 4,
 );
 Readonly::Scalar my $debug_mode      => ( exists $ENV{TZSOLAR_DEBUG} and $ENV{TZSOLAR_DEBUG} ) ? 1 : 0;
 Readonly::Scalar my $fp_epsilon      => 2**-24;                   # fp epsilon for fp_equal() based on 32-bit floats
@@ -52,10 +52,10 @@ Readonly::Array my @polar_test_points    => ( gen_polar_test_points() );
 sub gen_polar_test_points
 {
     my @polar_test_points;
-    foreach my $use_lon_tz (qw( 0 1 )) {
+    foreach my $use_narrow (qw( 0 1 )) {
         foreach my $longitude (@test_point_longitudes) {
             foreach my $latitude (@test_point_latitudes) {
-                push @polar_test_points, { longitude => $longitude, latitude => $latitude, use_lon_tz => $use_lon_tz };
+                push @polar_test_points, { longitude => $longitude, latitude => $latitude, use_narrow => $use_narrow };
             }
         }
     }
@@ -131,14 +131,14 @@ sub test_constants
 # formatting functions
 sub _tz_prefix
 {
-    my ( $use_lon_tz, $sign ) = @_;
-    return $use_lon_tz ? "Lon" : ( $sign > 0 ? "East" : "West" );
+    my ( $sign ) = @_;
+    return  $sign > 0 ? "East" : "West";
 }
 
 sub _tz_suffix
 {
-    my ( $use_lon_tz, $sign ) = @_;
-    return $use_lon_tz ? ( $sign > 0 ? "E" : "W" ) : "";
+    my ( $use_narrow, $sign ) = @_;
+    return $use_narrow ? ( $sign > 0 ? "E" : "W" ) : "";
 }
 
 # convert offset minutes to string
@@ -159,9 +159,8 @@ sub expect_lon2tz
     my %params          = @_;
     my $lon             = $params{longitude};
     my $precision       = $constants{PRECISION_FP};
-    my $use_lon_tz      = ( exists $params{use_lon_tz} and $params{use_lon_tz} );
-    my $tz_degree_width = $use_lon_tz ? 1 : 15;    # 1 for longitude-based tz, 15 for hour-based tz
-    my $tz_digits       = $use_lon_tz ? 3 : 2;
+    my $use_narrow      = ( exists $params{use_narrow} and $params{use_narrow} );
+    my $tz_degree_width = $use_narrow ? 3.75 : 15;    # 1 for longitude-based tz, 15 for hour-based tz
 
     # generate time zone name and offset
     my ( $tz_name, $offset_min );
@@ -171,38 +170,42 @@ sub expect_lon2tz
 
         # handle special case of half-wide tz at positive side of solar date line (180° longitude)
         # special case of -180: expect results for +180
-        $tz_name = sprintf( "%s%0*d%s",
-            _tz_prefix( $use_lon_tz, 1 ),
-            $tz_digits,
-            $constants{MAX_LONGITUDE_INT} / $tz_degree_width,
-            _tz_suffix( $use_lon_tz, 1 ) );
+        $tz_name = sprintf( "%s%02d%s",
+            _tz_prefix( 1 ),
+            $constants{MAX_LONGITUDE_INT} / 15,
+            $use_narrow ? "00" : ""
+        );
         $offset_min = 720;
         $debug_mode and say STDERR "debug expect_lon2tz(): tz_name=$tz_name offset_min=$offset_min (case: date line +)";
     } elsif ( $lon <= ( -$constants{MAX_LONGITUDE_INT} + $tz_degree_width / 2.0 + $precision ) ) {
 
         # handle special case of half-wide tz at negative side of solar date line (180° longitude)
-        $tz_name = sprintf( "%s%0*d%s",
-            _tz_prefix( $use_lon_tz, -1 ),
-            $tz_digits,
-            $constants{MAX_LONGITUDE_INT} / $tz_degree_width,
-            _tz_suffix( $use_lon_tz, -1 ) );
+        $tz_name = sprintf( "%s%02d%s",
+            _tz_prefix( -1 ),
+            $constants{MAX_LONGITUDE_INT} / 15,
+            $use_narrow ? "00" : ""
+        );
         $offset_min = -720;
         $debug_mode and say STDERR "debug expect_lon2tz(): tz_name=$tz_name offset_min=$offset_min (case: date line -)";
     } else {
 
         # handle other times zones
         my $tz_int = int( abs($lon) / $tz_degree_width + 0.5 + $precision );
+        my $tz_hour = $use_narrow ? int( $tz_int / 4 ) : $tz_int;
+        my $tz_min = $use_narrow ? ( $tz_int % 4 ) * 15 : 0;
         my $sign   = ( $lon > -$tz_degree_width / 2.0 + $precision ) ? 1 : -1;
-        $tz_name = sprintf( "%s%0*d%s",
-            _tz_prefix( $use_lon_tz, $sign ),
-            $tz_digits, $tz_int, _tz_suffix( $use_lon_tz, $sign ) );
+        $tz_name = sprintf( "%s%02d%s",
+            _tz_prefix( $sign ),
+            $tz_hour,
+            $use_narrow ? sprintf( "%02d", $tz_min ) : ""
+        );
         $offset_min = $sign * $tz_int * ( $constants{MINUTES_PER_DEGREE_LON} * $tz_degree_width );
         $debug_mode and say STDERR "debug expect_lon2tz(): tz_name=$tz_name offset_min=$offset_min (case: general)";
     }
 
     my $class      = "DateTime::TimeZone::Solar::" . $tz_name;
     my $offset_str = _offset_min2str($offset_min);
-    $debug_mode and say STDERR "debug(lon:$lon,type:" . ( $use_lon_tz ? "lon" : "hour" ) . ") -> $tz_name, $offset_min";
+    $debug_mode and say STDERR "debug(lon:$lon,type:" . ( $use_narrow ? "lon" : "hour" ) . ") -> $tz_name, $offset_min";
     return (
         short_name      => $tz_name,
         offset_min      => $offset_min,
@@ -220,9 +223,9 @@ sub test_lon
     my $lon = shift;
 
     # hourly and longitude time zones without latitude
-    foreach my $use_lon_tz ( 0, 1 ) {
-        my $stz      = TimeZone::Solar->new( longitude => $lon, use_lon_tz => $use_lon_tz );
-        my %expected = expect_lon2tz( longitude => $lon, use_lon_tz => $use_lon_tz );
+    foreach my $use_narrow ( 0, 1 ) {
+        my $stz      = TimeZone::Solar->new( longitude => $lon, use_narrow => $use_narrow );
+        my %expected = expect_lon2tz( longitude => $lon, use_narrow => $use_narrow );
         isa_ok( $stz, $expected{class} );
         is( $stz->short_name(), $expected{short_name},
             sprintf( "lon: %-04d short name = %s", $lon, $expected{short_name} ) );
@@ -257,14 +260,14 @@ sub test_polar
             ( abs( $test_point->{latitude} ) <= $constants{LIMIT_LATITUDE} - $precision )
             ? $test_point->{longitude}
             : 0;
-        my %expected = expect_lon2tz( longitude => $use_lon, use_lon_tz => $test_point->{use_lon_tz} );
+        my %expected = expect_lon2tz( longitude => $use_lon, use_narrow => $test_point->{use_narrow} );
         $expected{longitude} = $test_point->{longitude};
         $expected{latitude}  = $test_point->{latitude};
         my $test_name = sprintf(
-            "longitude=%-10s latitude=%-9s use_lon_tz=%d",
+            "longitude=%-10s latitude=%-9s use_narrow=%d",
             $test_point->{longitude},
             $test_point->{latitude},
-            $test_point->{use_lon_tz}
+            $test_point->{use_narrow}
             )
             . " => ("
             . join( " ", map { $expected{$_} } sort keys %expected ) . ")";

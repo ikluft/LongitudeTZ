@@ -4,7 +4,7 @@
 # CREATED: 09/14/2020 as gen-ltz.pl, updated 2024-02-27 as lon-tz.pl
 # part of Perl implementation of solar timezones library
 #
-# Copyright © 2020-2024 Ian Kluft. This program is free software; you can
+# Copyright © 2020-2025 Ian Kluft. This program is free software; you can
 # redistribute it and/or modify it under the terms of the GNU General Public
 # License Version 3. See  https://www.gnu.org/licenses/gpl-3.0-standalone.html
 
@@ -19,6 +19,7 @@ use warnings;
 use utf8;
 use autodie;
 use feature qw(say);
+use boolean;
 use Config;
 use Carp qw(croak);
 use Getopt::Long;
@@ -31,7 +32,7 @@ use File::Basename;
 Readonly::Scalar my $progname => basename($0);
 
 # debug flag
-my $debug = 0;
+my $debug = false;
 
 #
 # tzdata file generation functions
@@ -59,43 +60,39 @@ sub gen_hour_tz
     my $offset_str  = sprintf( "%s%d:%02d", $sign,   $offset_hr, $offset_min );
 
     # output time zone data
-    say "# Solar Time by hourly increment: $sign$offset_hr";
+    say "# Solar Time by hourly increment: $offset_str";
     say "# " . join( "\t", qw(Zone NAME ), "", qw(STDOFF RULES FORMAT [UNTIL]) );
     say join( "\t", "Zone", $zone_name, $offset_str, "-", $zone_abbrev );
     say "";
     return;
 }
 
-# generate longitude-based solar time zone info
-# input parameter: integer degrees of longitude in the range 180 to -180, Solar Time Zone centered on the meridian,
+# generate narrow solar time zone info
+# input parameter: integer position in the range 48 to -48
 # including one half degree either side of the meridian. Each time zone is named for its 1-degree-wide range.
 # The exception is at the Solar Date Line, where +12 and -12 time zones are one half degree wide.
-sub gen_lon_tz
+sub gen_narrow_tz
 {
-    my $deg = int(shift);
-    if ( $deg < -180 or $deg > 180 ) {
-        croak "deg parameter must be -180 to +180 inclusive";
+    my $tz_pos = int(shift);
+    if ( $tz_pos < -48 or $tz_pos > 48 ) {
+        croak "deg parameter must be -48 to +48 inclusive";
     }
 
     # use integer degrees to compute time zone parameters: longitude, east/west sign and minutes offset
-    # $deg>=0: positive degrees (east longitude), straightforward assignments of data
-    # $deg<0: negative degrees (west longitude)
-    my $lon  = abs($deg);
-    my $ew   = ( $deg >= 0 ) ? "E" : "W";
-    my $sign = ( $deg >= 0 ) ? ""  : "-";
-
-    # derive time zone parameters from 4 minutes of offset for each degree of longitude
-    my $offset     = 4 * abs($deg);
-    my $offset_hr  = int( abs($offset) / 60 );
-    my $offset_min = abs($offset) % 60;
+    # $tz_pos>=0: positive degrees (east longitude), straightforward assignments of data
+    # $tz_pos<0: negative degrees (west longitude)
+    my $ew         = ( $tz_pos >= 0 ) ? "East" : "West";
+    my $sign       = ( $tz_pos >= 0 ) ? ""  : "-";
+    my $offset_hr  = abs( int( $tz_pos / 4 ));
+    my $offset_min = abs( $tz_pos ) % 4 * 15;
 
     # generate strings from time zone parameters
-    my $zone_abbrev = sprintf( "%s%03d%s",  "Lon",   $lon, $ew );
+    my $zone_abbrev = sprintf( "%s%02d%02d",  $ew,   $offset_hr, $offset_min );
     my $zone_name   = sprintf( "%s/%s",     "Solar", $zone_abbrev );
     my $offset_str  = sprintf( "%s%d:%02d", $sign,   $offset_hr, $offset_min );
 
     # output time zone data
-    say "# Solar Time by degree of longitude: $lon $ew";
+    say "# Solar Time by 15-minute increment: $offset_str";
     say "# " . join( "\t", qw(Zone NAME ), "", qw(STDOFF RULES FORMAT [UNTIL]) );
     say join( "\t", "Zone", $zone_name, $offset_str, "-", $zone_abbrev );
     say "";
@@ -105,16 +102,16 @@ sub gen_lon_tz
 # generate tzdata file
 sub gen_tzfile
 {
-    # generate solar time zones in increments of 15 degrees of longitude (STHxxE/STHxxW)
+    # generate solar time zones in increments of 15 degrees of longitude (Easthh/Westhh)
     # standard 1-hour-wide time zones
     foreach my $hour ( -12 .. 12 ) {
         gen_hour_tz($hour);
     }
 
-    # generate solar time zones in incrememnts of 4 minutes / 1 degree of longitude (STLxxxE/STxxxW)
-    # hyperlocal 4-minute-wide time zones for conversion to/from niche uses of local solar time
-    foreach my $deg ( -180 .. 180 ) {
-        gen_lon_tz($deg);
+    # generate solar time zones in incrememnts of 15 minutes / 3.75 degrees of longitude (Easthhmm/Westhhmm)
+    # narrow 15-minute-wide time zones
+    foreach my $tz_pos ( -48 .. 48 ) {
+        gen_narrow_tz($tz_pos);
     }
     return;
 }
@@ -164,8 +161,8 @@ sub main
     }
 
     # set debug flag if provided
-    if ( $opts{debug} // 0 ) {
-        $debug = 1;
+    if ( $opts{debug} // false ) {
+        $debug = true;
     }
     if ($debug) {
         my @out_opts;
@@ -207,12 +204,12 @@ sub main
     }
 
     # if longitude was provided (latitude optional), generate time zone parameters
-    my $use_lon_tz = 0;    # default to more common hour-based time zones rather than nice longitude-based tz
+    my $use_narrow = false;    # default to more common hour-based time zones rather than nice longitude-based tz
     if ( exists $opts{type} ) {
         if ( $opts{type} eq "hour" ) {
-            $use_lon_tz = 0;
+            $use_narrow = false;
         } elsif ( $opts{type} eq "longitude" ) {
-            $use_lon_tz = 1;
+            $use_narrow = true;
         } else {
             croak "unrecognized time zone type '" . $opts{type} . "'";
         }
@@ -224,7 +221,7 @@ sub main
                 TimeZone::Solar->new(
                     longitude  => $opts{longitude},
                     latitude   => $opts{latitude},
-                    use_lon_tz => $use_lon_tz
+                    use_narrow => $use_narrow
                 )
             );
         } else {
@@ -232,7 +229,7 @@ sub main
                 \%opts,
                 TimeZone::Solar->new(
                     longitude  => $opts{longitude},
-                    use_lon_tz => $use_lon_tz
+                    use_narrow => $use_narrow
                 )
             );
         }
