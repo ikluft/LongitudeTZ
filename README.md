@@ -1,6 +1,6 @@
 Natural Time Zones by Longitude
 ===============================
-<img src="docs/dst-opt-out.jpg" align="right" width="50%" />
+<a href="https://ikluft.github.io/LongitudeTZ/"><img src="docs/dst-opt-out.jpg" align="right" width="50%" /></a>
 
 *Note Dec 1, 2025: the LongitudeTZ project is [overhauling the narrow overlay time zones](docs/2025-12-01-ltz-project-update.md) from 1-degree longitude (4 minutes clock time) to 3.75 degrees longitude (15 minutes clock time). There are no changes to the primary hour-wide time zones.*
 
