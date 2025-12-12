@@ -10,6 +10,7 @@ On this page:
 
 Project information:
 * [Solar Time Zones Definition](solar_tz_definition.md)
+* [Questions & Answers about Solar Time Zones](questions-answers.md)
 * [LongitudeTZ Command-line Interface Specification](cli-spec.md)
 * [GitHub repository](https://github.com/ikluft/LongitudeTZ)
 <br clear="all" />
