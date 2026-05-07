@@ -322,6 +322,7 @@ sub run_prog_tzdata
     # run the program, capture stdout and stderr
     my ( $out, $err );
     my $res = IPC::Run::run \@prog_cmd, \undef, \$out, \$err, IPC::Run::timeout(10);
+    chomp $out;
     return { res => $res, out => $out, err => $err };
 }
 
@@ -470,6 +471,7 @@ sub run_tzdata_test
 {
     my $progpath        = shift;
     my $ref_tzdata_text = File::Slurp::read_file($TZDATA_REF_FILE);
+    chomp $ref_tzdata_text;
 
     # run CLI command to generate tz info and verify against expected valid tz info
     my %params      = ( progpath => $progpath );
