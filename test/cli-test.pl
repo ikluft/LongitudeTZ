@@ -45,6 +45,9 @@ Readonly::Scalar my $TZDATA_TESTS           => 3;
 Readonly::Scalar my $TOTAL_TESTS            => $SOLAR_TZ_TEST_SETS * $SOLAR_TZ_TESTS_PER_SET * 2
     + $SOLAR_TZ_HOUR_SETS * $SOLAR_TZ_TESTS_PER_SET + $TZDATA_TESTS;
 
+# system environment for tests
+Readonly::Scalar my $IS_MSWIN                => ( $OSNAME eq "MSWin32" );
+
 # globals
 my $debug = 0;
 
@@ -251,6 +254,7 @@ sub run_prog_fields
         # run the program, capture stdout and stderr
         my ( $out, $err );
         my $res = IPC::Run::run \@prog_cmd2, \undef, \$out, \$err, IPC::Run::timeout(10);
+        $IS_MSWIN and $out =~ s/ \r //xg;
         chomp $out;
 
         # save result for this field's run
@@ -271,6 +275,7 @@ sub run_prog_fields
         # run the program, capture stdout and stderr
         my ( $out, $err );
         my $res = IPC::Run::run \@prog_cmd2, \undef, \$out, \$err, IPC::Run::timeout(10);
+        $IS_MSWIN and $out =~ s/ \r //xg;
         chomp $out;
         my @out_fields = split /^/xm, $out;
         foreach my $field (@SOLAR_TZ_FIELDS) {
@@ -292,6 +297,7 @@ sub run_prog_fields
         # run the program, capture stdout and stderr
         my ( $out, $err );
         my $res = IPC::Run::run \@prog_cmd2, \undef, \$out, \$err, IPC::Run::timeout(10);
+        $IS_MSWIN and $out =~ s/ \r //xg;
         chomp $out;
         my @out_fields = split /^/xm, $out;
         foreach my $field (@SOLAR_TZ_FIELDS) {
@@ -322,6 +328,7 @@ sub run_prog_tzdata
     # run the program, capture stdout and stderr
     my ( $out, $err );
     my $res = IPC::Run::run \@prog_cmd, \undef, \$out, \$err, IPC::Run::timeout(10);
+    $IS_MSWIN and $out =~ s/ \r //xg;
     chomp $out;
     return { res => $res, out => $out, err => $err };
 }
@@ -470,8 +477,9 @@ sub run_validity_tests
 sub run_tzdata_test
 {
     my $progpath        = shift;
-    my $ref_tzdata_text = File::Slurp::read_file($TZDATA_REF_FILE);
-    chomp $ref_tzdata_text;
+    my @ref_tzdata_text = File::Slurp::read_file($TZDATA_REF_FILE);
+    chomp @ref_tzdata_text;
+    my $ref_tzdata_text = join "\n", @ref_tzdata_text;
 
     # run CLI command to generate tz info and verify against expected valid tz info
     my %params      = ( progpath => $progpath );
