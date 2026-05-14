@@ -13,8 +13,8 @@ time zone boundaries, just like ships at sea use every day.
 For those who want an alternative to Daylight Saving Time, we have to build that alternative.
 
 It provides an interface compatible with datetime.tzinfo so that solar time zones based on increments
-of either an hour or each degree of longitude may be used in time stamps.
-There are 24 hour-based time zones and 360 time zones based on each degree of longitude.
+of either an hour or 15 minutes may be used in time stamps.
+There are 24 hour-wide (15 degrees longitude) time zones and 96 narrower 15-minute wide (3.75 degrees longitude) time zones.
 
 Overview of Solar time zones
 ----------------------------
@@ -34,7 +34,7 @@ The Solar Time Zones proposal is intended as a potential de-facto standard which
 
 There are normal variations of a matter of minutes between local solar noon and clock noon, depending on the latitude and time of year. That variation is always the same number of minutes as local solar noon differs from noon UTC at the same latitude on the Prime Meridian (0° longitude), due to seasonal effects of the tilt in Earth's axis relative to our orbit around the Sun.
 
-The Solaer time zones also have another set of overlay time zones the width of 1 degree of longitude, which puts them in 4-minute intervals of time. These are a hyper-local niche for potential use by outdoor events or activities which must be scheduled around daylight. They can also be used by anyone who wants the middle of the scheduling day to coincide closely with local solar noon.
+The Solar time zones also have another set of narrower overlay time zones the width of 3.75 degree of longitude, which puts them in 15-minute intervals of time. These are a more local niche for potential use by outdoor events or activities which must be scheduled around daylight. They can also be used by anyone who wants the middle of the scheduling day to coincide closely with local solar noon.
 
 Usage of timezone_solar
 -----------------------
